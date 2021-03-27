@@ -1,1 +1,1 @@
-bayanno-hospital-management-system
+Chash-noor-hospital-management-system
