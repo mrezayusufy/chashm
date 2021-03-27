@@ -593,7 +593,6 @@ class Crud_model extends CI_Model
         $this->create_log($data);
         $this->db->delete('hr');
     }
-    // patient
     function save_patient_info()
     {
         $data['name']                 = $this->input->post('name');
