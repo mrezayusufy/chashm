@@ -607,7 +607,6 @@ class Crud_model extends CI_Model
         $data['patient_id'] = $patient_id;
         return $data;
     }
-
     function update_patient_info($patient_id)
     {
         $data['name']               = $this->input->post('name');
