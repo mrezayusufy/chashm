@@ -25,7 +25,7 @@
       href="<?php echo base_url('assets/common/izitoast/css/iziToast.min.css');?>" type="text/css">
 <!-- Icons -->
 <link rel="stylesheet" 
-    href="<?php echo base_url('assets/frontend/' . $theme . '/fonts/font-awesome/css/font-awesome.min.css');?>" type="text/css">
+    href="<?php echo base_url('assets/frontend/' . $theme . '/fonts/fontawesome/css/all.min.css');?>" type="text/css">
 <link rel="stylesheet" 
     href="<?php echo base_url('assets/frontend/' . $theme . '/fonts/ionicons/css/ionicons.min.css');?>" type="text/css">
 <link rel="stylesheet" 

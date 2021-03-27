@@ -60,14 +60,14 @@
                             <div class="col-6">
                                 <ul class="inline-links inline-links--style-3">
                                     <li>
-                                        <i class="fa fa-calendar"></i> <?php echo date('d M, Y', $row['timestamp']);?>
+                                        <i class="fas fa-calendar"></i> <?php echo date('d M, Y', $row['timestamp']);?>
                                     </li>
                                 </ul>
                             </div>
                             <div class="col-6 text-right">
                                 <a href="<?php echo site_url('home/blog_details/' . $row['frontend_blog_id']);?>" 
                                     class="link link-sm link--style-2">
-                                    <i class="fa fa-long-arrow-right"></i> <?php echo get_phrase('read_more');?>
+                                    <i class="fas fa-long-arrow-right"></i> <?php echo get_phrase('read_more');?>
                                 </a>
                             </div>
                         </div>

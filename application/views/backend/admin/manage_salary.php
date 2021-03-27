@@ -1,7 +1,7 @@
 <!-- FIXME: date and time -->
-<button onclick="showAjaxModal('<?php echo site_url('modal/popup/add_salary');?>');" 
+<button onclick="showAjaxModal('<?= site_url('modal/popup/add_salary');?>');" 
     class="btn btn-primary pull-right">
-        <i class="fa fa-plus"></i>&nbsp;<?php echo get_phrase('add_salary'); ?>
+        <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_salary'); ?>
 </button>
 <div style="clear:both;"></div>
 <br>
@@ -9,35 +9,42 @@
 <table class="table table-bordered table-striped datatable" id="table-2">
     <thead>
         <tr>
-            <th><?php echo get_phrase('ID');?></th>
-            <th><?php echo get_phrase('tazkira_id');?></th>
-            <th><?php echo get_phrase('name');?></th>
-            <th><?php echo get_phrase('salary');?></th>
-            <th><?php echo get_phrase('date');?></th>
-            <th><?php echo get_phrase('status');?></th>
-            <th><?php echo get_phrase('options');?></th>
+            <th><?= get_phrase('ID');?></th>
+            <th><?= get_phrase('tazkira_id');?></th>
+            <th><?= get_phrase('name');?></th>
+            <th><?= get_phrase('department');?></th>
+            <th><?= get_phrase('salary');?></th>
+            <th><?= get_phrase('date');?></th>
+            <th><?= get_phrase('status');?></th>
+            <th><?= get_phrase('options');?></th>
         </tr>
     </thead>
 
     <tbody>
-    <?php foreach ($salary_info as $row) { ?>   
+    <?php 
+    
+    foreach ($salary_info as $row) { 
+        $department = $this->db->get_where("department", array("department_id" => $row["department_id"]))->row();
+    ?>
+    
             <tr>
-                <td><?php echo $row['salary_id']?></td>
-                <td><?php echo $row['tazkira_id']?></td>
-                <td><?php echo $row['name']?></td>
-                <td><?php echo $row['salary']?></td>
-                <td><?php echo date('d M,Y', $row['date']);?></td>
-                <td><?php echo $row['status']?></td>
+                <td><?= $row['salary_id']?></td>
+                <td><?= $row['tazkira_id']?></td>
+                <td><?= $row['name']?></td>
+                <td><?= $department->name ?></td>
+                <td><?= $row['salary']?></td>
+                <td><?= date('d M,Y', $row['date']);?></td>
+                <td><div class="btn <?= $row['status'] == 'paid'? 'btn-primary' : 'btn-danger'?> btn-sm"><?= $row['status']?></div></td>
                 <td>
-                    <a onclick="showAjaxModal('<?php echo site_url('modal/popup/edit_salary/'.$row['salary_id']);?>');" 
+                    <a onclick="showAjaxModal('<?= site_url('modal/popup/edit_salary/'.$row['salary_id']);?>');" 
                         class="btn btn-info btn-sm">
-                            <i class="fa fa-pencil"></i>&nbsp;
-                            <?php echo get_phrase('edit');?>
+                            <i class="fas fa-pencil-alt"></i>&nbsp;
+                            <?= get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?php echo site_url('admin/salary/delete/'.$row['salary_id']); ?>')"
+                    <a onclick="confirm_modal('<?= site_url('admin/salary/delete/'.$row['salary_id']); ?>')"
                         class="btn btn-danger btn-sm">
-                            <i class="fa fa-trash-o"></i>&nbsp;
-                            <?php echo get_phrase('delete');?>
+                            <i class="fas fa-trash"></i>&nbsp;
+                            <?= get_phrase('delete');?>
                     </a>
                 </td>
             </tr>
@@ -52,6 +59,7 @@
 
         $("#table-2").dataTable({
             "sPaginationType": "bootstrap",
+            "aaSorting": [[ 0, "desc" ]],
             "sDom": "<'row'<'col-xs-3 col-left'l><'col-xs-9 col-right'<'export-data'T>f>r>t<'row'<'col-xs-3 col-left'i><'col-xs-9 col-right'p>>"
         });
 

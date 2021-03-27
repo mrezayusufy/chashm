@@ -35,27 +35,9 @@ class Login extends CI_Controller
         if ($this->session->userdata('admin_login') == 1)
             redirect(site_url('admin/dashboard'), 'refresh');
         
-        else if ($this->session->userdata('doctor_login') == 1)
-            redirect(site_url('doctor'), 'refresh');
-        
-        else if ($this->session->userdata('patient_login') == 1)
-            redirect(site_url('patient'), 'refresh');
-        
-        else if ($this->session->userdata('nurse_login') == 1)
-            redirect(site_url('nurse'), 'refresh');
-        
-        else if ($this->session->userdata('pharmacist_login') == 1)
-            redirect(site_url('pharmacist'), 'refresh');
-        
-        else if ($this->session->userdata('laboratorist_login') == 1)
-            redirect(site_url('laboratorist'), 'refresh');
-        
-        else if ($this->session->userdata('accountant_login') == 1)
-            redirect(site_url('accountant'), 'refresh');
-        
-        else if ($this->session->userdata('receptionist_login') == 1)
-            redirect(site_url('receptionist'), 'refresh');
-        
+        else if ($this->session->userdata('hr_login') == 1)
+            redirect(site_url('hr'), 'refresh');
+
         $this->load->view('backend/login');
     }
     
@@ -94,69 +76,72 @@ class Login extends CI_Controller
             $this->session->set_userdata('login_user_id', $row->admin_id);
             $this->session->set_userdata('name', $row->name);
             $this->session->set_userdata('login_type', 'admin');
+            $this->session->set_userdata('department', 'Admin');
+
             return 'success';
         }
         
         // hr
         $join = array('department', 'department.department_id=hr.department_id');
-            $select = 'department.name as department_name, concat_ws(" ",hr.first_name, hr.last_name) as name';
+        $select = 'hr.hr_id as hr_id, department.name as department_name, concat_ws(" ",hr.first_name, hr.last_name) as name';
         $query = $this->db->select($select)->join($join[0], $join[1])->get_where('hr', $credential);
         if ($query->num_rows() > 0 && $query->row()->department_name == 'Doctor') {
             $row = $query->row();
-            $this->session->set_userdata('doctor_login', '1');
+            $this->session->set_userdata('hr_login', '1');
             $this->session->set_userdata('login_user_id', $row->hr_id);
             $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'doctor');
+            $this->session->set_userdata('login_type', 'hr');
+            $this->session->set_userdata('department', $query->row()->department_name);
             return 'success';
         }
         
-        $query = $this->db->get_where('nurse', $credential);
-        if ($query->num_rows() > 0) {
+        if ($query->num_rows() > 0 && $query->row()->department_name == 'Pharmacist') {
             $row = $query->row();
-            $this->session->set_userdata('nurse_login', '1');
-            $this->session->set_userdata('login_user_id', $row->nurse_id);
+            $this->session->set_userdata('hr_login', '1');
+            $this->session->set_userdata('login_user_id', $row->hr_id);
             $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'nurse');
+            $this->session->set_userdata('department', $query->row()->department_name);
+            $this->session->set_userdata('login_type', 'hr');
             return 'success';
         }
         
-        $query = $this->db->get_where('pharmacist', $credential);
-        if ($query->num_rows() > 0) {
+        if ($query->num_rows() > 0 && $query->row()->department_name == 'Laboratorist') {
             $row = $query->row();
-            $this->session->set_userdata('pharmacist_login', '1');
-            $this->session->set_userdata('login_user_id', $row->pharmacist_id);
+            $this->session->set_userdata('hr_login', '1');
+            $this->session->set_userdata('login_user_id', $row->hr_id);
             $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'pharmacist');
+            $this->session->set_userdata('login_type', 'hr');
+            $this->session->set_userdata('department', $query->row()->department_name);
+            return 'success';
+        }
+
+        if ($query->num_rows() > 0 && $query->row()->department_name == 'Accountant') {
+            $row = $query->row();
+            $this->session->set_userdata('hr_login', '1');
+            $this->session->set_userdata('login_user_id', $row->hr_id);
+            $this->session->set_userdata('name', $row->name);
+            $this->session->set_userdata('login_type', 'hr');
+            $this->session->set_userdata('department', $query->row()->department_name);
             return 'success';
         }
         
-        $query = $this->db->get_where('laboratorist', $credential);
-        if ($query->num_rows() > 0) {
+        if ($query->num_rows() > 0 && $query->row()->department_name == 'Receptionist') {
             $row = $query->row();
-            $this->session->set_userdata('laboratorist_login', '1');
-            $this->session->set_userdata('login_user_id', $row->laboratorist_id);
+            $this->session->set_userdata('hr_login', '1');
+            $this->session->set_userdata('login_user_id', $row->hr_id);
             $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'laboratorist');
+            $this->session->set_userdata('login_type', 'hr');
+            $this->session->set_userdata('department', $query->row()->department_name);
             return 'success';
         }
-        
-        $query = $this->db->get_where('accountant', $credential);
-        if ($query->num_rows() > 0) {
+
+        if ($query->num_rows() > 0 && $query->row()->department_name == 'Optician') {
             $row = $query->row();
-            $this->session->set_userdata('accountant_login', '1');
-            $this->session->set_userdata('login_user_id', $row->accountant_id);
+            $this->session->set_userdata('hr_login', '1');
+            $this->session->set_userdata('login_user_id', $row->hr_id);
             $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'accountant');
-            return 'success';
-        }
-        
-        $query = $this->db->get_where('receptionist', $credential);
-        if ($query->num_rows() > 0) {
-            $row = $query->row();
-            $this->session->set_userdata('receptionist_login', '1');
-            $this->session->set_userdata('login_user_id', $row->receptionist_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'receptionist');
+            $this->session->set_userdata('login_type', 'hr');
+            $this->session->set_userdata('department', $query->row()->department_name);
             return 'success';
         }
         
@@ -204,25 +189,15 @@ class Login extends CI_Controller
                 'password' => sha1($new_password)
             ));
         }
-        // checking credential for patient
-        $query = $this->db->get_where('patient', array(
+        
+        // checking credential for optician
+        $query = $this->db->get_where('optician', array(
             'email' => $email
         ));
         if ($query->num_rows() > 0) {
-            $reset_account_type = 'patient';
+            $reset_account_type = 'optician';
             $this->db->where('email', $email);
-            $this->db->update('patient', array(
-                'password' => sha1($new_password)
-            ));
-        }
-        // checking credential for nurse
-        $query = $this->db->get_where('nurse', array(
-            'email' => $email
-        ));
-        if ($query->num_rows() > 0) {
-            $reset_account_type = 'nurse';
-            $this->db->where('email', $email);
-            $this->db->update('nurse', array(
+            $this->db->update('optician', array(
                 'password' => sha1($new_password)
             ));
         }

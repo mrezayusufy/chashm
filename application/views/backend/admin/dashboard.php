@@ -1,44 +1,51 @@
+<?php 
+
+$paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
+$pa = $paid_accountant ? $paid_accountant : 0;
+$salary_paid = $this->crud_model->total_count('salary', array('status' => 'paid'), 'salary')->salary;
+$sp = $salary_paid ? $salary_paid : 0;
+?>
 <div class="row">
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/doctor'); ?>">
+        <a href="<?= site_url('admin/doctor'); ?>">
             <div class="tile-stats tile-white tile-white-primary">
-                <div class="icon"><i class="fa fa-user-md"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('hr'); ?>"
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('hr'); ?></div>
-                <h3><?php echo get_phrase('HR') ?></h3>
+                <div class="icon"><i class="fas fa-user-md"></i></div>
+                <div class="num" data-start="0" data-end="<?= $this->db->count_all('hr'); ?>"
+                     data-duration="1500" data-delay="0"><?= $this->db->count_all('hr'); ?></div>
+                <h3><?= get_phrase('HR') ?></h3>
             </div>
         </a>
     </div>
 
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/patient'); ?>">
+        <a href="<?= site_url('admin/patient'); ?>">
             <div class="tile-stats tile-white-red">
-                <div class="icon"><i class="fa fa-user"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('patient'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('patient'); ?></div>
-                <h3><?php echo get_phrase('patient') ?></h3>
+                <div class="icon"><i class="fas fa-user"></i></div>
+                <div class="num" data-start="0" data-end="<?= $this->db->count_all('patient'); ?>" 
+                     data-duration="1500" data-delay="0"><?= $this->db->count_all('patient'); ?></div>
+                <h3><?= get_phrase('patient') ?></h3>
             </div>
         </a>
     </div>
 
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/nurse'); ?>">
+        <a href="<?= site_url('admin/invoice'); ?>">
             <div class="tile-stats tile-white-aqua">
-                <div class="icon"><i class="fa fa-plus-square"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('nurse'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('nurse'); ?></div>
-                <h3><?php echo get_phrase('nurse') ?></h3>
+                <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
+                <div class="num" data-start="0" data-end="<?= $pa; ?>" 
+                     data-duration="1500" data-delay="0"><?= $pa; ?></div>
+                <h3><?= get_phrase('income') ?></h3>
             </div>
         </a>
     </div>
 
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/pharmacist'); ?>">
+        <a href="<?= site_url('admin/invoice'); ?>">
             <div class="tile-stats tile-white-blue">
-                <div class="icon"><i class="fa fa-medkit"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('pharmacist'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('pharmacist'); ?></div>
-                <h3><?php echo get_phrase('pharmacist') ?></h3>
+                <div class="icon"><i class="fas fa-money-bill-alt"></i></div>
+                <div class="num" data-start="0" data-end="<?= $this->db->count_all('invoice'); ?>" 
+                     data-duration="1500" data-delay="0"><?= $this->db->count_all('invoice'); ?></div>
+                <h3><?= get_phrase('total_invoice') ?></h3>
             </div>
         </a>
     </div>
@@ -48,84 +55,48 @@
 
 <div class="row">
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/laboratorist'); ?>">
+        <a href="<?= site_url('admin/salary'); ?>">
             <div class="tile-stats tile-white-cyan">
-                <div class="icon"><i class="fa fa-user"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('laboratorist'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('laboratorist'); ?></div>
-                <h3><?php echo get_phrase('laboratorist') ?></h3>
+                <div class="icon"><i class="fas fa-money-bill"></i></div>
+                <div class="num" data-start="0" data-end="<?= $this->db->count_all('salary'); ?>" 
+                     data-duration="1500" data-delay="0"><?= $this->db->count_all('salary'); ?></div>
+                <h3><?= get_phrase('salary') ?></h3>
+            </div>
+        </a>
+    </div>
+    <div class="col-sm-3">
+        <a href="<?= site_url('admin/salary'); ?>">
+            <div class="tile-stats tile-white-cyan">
+                <div class="icon"><i class="fas fa-money-bill-alt"></i></div>
+                <div class="num" data-start="0" data-end="<?= $sp ?>" 
+                     data-duration="1500" data-delay="0"><?= $sp ?></div>
+                <h3><?= get_phrase('salary_paid') ?></h3>
             </div>
         </a>
     </div>
 
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/accountant'); ?>">
+        <a href="<?= site_url('admin/department'); ?>">
             <div class="tile-stats tile-white-purple">
-                <div class="icon"><i class="fa fa-money"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('accountant'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('accountant'); ?></div>
-                <h3><?php echo get_phrase('accountant') ?></h3>
+                <div class="icon"><i class="fas fa-book"></i></div>
+                <div class="num" data-start="0" data-end="<?= $this->db->count_all('department'); ?>" 
+                     data-duration="1500" data-delay="0"><?= $this->db->count_all('department'); ?></div>
+                <h3><?= get_phrase('department') ?></h3>
             </div>
         </a>
     </div>
 
-    <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/payment_history'); ?>">
-            <div class="tile-stats tile-white-pink">
-                <div class="icon"><i class="fa fa-list-alt"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('invoice'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('invoice'); ?></div>
-                <h3><?php echo get_phrase('payment') ?></h3>
-            </div>
-        </a>
-    </div>
 
     <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/medicine'); ?>">
+        <a href="<?= site_url('admin/medicine'); ?>">
             <div class="tile-stats tile-white-orange">
-                <div class="icon"><i class="fa fa-medkit"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo $this->db->count_all('medicine'); ?>" 
-                     data-duration="1500" data-delay="0"><?php echo $this->db->count_all('medicine'); ?></div>
-                <h3><?php echo get_phrase('medicine') ?></h3>
+                <div class="icon"><i class="fas fa-medkit"></i></div>
+                <div class="num" data-start="0" data-end="<?= $this->db->count_all('medicine'); ?>" 
+                     data-duration="1500" data-delay="0"><?= $this->db->count_all('medicine'); ?></div>
+                <h3><?= get_phrase('medicine') ?></h3>
             </div>
         </a>
     </div>
 </div>
 
 <br />
-
-<div class="row">
-    <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/operation_report'); ?>">
-            <div class="tile-stats tile-white-green">
-                <div class="icon"><i class="fa fa-wheelchair"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo count($this->db->get_where('report', array('type' => 'operation'))->result_array());?>" 
-                     data-duration="1500" data-delay="0"></div>
-                <h3><?php echo get_phrase('operation_report') ?></h3>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/birth_report'); ?>">
-            <div class="tile-stats tile-white-brown">
-                <div class="icon"><i class="fa fa-github-alt"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo count($this->db->get_where('report', array('type' => 'birth'))->result_array());?>" 
-                     data-duration="1500" data-delay="0"></div>
-                <h3><?php echo get_phrase('birth_report') ?></h3>
-            </div>
-        </a>
-    </div>
-
-    <div class="col-sm-3">
-        <a href="<?php echo site_url('admin/death_report'); ?>">
-            <div class="tile-stats tile-white-plum">
-                <div class="icon"><i class="fa fa-ban"></i></div>
-                <div class="num" data-start="0" data-end="<?php echo count($this->db->get_where('report', array('type' => 'death'))->result_array());?>" 
-                     data-duration="1500" data-delay="0"></div>
-                <h3><?php echo get_phrase('death_report') ?></h3>
-            </div>
-        </a>
-    </div>
-
-</div>

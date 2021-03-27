@@ -176,7 +176,7 @@
                     </div>
                     <button type="submit" class="btn btn-styled btn-base-1"
                             style="cursor: pointer;">
-                        <i class="fa fa-calendar mr-1"></i> <?php echo get_phrase('book_now');?>
+                        <i class="fas fa-calendar mr-1"></i> <?php echo get_phrase('book_now');?>
                     </button>
                 </form>
             </div>

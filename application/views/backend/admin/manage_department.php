@@ -1,6 +1,6 @@
 <button onclick="showAjaxModal('<?php echo site_url('modal/popup/add_department'); ?>');" 
     class="btn btn-primary pull-right">
-    <i class="fa fa-plus"></i>&nbsp;<?php echo get_phrase('add_department'); ?>
+    <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('add_department'); ?>
 </button>
 <div style="clear:both;"></div>
 <br>
@@ -26,15 +26,15 @@
                 <td>
                     <a href="<?php echo site_url('admin/department_facilities/'.$row['department_id']);?>"
                         class="btn btn-default btn-sm">
-                        <i class="fa fa-plus"></i>&nbsp;<?php echo get_phrase('manage_facilities');?>
+                        <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('manage_facilities');?>
                     </a>
                     <a  onclick="showAjaxModal('<?php echo site_url('modal/popup/edit_department/'.$row['department_id']); ?>');" 
                         class="btn btn-info btn-sm">
-                        <i class="fa fa-pencil"></i>&nbsp;<?php echo get_phrase('edit');?>
+                        <i class="fas fa-pencil-alt"></i>&nbsp;<?php echo get_phrase('edit');?>
                     </a>
                     <a onclick="confirm_modal('<?php echo site_url('admin/department/delete/'.$row['department_id']); ?>')"
                        class="btn btn-danger btn-sm">
-                        <i class="fa fa-trash-o"></i>&nbsp;<?php echo get_phrase('delete');?>
+                        <i class="fas fa-trash"></i>&nbsp;<?php echo get_phrase('delete');?>
                     </a>
                 </td>
             </tr>

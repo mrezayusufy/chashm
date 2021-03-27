@@ -27,7 +27,7 @@
                     <td>
                         <a onclick="confirm_modal('<?php echo site_url('admin/contact_email/delete/'.$row['contact_email_id']);?>')"
                            class="btn btn-danger btn-sm">
-                            <i class="fa fa-trash-o"></i>&nbsp;
+                            <i class="fas fa-trash"></i>&nbsp;
                             <?php echo get_phrase('delete');?>
                         </a>
                     </td>

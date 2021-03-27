@@ -1,0 +1,6 @@
+{
+    "require": {
+        "mike42/escpos-php": "^3.0",
+        "mpdf/mpdf": "^8.0"
+    }
+}

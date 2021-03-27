@@ -45,7 +45,7 @@
                         <div class="appointment-btn">
                             <a href="<?php echo site_url('home/appointment');?>" 
                                 class="btn btn-styled btn-base-1 btn-outline btn-icon-left">
-                                <i class="fa fa-calendar"></i>
+                                <i class="fas fa-calendar"></i>
                                 <?php echo get_phrase('book_appointment');?>
                             </a>
                         </div>
@@ -114,7 +114,7 @@
                                                         <span class="view-buttons-inner text-center">
                                                             <a href="#" class="c-white btn-st-trigger" data-effect="st-effect-1"
                                                                 id="<?php echo site_url('home/get_doctor_details/' . $row['doctor_id']);?>">
-                                                                <i class="fa fa-user-md fa-3x"></i>
+                                                                <i class="fas fa-user-md fa-3x"></i>
                                                             </a>
                                                         </span>
                                                     </div>
@@ -203,7 +203,7 @@
                         <div class="py-4 text-center text-lg-right">
                             <a href="<?php echo site_url('home/appointment');?>" 
                                 class="btn btn-styled btn-base-1 btn-outline btn-icon-left">
-                                <i class="fa fa-calendar"></i><?php echo get_phrase('book_appointment');?>
+                                <i class="fas fa-calendar"></i><?php echo get_phrase('book_appointment');?>
                             </a>
                         </div>
                     </div>

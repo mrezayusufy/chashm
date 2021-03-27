@@ -1,7 +1,7 @@
 <!-- TODO: 1 change file name to manage_hr and change table -->
 <button onclick="showAjaxModal('<?php echo site_url('modal/popup/add_hr');?>');" 
     class="btn btn-primary pull-right">
-        <i class="fa fa-plus"></i>&nbsp;<?php echo get_phrase('add_hr'); ?>
+        <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('add_hr'); ?>
 </button>
 <?php $query = $this->db->select("department.name as department_name")->join('department','department.department_id=hr.department_id')->get_where("hr", array( 'email' => 'hamedhamidi@gmail.com'));
 echo $query->row()->department_name;
@@ -36,11 +36,11 @@ echo $query->row()->department_name;
                 <td>
                     <a  onclick="showAjaxModal('<?php echo site_url('modal/popup/edit_hr/'.$row['hr_id']);?>');" 
                         class="btn btn-info btn-sm">
-                        <i class="fa fa-pencil"></i>&nbsp;<?php echo get_phrase('edit');?>
+                        <i class="fas fa-pencil-alt"></i>&nbsp;<?php echo get_phrase('edit');?>
                     </a>
                     <a onclick="confirm_modal('<?php echo site_url('admin/hr/delete/'.$row['hr_id']); ?>')"
                         class="btn btn-danger btn-sm">
-                        <i class="fa fa-trash-o"></i>&nbsp;<?php echo get_phrase('delete');?>
+                        <i class="fas fa-trash"></i>&nbsp;<?php echo get_phrase('delete');?>
                     </a>
                 </td>
             </tr>

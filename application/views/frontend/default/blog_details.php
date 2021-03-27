@@ -16,13 +16,13 @@
 
                     <ul class="inline-links inline-links--style-1 mt-4">
                         <li>
-                            <i class="fa fa-calendar"></i> <?php echo date('d M, Y', $blog->timestamp);?>
+                            <i class="fas fa-calendar"></i> <?php echo date('d M, Y', $blog->timestamp);?>
                         </li>
                         <li>
                             <?php 
                                 $user = $this->frontend_model->get_user_from_type_id($blog->posted_by);
                             ?>
-                            <i class="fa fa-user"></i> <?php echo $user->name;?>
+                            <i class="fas fa-user"></i> <?php echo $user->name;?>
                         </li>
                     </ul>
                 </div>

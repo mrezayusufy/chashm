@@ -1420,10 +1420,10 @@ var public_vars = public_vars || {};
 	// Enable/Disable Resizable Event
 	var wid = 0;
 	
-	$(window).resize(function() {
-		clearTimeout(wid);
-		wid = setTimeout(trigger_resizable, 200);
-	});
+	// $(window).resize(function() {
+	// 	clearTimeout(wid);
+	// 	wid = setTimeout(trigger_resizable, 200);
+	// });
 
 	
 	
@@ -1452,10 +1452,10 @@ function fit_main_content_height()
 		}
 		
 		var sm_height  = public_vars.$sidebarMenu.outerHeight(),
-			mc_height  = public_vars.$mainContent.outerHeight(),
-			doc_height = $(document).height(),
-			win_height = $(window).height(),
-			sm_height_real = 0;
+		mc_height  = public_vars.$mainContent.outerHeight(),
+		doc_height = $(document).height(),
+		win_height = $(window).height(),
+		sm_height_real = 0;
 		
 		if(win_height > doc_height)
 		{

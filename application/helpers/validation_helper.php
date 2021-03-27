@@ -104,7 +104,10 @@ if (!function_exists('null_checking')) {
 				$returned_array[$key_array[$i]] = $data[$key_array[$i]];
 			}
 			else{
-				$returned_array[$key_array[$i]] = null;
+				$val = $returned_array[$key_array[$i]];
+				if(is_int($val)) $val = 0;
+				if(is_string($val)) $val = null;
+				else $val = null;
 			}
 		}
 		return $returned_array;

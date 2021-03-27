@@ -23,10 +23,26 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('father_name'); ?></label>
+
+                        <div class="col-sm-7">
+                            <input type="text" name="father_name" class="form-control" id="field-1" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('phone'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="text" name="phone" class="form-control" id="field-1" >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('address'); ?></label>
+
+                        <div class="col-sm-7">
+                            <textarea name="address" class="form-control" id="field-ta" rows="5" ></textarea>
                         </div>
                     </div>
 
@@ -71,7 +87,7 @@
                     
                     <div class="col-sm-3 control-label col-sm-offset-2">
                         <button type="submit" class="btn btn-success">
-                            <i class="fa fa-check"></i> <?php echo get_phrase('save');?>
+                            <i class="fas fa-check"></i> <?php echo get_phrase('save');?>
                         </button>
                     </div>
                 </form>

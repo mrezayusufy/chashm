@@ -66,7 +66,7 @@ foreach ($single_department_info as $row) {
 
                         <div class="col-sm-3 control-label col-sm-offset-2">
                             <button type="submit" class="btn btn-success">
-                                <i class="fa fa-check"></i> <?php echo get_phrase('update');?>
+                                <i class="fas fa-check"></i> <?php echo get_phrase('update');?>
                             </button>
                         </div>
                     </form>

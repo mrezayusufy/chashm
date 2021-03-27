@@ -77,7 +77,7 @@ var public_vars = public_vars || {};
 			{
 				public_vars.$mainMenu.stop().slideToggle('normal', function()
 				{
-					public_vars.$mainMenu.css('height', 'auto');
+					// public_vars.$mainMenu.css('height', 'auto');
 				});
 			}
 			else
@@ -1574,6 +1574,7 @@ function fit_main_content_height()
 			fit_calendar_container_height();
 	}
 }
+
 
 
 // Sidebar Menu Setup

@@ -55,6 +55,14 @@
                     </div>
 
                     <div class="form-group">
+                        <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('salary'); ?></label>
+
+                        <div class="col-sm-7">
+                            <input type="number" name="salary" class="form-control" id="field-1" required/>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
                         <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('address'); ?></label>
 
                         <div class="col-sm-7">
@@ -109,7 +117,7 @@
 
                     <div class="col-sm-3 control-label col-sm-offset-2">
                         <button type="submit" class="btn btn-success">
-                            <i class="fa fa-check"></i> <?php echo get_phrase('save');?>
+                            <i class="fas fa-check"></i> <?php echo get_phrase('save');?>
                         </button>
                     </div>
                 </form>

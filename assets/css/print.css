@@ -1,0 +1,18 @@
+@page {
+  size: A4;
+}
+tr {
+  height: 9mm;
+}
+td:first-child {
+  width: 40mm;
+}
+td:nth-child(3) {
+  width: 40mm;
+}
+td {
+  width: 60mm;
+}
+@page {
+  margin: 44mm 5mm 5mm 5mm;
+}

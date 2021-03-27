@@ -38,7 +38,7 @@ foreach ($facility as $row) { ?>
 
                     <div class="col-sm-3 col-sm-offset-3">
                         <button type="submit" class="btn btn-success">
-                            <i class="fa fa-check"></i> <?php echo get_phrase('update');?>
+                            <i class="fas fa-check"></i> <?php echo get_phrase('update');?>
                         </button>
                     </div>
 

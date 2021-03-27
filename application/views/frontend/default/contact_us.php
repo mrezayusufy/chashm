@@ -37,7 +37,7 @@
                 <?php echo get_phrase('please_call_us_or_complete_the_form_below_and_we_will_get_to_you_shortly');?>
             </p>
             <button class="btn btn-styled btn-xl btn-base-1 btn-icon-left mt-4">
-                <i class="fa fa-mobile"></i><?php echo $this->frontend_model->get_frontend_settings('emergency_contact');?>
+                <i class="fas fa-mobile"></i><?php echo $this->frontend_model->get_frontend_settings('emergency_contact');?>
             </button>
         </div>
     </div>

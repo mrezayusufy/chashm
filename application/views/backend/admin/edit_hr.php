@@ -52,10 +52,18 @@ foreach ($single_hr_info as $row) {
                         </div>
 
                         <div class="form-group">
+                            <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('salary'); ?></label>
+
+                            <div class="col-sm-7">
+                                <input type="number" name="salary" class="form-control" id="field-1" value="<?php echo $row['salary'];?>" required>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
                             <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('address'); ?></label>
 
                             <div class="col-sm-7">
-                                <textarea name="address" rows="5" class="form-control" id="field-ta"><?php echo $row['address']; ?></textarea>
+                                <textarea name="address" rows="5" class="form-control" id="field-ta" value="<?php echo $row['address']; ?>"><?php echo $row['address']; ?></textarea>
                             </div>
                         </div>
 
@@ -107,7 +115,7 @@ foreach ($single_hr_info as $row) {
 
                         <div class="col-sm-3 control-label col-sm-offset-2">
                             <button type="submit" class="btn btn-success">
-                                <i class="fa fa-check"></i> <?php echo get_phrase('update');?>
+                                <i class="fas fa-check"></i> <?php echo get_phrase('update');?>
                             </button>
                         </div>
                     </form>

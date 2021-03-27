@@ -64,23 +64,23 @@ class Frontend_model extends CI_Model {
         }
         $this->db->order_by('name', 'asc');
 
-        return $this->db->get('doctor')->result_array();
+        return $this->db->get('hr')->result_array();
     }
 
-    function get_doctor_info($doctor_id) {
-        $result = $this->db->get_where('doctor', array(
-            'doctor_id' => $doctor_id
+    function get_hr_info($hr_id) {
+        $result = $this->db->get_where('hr', array(
+            'hr_id' => $hr_id
         ))->row();
 
         return $result;
     }
 
     function get_random_doctors($limit = '') {
-        $this->db->order_by('doctor_id', 'rand');
+        $this->db->order_by('hr_id', 'rand');
         if ($limit != '') {
             $this->db->limit($limit);
         }
-        $result = $this->db->get('doctor')->result_array();
+        $result = $this->db->get('hr')->result_array();
 
         return $result;
     }

@@ -62,7 +62,7 @@
 
                     <div class="col-sm-3 control-label col-sm-offset-2">
                         <button type="submit" class="btn btn-success">
-                            <i class="fa fa-check"></i> <?php echo get_phrase('save');?>
+                            <i class="fas fa-check"></i> <?php echo get_phrase('save');?>
                         </button>
                     </div>
                 </form>

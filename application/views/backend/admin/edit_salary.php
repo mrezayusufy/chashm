@@ -43,18 +43,20 @@ foreach ($single_salary_info as $row) {
                                        placeholder="<?php echo get_phrase('date');?>" value="<?php echo date("D, d M Y", $row['date']); ?>" required>
                             </div>
                         </div>
-
                         <div class="form-group">
                             <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('status'); ?></label>
 
                             <div class="col-sm-7">
-                                <input type="text" name="status" class="form-control" id="field-1" value="<?php echo $row['status']; ?>">
+                                <select name="status" class="select2" id = "status" defaultValue="<?= $row["status"];?>" required>
+                                    <option value="paid"><?php echo get_phrase('paid'); ?></option>
+                                    <option value="unpaid"><?php echo get_phrase('unpaid'); ?></option>
+                                </select>
                             </div>
                         </div>
 
                         <div class="col-sm-3 control-label col-sm-offset-2">
                             <button type="submit" class="btn btn-success">
-                                <i class="fa fa-check"></i> <?php echo get_phrase('update');?>
+                                <i class="fas fa-check"></i> <?php echo get_phrase('update');?>
                             </button>
                         </div>
                     </form>

@@ -1,7 +1,10 @@
 {
   "favorites.resources": [
     "application\\views\\backend\\admin",
-    "application\\views\\backend\\receptionist"
+    "application\\views\\backend\\hr",
+    "application\\models\\Crud_model.php",
+    "application\\controllers\\HR.php",
+    "application\\views\\backend\\accountant"
   ],
   "workbench.colorCustomizations": {
     "activityBar.activeBackground": "#ff6433",

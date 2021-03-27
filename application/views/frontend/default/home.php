@@ -44,14 +44,14 @@
         <div class="row">
             <div class="col-lg-4">
                 <div class="home-widget widget-1">
-                    <i class="fa fa-phone"></i>
+                    <i class="fas fa-phone"></i>
                     <h4><?php echo get_phrase('emergency_contact');?></h4>
                     <h3><?php echo $this->frontend_model->get_frontend_settings('emergency_contact');?></h3>
                 </div>
             </div>
             <div class="col-lg-4">
                 <div class="home-widget widget-2">
-                    <i class="fa fa-calendar"></i>
+                    <i class="fas fa-calendar"></i>
                     <h4><?php echo get_phrase('doctor_appointment');?></h4>
                     <a href="<?php echo site_url('home/appointment');?>" 
                         class="btn">
@@ -61,7 +61,7 @@
             </div>
             <div class="col-lg-4">
                 <div class="home-widget widget-3">
-                    <i class="fa fa-clock-o"></i>
+                    <i class="fas fa-clock-o"></i>
                     <h4><?php echo get_phrase('opening_hours');?></h4>
                     <?php $open = json_decode($opening_hours);?>
                     <ul>

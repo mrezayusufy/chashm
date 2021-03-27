@@ -71,7 +71,7 @@
     </div>
     <div class="appointment-btn doctor-book">
         <a href="<?php echo site_url('home/appointment/' . $doctor->doctor_id);?>" class="btn btn-styled btn-base-1 btn-outline btn-icon-left">
-            <i class="fa fa-calendar"></i><?php echo get_phrase('book_appointment');?>
+            <i class="fas fa-calendar"></i><?php echo get_phrase('book_appointment');?>
         </a>
     </div>
 

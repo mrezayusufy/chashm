@@ -1,6 +1,6 @@
 <button onclick="showAjaxModal('<?php echo site_url('modal/popup/add_accountant');?>');" 
     class="btn btn-primary pull-right">
-        <i class="fa fa-plus"></i>&nbsp;<?php echo get_phrase('add_accountant'); ?>
+        <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('add_accountant'); ?>
 </button>
 <div style="clear:both;"></div>
 <br>
@@ -30,12 +30,12 @@
                 <td>
                     <a  onclick="showAjaxModal('<?php echo site_url('modal/popup/edit_accountant/'.$row['accountant_id']);?>');" 
                         class="btn btn-info btn-sm">
-                            <i class="fa fa-pencil"></i>&nbsp;
+                            <i class="fas fa-pencil-alt"></i>&nbsp;
                             <?php echo get_phrase('edit');?>
                     </a>
                     <a onclick="confirm_modal('<?php echo site_url('admin/accountant/delete/'.$row['accountant_id']); ?>')"
                         class="btn btn-danger btn-sm">
-                            <i class="fa fa-trash-o"></i>&nbsp;
+                            <i class="fas fa-trash"></i>&nbsp;
                         <?php echo get_phrase('delete');?>
                     </a>
                 </td>

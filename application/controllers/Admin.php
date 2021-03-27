@@ -361,14 +361,17 @@ class Admin extends CI_Controller
         $this->load->view('backend/index', $data);
     }
     // patient 
-    function apiPatient($task = "", $patient_id = "") {
-        if ($task == "all") {
-            $query = $this->crud_model->select_patient_info();
-            if($query) 
-                $result['patients'] = $this->crud_model->select_patient_info();
-            header('Content-Type: application/json');
-            echo json_encode($result);
+    function patient_api() {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
         }
+        $query = $this->crud_model->select_patient_info();
+
+        $data['patients'] = $query;
+        
+        header('Content-Type: application/json');
+        echo json_encode($data);
     }
     function patient($task = "", $patient_id = "")
     {
