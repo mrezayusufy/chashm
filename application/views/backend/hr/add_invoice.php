@@ -23,7 +23,6 @@ $index = 1;
                                 :options="invoiceTitle" 
                                 name="title" 
                                 label="title" 
-                                @input="setSelected" 
                                 v-model="newInvoice.title" 
                                 required>
                             </title-select>
@@ -34,7 +33,7 @@ $index = 1;
                         <label for="field-1" class="col-sm-2 control-label"><?= get_phrase('patient'); ?></label>
 
                         <div class="col-sm-7">
-                            <patient-select id="patient" :options="patients" label="patient" :reduce="o => `${o.patient_id}`" :get-option-label="o => `${o.patient_id} ${o.name}`" :create-option="o => ({ name: name, father_name: father_name, patient_id: patient_id })" @input="setSelected" v-model="newInvoice.patient_id">
+                            <patient-select id="patient" :options="patients" label="patient" :reduce="o => `${o.patient_id}`" :get-option-label="o => `${o.patient_id} ${o.name}`" :create-option="o => ({ name: name, father_name: father_name, patient_id: patient_id })" v-model="newInvoice.patient_id">
                                 <template slot="option" slot-scope="option">
                                     ID:{{ option.patient_id }} _ {{ option.name }} _ {{ option.father_name }}
                                 </template>
@@ -52,7 +51,7 @@ $index = 1;
                         <label for="field-1" class="col-sm-2 control-label"><?= get_phrase('doctor'); ?></label>
 
                         <div class="col-sm-7">
-                            <hr-select id="hr_id" :options="hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="setSelected" v-model="newInvoice.hr_id">
+                            <hr-select id="hr_id" :options="hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" v-model="newInvoice.hr_id">
                                 <template slot="option" slot-scope="option">
                                     ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }}
                                 </template>
@@ -81,8 +80,9 @@ $index = 1;
                     <div id="invoice_entries">
                         <invoice-entries 
                             v-for="(invoice_entry, index) in newInvoice.invoice_entries" 
-                            v-bind:invoice_entry="invoice_entry"
-                            v-bind:key="index"
+                            :invoice_entry="invoice_entry"
+                            :key="index"
+                            v-on:setSelected="setSelected"
                             v-on:remove-entry="removeEntry(this)">
                         </invoice-entries>
                     </div>
@@ -112,16 +112,6 @@ $index = 1;
             </div>
         </div>
     </div>
-    <medicine-select id="medicine_id" :options="medicines" label="medicine_id" :reduce="o => o.medicine_id" :get-option-label="o => `${o.medicine_id} ${o.name} ${o.total_quantity} ${o.manufacturing_company} ${o.price}`" :create-option="o => ({ name: name, medicine_id: medicine_id, total_quantity: total_quantity, manufacturing_company: manufacturing_company, price: price })" @input="setSelected" v-model="newInvoice.invoice_entries.item">
-        <template slot="option" slot-scope="option">
-            ID:{{ option.medicine_id }} _ {{ option.name }} _ {{ option.manufacturing_company }}
-        </template>
-        <template slot="selected-option" slot-scope="option">
-            <div class="selected d-center">
-                ID:{{ option.medicine_id }} _ {{ option.name }} _ {{ option.manufacturing_company }}
-            </div>
-        </template>
-    </medicine-select>
  
 </div>
 <script type="text/x-template" id="invoice-entry-template">
@@ -137,7 +127,7 @@ $index = 1;
                     :reduce="o => `${o.name}:${o.manufacturing_company}:${o.medicine_id}:${o.price}`" 
                     :get-option-label="o => `${o.medicine_id} ${o.name} ${o.total_quantity} ${o.manufacturing_company} ${o.price}`" 
                     :create-option="o => ({ name: name, medicine_id: medicine_id, total_quantity: total_quantity, manufacturing_company: manufacturing_company, price: price })" 
-                    @input="setSelected"
+                    @input="$emit('setSelected')"
                     v-model="invoice_entry.item">
                     <template slot="option" slot-scope="option">
                         ID:{{ option.medicine_id }} _ {{ option.name }} _ {{ option.manufacturing_company }}
@@ -151,11 +141,11 @@ $index = 1;
             </div>
             <!-- medicine qty -->
             <div class="col-sm-2">
-                <input type="number" class="form-control" name="quantity" v-model="invoice_entry.quantity" min=1 placeholder="<?= get_phrase('quantity'); ?>">
+                <input type="number" class="form-control" name="quantity" name="quantity[n]" v-model="invoice_entry.quantity" min=1 placeholder="<?= get_phrase('quantity'); ?>">
             </div>
             <!-- medicine amount -->
             <div class="col-sm-2">
-                <input type="number" class="form-control" name="amount" v-model="invoice_entry.amount" min=0 placeholder="<?= get_phrase('amount'); ?>">
+                <input type="number" class="form-control" name="amount" name="amount[n]" v-model="invoice_entry.amount" min=0 placeholder="<?= get_phrase('amount'); ?>">
             </div>
         <?php else : ?>
         <div class="col-sm-3">
@@ -181,24 +171,15 @@ $index = 1;
         data: function(){
             return {
                 medicines: <?= json_encode($medicines); ?>,
-                item: "",
-                quantity: "",
-                amount: ""
+                n: 0,
             }
-        },
-        methods: {
-            setSelected(option){
-                var item = option.split(":");
-                console.log('item', item[3]);
-                this.amount = item[3];
-            }
-        },
+        }, 
         template: "#invoice-entry-template"
     }); 
     Vue.component("title-select", VueSelect.VueSelect);
     Vue.component("medicine-select", VueSelect.VueSelect);
     Vue.component("patient-select", VueSelect.VueSelect);
-    Vue.component("hr-select", VueSelect.VueSelect);
+    Vue.component("hr-select", VueSelect.VueSelect); 
     var app = new Vue({
         el: "#add-invoice",
         data: { 
@@ -220,9 +201,15 @@ $index = 1;
             formValidate: [],
             patients: <?= json_encode($patients); ?>,
             invoiceTitle: ['Pharmacist','Checkout','Optician','Surgery','BScan','Pharmacist']
-        },
+        }, 
         methods: {
-            setSelected(option){},
+             setSelected(option){
+                console.log('option', option);
+                // var item = option.split(":");
+                // console.log('item', item[3]);
+                // this.amount++;
+                // console.log('this.amount', this.amount);
+            },
             createInvoice() {
                 var i = app.newInvoice; 
                 var invoice_entries = JSON.stringify(i.invoice_entries);
@@ -265,8 +252,9 @@ $index = 1;
                     formData.append(key, obj[key]);
                 }
                 return formData;
-            },
-        }
+            }, 
+        },
+
     });
     // CREATING BLANK INVOICE ENTRY
     let i = 2;

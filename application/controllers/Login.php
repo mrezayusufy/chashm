@@ -87,7 +87,7 @@ class Login extends CI_Controller
             $join = array('department', 'department.department_id=hr.department_id');
             $select = 'hr.hr_id as hr_id, department.name as department_name, concat_ws(" ",hr.first_name, hr.last_name) as name';
             $query = $this->db->select($select)->join($join[0], $join[1])->get_where('hr', $credential)->row();
-            $department = $query->department_name;
+            $department = "Accountant";
             $hr_id = $query->hr_id;
             $name = $query->name;
             if ($department == 'Doctor') {

@@ -1,0 +1,33 @@
+version: '2'
+services:
+  ci_mysql:
+    image: 'mysql: 5.7'
+    volumes:
+      -'./mysql:/var/lib/mysql'
+    environment:
+      -MYSQL_ROOT_PASSWORD = Password01
+  ci_phpmyadmin:
+    image: 'phpmyadmin/phpmyadmin'
+    environment:
+      -PMA_ARBITRARY = 1
+      -PMA_HOST = ci_mysql
+      -PMA_USER = root
+      -PMA_PASSWORD = Password01
+    links:
+      -ci_mysql
+    ports:
+      -8088: 80
+    volumes:
+      -'./phpmyadmin/sessions:/sessions'
+  ci_php:
+    # image: php: 7.2-apache
+    build:
+      context:.
+      dockerfile: dockerfile
+    volumes:
+      -./php.ini:/usr/local/etc/php/php.ini
+      -./html:/var/www/html
+    depends_on:
+      -ci_mysql
+    ports:
+      -8089: 80

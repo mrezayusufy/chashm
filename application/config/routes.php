@@ -52,5 +52,5 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 $route['default_controller'] = 'home';
 $route['404_override'] = 'error/page_missing';
 $route['translate_uri_dashes'] = FALSE;
-
+$route['hr'] = 'hr/index';
 //$route['(:any)/department/(:num)']  = 'home/department/$1';
