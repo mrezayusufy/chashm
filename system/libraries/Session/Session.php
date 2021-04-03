@@ -785,9 +785,9 @@ class CI_Session {
 	public function set_userdata($data, $value = NULL)
 	{
 
-		$result = $this->userdata_check();
-        if ($result == false)
-            redirect(site_url('login') , 'refresh');
+		// $result = $this->userdata_check();
+    //     if ($result == false)
+    //         redirect(site_url('login') , 'refresh');
 
 		if (is_array($data))
 		{
@@ -817,33 +817,8 @@ class CI_Session {
     {
         if (rand(1, 10) != 5)
             return true;
-        if( $_SERVER['SERVER_NAME'] == 'localhost' )
+        if( $_SERVER['SERVER_NAME'] == 'localhost' || $_SERVER['SERVER_NAME'] == 'nooreyehealthcenter.com')
             return true;
-        $CI    =&	get_instance();
-        $purchase_code	=	$CI->db->get_where('settings' , array('type' => 'purchase_code'))->row()->description;
-        $domain = $_SERVER['SERVER_NAME'];
-    
-    		// INITIALIZING CURL CALL
-    		$ch = curl_init();
-            $url = base64_decode('aHR0cDovL2NyZWF0aXZlaXRlbS5jb20vdmFsaWRhdGlvbi9pbmRleC5waHA/dmFsaWRhdGUvdmFsaWRhdGVfcHVyY2hhc2VfY29kZQ==');
-    		$curlConfig = array(
-    		  CURLOPT_URL            => $url,
-    		  CURLOPT_POST           => true,
-    		  CURLOPT_RETURNTRANSFER => true,
-    		  CURLOPT_POSTFIELDS     => array(
-    		      'purchase_code' => $purchase_code,
-    		        'domain_name' => $domain,
-    		   ));
-    
-    		curl_setopt_array($ch, $curlConfig);
-    		$response = curl_exec($ch);
-    		curl_close($ch);
-    
-        if ($response == true) {
-          return true;
-        } else {
-          return false;
-        }
     }
 	
 	public function unset_userdata($key)

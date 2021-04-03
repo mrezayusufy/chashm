@@ -27,7 +27,7 @@
                 <td><?php echo $row['manufacturing_company'] ?></td>
                 <td>
                     <?php
-                    $available_quantity = $row['total_quantity'] - $row['sold_quantity'];
+                    $available_quantity = $row['status'];
                     if($available_quantity > 0) { ?>
                         <div class="label label-success" style="font-size: 11px;"><?php echo get_phrase('available'); ?></div>
                     <?php } else { ?>

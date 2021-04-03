@@ -1,5 +1,4 @@
 <div id="app">
-
     <button @click="addModal=true" class="btn btn-primary pull-right">
         <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_patient'); ?>
     </button>

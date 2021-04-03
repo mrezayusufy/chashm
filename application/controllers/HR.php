@@ -15,8 +15,6 @@ class HR extends CI_Controller
         $this->load->database();
         $this->load->library('session');
         $this->load->model('crud_model');
-        $this->load->model('email_model');
-        $this->load->model('sms_model');
         $this->load->model('frontend_model');
     }
     
@@ -45,13 +43,13 @@ class HR extends CI_Controller
         echo json_encode($data);
     }
     function salary($task = "", $salary_id = ""){
-        // if ($this->session->userdata('hr_login') != 1) {
-        //     $this->session->set_userdata('last_page', current_url());
-        //     redirect(site_url(), 'refresh');
-        // }
+        if ($this->session->userdata('hr_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
         header('Content-Type: application/json');
         $department = $this->session->userdata('department');
-        // if($department == "Accountant") {
+        if($department == "Accountant") {
             switch($task){
                 case "add":
                     $config = array(
@@ -115,10 +113,10 @@ class HR extends CI_Controller
                     echo json_encode($data);
                     break;
             }
-        // } else {
-        //     $data['msg'] = "You are not allowed!";
-        //     echo json_encode($data);
-        // }
+        } else {
+            $data['msg'] = "You are not allowed!";
+            echo json_encode($data);
+        }
     }
     function salary_manage(){
         if ($this->session->userdata('hr_login') != 1) {
@@ -137,10 +135,10 @@ class HR extends CI_Controller
     function patient_api($task= "" ,  $patient_id = "") {
         header('Content-Type: application/json');
 
-        // if ($this->session->userdata('hr_login') != 1) {
-        //     $this->session->set_userdata('last_page', current_url());
-        //     redirect(site_url(), 'refresh');
-        // }
+        if ($this->session->userdata('hr_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
         switch($task) {
             case "add":
                 $config = array(
@@ -214,24 +212,9 @@ class HR extends CI_Controller
     }
     function patient($task = "", $patient_id = "")
     {
-        if ($this->session->userdata('department') != 'Receptionist') {
+        if ($this->session->userdata('department') != 'Accountant') {
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
-        }
-        if ($task == "create") {
-            $this->crud_model->save_patient_info();
-            $this->session->set_flashdata('message', get_phrase('patient_info_saved_successfuly'));
-            redirect(site_url('hr/patient'), 'refresh');
-        }
-        
-        if ($task == "update") {
-            $this->crud_model->update_patient_info($patient_id);
-            $this->session->set_flashdata('message', get_phrase('patient_info_updated_successfuly'));
-            // redirect(site_url('hr/patient'), 'refresh');
-        }
-        
-        if ($task == "delete") {
-            $this->crud_model->delete_patient_info($patient_id);
         }
         
         $data['patient_info']   = $this->crud_model->select_patient_info();
@@ -245,7 +228,7 @@ class HR extends CI_Controller
         header("Access-Control-Allow-Methods:POST,GET");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-        $data = new class{};
+    $data = new class{};
         $system_name = $this->db->get_where('settings', array('type' => 'system_name'))->row()->description;
         $address = $this->db->get_where('settings', array('type' => 'address'))->row()->description;
         $phone = $this->db->get_where('settings', array('type' => 'phone'))->row()->description;
@@ -356,17 +339,22 @@ class HR extends CI_Controller
         switch($task){
             case "add":
                 $config = array(
-                    array('field' => 'paid', 'label' => 'paid', 'rules' => 'trim|required'),
-                    array('field' => 'invoice_', 'label' => 'paid', 'rules' => 'trim|required'),
+                    array('field' => 'title', 'label' => 'title', 'rules' => 'trim|required'),
+                    array('field' => 'patient_id', 'label' => 'patient_id', 'rules' => 'trim|required'),
+                    array('field' => 'hr_id', 'label' => 'hr_id', 'rules' => 'trim|required'),
+                    array('field' => 'invoice_entries', 'label' => 'invoice_entries', 'rules' => 'trim|required'),
                 );
                 $this->form_validation->set_rules($config);
                 if($this->form_validation->run() == false) {
                     $result['error'] = true;
                     $result['msg'] = array(
-                        'paid' => form_error('paid'),
+                        'title' => form_error('title'),
+                        'patient_id' => form_error('patient_id'),
+                        'hr_id' => form_error('hr_id'),
+                        'invoice_entries' => form_error('invoice_entries')
                     );
                 } else {
-                    $this->crud_model->update_invoice($invoice_id);
+                    $this->crud_model->add_invoice($invoice_id);
                     $result['error'] = false;
                     $result['msg'] = 'The invoice info was updated successfully.';
                 }

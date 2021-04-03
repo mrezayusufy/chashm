@@ -73,6 +73,13 @@
             </a>
         </li>
 
+        <li class="<?php if ($page_name == 'manage_hr') echo 'active'; ?>">
+            <a href="<?php echo site_url('admin/hr');?>">
+                <i class="fas fa-user-md"></i>
+                <span><?php echo get_phrase('HR'); ?></span>
+            </a>
+        </li>
+
         <li class="<?php if ($page_name == 'staff') echo 'active'; ?> ">
             <a href="<?php echo site_url('admin/staff');?>">
                 <i class="fas fa-user"></i>
@@ -87,10 +94,10 @@
             </a>
         </li>
 
-        <li class="<?php if ($page_name == 'manage_hr') echo 'active'; ?>">
-            <a href="<?php echo site_url('admin/hr');?>">
-                <i class="fas fa-user-md"></i>
-                <span><?php echo get_phrase('HR'); ?></span>
+        <li class="<?php if ($page_name == 'invoice') echo 'active'; ?> ">
+            <a href="<?php echo site_url('admin/invoice');?>">
+                <i class="fas fa-receipt"></i>
+                <span><?php echo get_phrase('invoice'); ?></span>
             </a>
         </li>
 
@@ -101,45 +108,17 @@
             </a>
         </li>
 
-        <li class="<?php if ($page_name == 'show_medicine')
-                        echo 'opened active';?> ">
-            <a href="#">
-                <i class="fas fa-sun"></i>
-                <span><?php echo get_phrase('monitor_hospital'); ?></span>
+        <li class="<?php if ($page_name == 'show_medicine') echo 'active'; ?> ">
+            <a href="<?php echo site_url('admin/medicine');?>">
+                <i class="fas fa-capsules"></i>
+                <span><?php echo get_phrase('medicine'); ?></span>
             </a>
-            <ul>
-                <li class="<?php if ($page_name == 'show_medicine') echo 'active'; ?> ">
-                    <a href="<?php echo site_url('admin/medicine');?>">
-                        <i class="entypo-dot"></i>
-                        <span><?php echo get_phrase('medicine'); ?></span>
-                    </a>
-                </li>
-            </ul>
         </li>
 
-        <!-- SETTINGS -->
-        <li class="<?php if ($page_name == 'system_settings' || $page_name == 'manage_language' ||
-                            $page_name == 'sms_settings') echo 'opened active';?> ">
-            <a href="#">
+        <li class="<?php if ($page_name == 'system_settings') echo 'active'; ?> ">
+            <a href="<?php echo site_url('admin/system_settings');?>">
                 <i class="fas fa-wrench"></i>
-                <span><?php echo get_phrase('settings'); ?></span>
-            </a>
-            <ul>
-                <li class="<?php if ($page_name == 'system_settings') echo 'active'; ?> ">
-                    <a href="<?php echo site_url('admin/system_settings');?>">
-                        <span><i class="fas fa-h-square"></i> <?php echo get_phrase('system_settings'); ?></span>
-                    </a>
-                </li>
-               
-            </ul>
-        </li>
-
-       
-        <!-- contact emails -->
-        <li class="<?php if ($page_name == 'contact_email') echo 'active'; ?>">
-            <a href="<?php echo site_url('admin/contact_email');?>">
-                <i class="fas fa-envelope"></i>
-                <span><?php echo get_phrase('contact_emails'); ?></span>
+                <span><?php echo get_phrase('system_settings'); ?></span>
             </a>
         </li>
 

@@ -20,7 +20,14 @@ class Crud_model extends CI_Model
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
     }
-
+    /////creates log/////
+    function create_log($data = array()) {
+        $data['timestamp'] = now('Asia/Kabul');
+        $data['ip'] = $_SERVER["REMOTE_ADDR"];
+        // $location = new SimpleXMLElement(file_get_contents('http://freegeoip.net/xml/' . $_SERVER["REMOTE_ADDR"]));
+        // $data['location'] = $location->City . ' , ' . $location->CountryName;
+        $this->db->insert('log', $data);
+    }
     function get_type_name_by_id($type, $type_id = '', $field = 'name')
     {
         $this->db->where($type . '_id', $type_id);
@@ -28,21 +35,77 @@ class Crud_model extends CI_Model
         $result = $query->result_array();
         foreach ($result as $row)
             return $row[$field];
-        //return	$this->db->get_where($type,array($type.'_id'=>$type_id))->row()->$field;
     } 
     function total_count($column_name, $where, $table_name)
     {
-
         $this->db->select_sum($column_name);
         // If Where is not NULL
         if (!empty($where) && count($where) > 0) {
             $this->db->where($where);
         }
-
         $this->db->from($table_name);
         // Return Count Column
         return $this->db->get()->row(); //table_name array sub 0
+    }
+    function add_invoice()
+    {
+        $data = array(
+            'title'              => $this->input->post('title'),
+            'patient_id'         => $this->input->post('patient_id'),
+            'hr_id'              => $this->input->post('hr_id'),
+            'paid'               => 0,
+            'status'             => 'unpaid',
+            'creation_timestamp' => now('Asia/Kabul')
+        );
+        $invoice_entry_id = array();
 
+        $invoice_entries                      = json_decode($this->input->post('invoice_entries'));
+        $total = 0;
+        for ($i = 0; $i <= count($invoice_entries); $i++) {
+            $invoice_item = $invoice_entries[$i]->item;
+            $invoice_amount = $invoice_entries[$i]->amount;
+            $invoice_quantity = $invoice_entries[$i]->quantity;
+            if ($invoice_item != "" && $invoice_amount != "" && $invoice_quantity != "") {
+                $new_entry          = array('item' => $invoice_item, 'quantity' => $invoice_quantity, 'amount' => $invoice_amount);
+                $this->db->insert('invoice_entry', $new_entry);
+                $invoice_entry_id_item = $this->db->insert_id();
+                if ($this->session->userdata('department') == "Pharmacist") {
+                    $medicine_items = explode(":", $invoice_item);
+                    $medicine = $this->db->get_where("medicine", array("medicine_id" => $medicine_items["2"]))->row();
+                    if($medicine->total_quantity > 0){
+                        $quantity = $medicine->total_quantity - $invoice_quantity;
+                        $status = $quantity > 0 ? 1 : 0;
+                        $update_medicine = array("total_quantity" => $quantity, "status" => $status);
+                    }
+                    $this->db->update("medicine", $update_medicine, array("medicine_id" => $medicine->medicine_id));
+                }
+                $total += $invoice_amount * $invoice_quantity;
+                $invoice_entry_id[] = $invoice_entry_id_item;
+            }
+        }
+        // for ($i = 0; $i <= count($items); $i++) {
+        //     if ($items[$i] != "" && $amounts[$i] != "" && $quantities[$i] != "") {
+        //         $new_entry          = array('item' => $items[$i], 'quantity' => $quantities[$i], 'amount' => $amounts[$i]);
+        //         $this->db->insert('invoice_entry', $new_entry);
+        //         $invoice_entry_id_item = $this->db->insert_id();
+        //         if ($this->session->userdata('department') == "Pharmacist") {
+        //             $medicine_items = explode(":", $items[$i]);
+        //             $medicine = $this->db->get_where("medicine", array("medicine_id" => $medicine_items["2"]))->row();
+        //             if($medicine->total_quantity > 0){
+        //                 $quantity = $medicine->total_quantity - $quantities[$i];
+        //                 $status = $quantity > 0 ? 1 : 0;
+        //                 $update_medicine = array("total_quantity" => $quantity, "status" => $status);
+        //             }
+        //             $this->db->update("medicine", $update_medicine, array("medicine_id" => $medicine->medicine_id));
+        //         }
+        //         $total += $amounts[$i] * $quantities[$i];
+        //         $invoice_entry_id[] = $invoice_entry_id_item;
+        //     }
+        // }
+        $data['invoice_entry_id']    = json_encode($invoice_entry_id);
+        $data['total']              = $total;
+        $returned_array = null_checking($data);
+        $this->db->insert('invoice', $returned_array);
     }
     function create_invoice()
     {
@@ -55,6 +118,7 @@ class Crud_model extends CI_Model
             'creation_timestamp' => now('Asia/Kabul')
         );
         $invoice_entry_id = array();
+
         $items                      = $this->input->post('item');
         $quantities                 = $this->input->post('quantity');
         $amounts                    = $this->input->post('amount');
@@ -67,7 +131,11 @@ class Crud_model extends CI_Model
                 if ($this->session->userdata('department') == "Pharmacist") {
                     $medicine_items = explode(":", $items[$i]);
                     $medicine = $this->db->get_where("medicine", array("medicine_id" => $medicine_items["2"]))->row();
-                    $update_medicine = array("total_quantity" => ($medicine->total_quantity - $quantities[$i]));
+                    if($medicine->total_quantity > 0){
+                        $quantity = $medicine->total_quantity - $quantities[$i];
+                        $status = $quantity > 0 ? 1 : 0;
+                        $update_medicine = array("total_quantity" => $quantity, "status" => $status);
+                    }
                     $this->db->update("medicine", $update_medicine, array("medicine_id" => $medicine->medicine_id));
                 }
                 $total += $amounts[$i] * $quantities[$i];
@@ -191,7 +259,7 @@ class Crud_model extends CI_Model
         $this->db->where('type', 'system_title');
         $this->db->update('settings', $returned_array);
 
-        $data['description'] = $this->input->post('address');
+    $data['description'] = $this->input->post('address');
         $returned_array = null_checking($data);
         $this->db->where('type', 'address');
         $this->db->update('settings', $returned_array);
@@ -201,73 +269,14 @@ class Crud_model extends CI_Model
         $this->db->where('type', 'phone');
         $this->db->update('settings', $returned_array);
 
-        $data['description'] = $this->input->post('paypal_email');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'paypal_email');
-        $this->db->update('settings', $returned_array);
-
-        $data['description'] = $this->input->post('currency');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'currency');
-        $this->db->update('settings', $returned_array);
-
         $data['description'] = $this->input->post('system_email');
         $returned_array = null_checking($data);
         $this->db->where('type', 'system_email');
         $this->db->update('settings', $returned_array);
 
-        $data['description'] = $this->input->post('buyer');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'buyer');
-        $this->db->update('settings', $returned_array);
-
-        $data['description'] = $this->input->post('purchase_code');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'purchase_code');
-        $this->db->update('settings', $returned_array);
-
-        $data['description'] = $this->input->post('language');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'language');
-        $this->db->update('settings', $returned_array);
-
-        $data['description'] = $this->input->post('text_align');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'text_align');
-        $this->db->update('settings', $returned_array);
-
         move_uploaded_file($_FILES['logo']['tmp_name'], 'uploads/logo.png');
     }
 
-    // SMS settings.
-    function update_sms_settings()
-    {
-
-        $data['description'] = $this->input->post('clickatell_user');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'clickatell_user');
-        $this->db->update('settings', $returned_array);
-
-        $data['description'] = $this->input->post('clickatell_password');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'clickatell_password');
-        $this->db->update('settings', $returned_array);
-
-        $data['description'] = $this->input->post('clickatell_api_id');
-        $returned_array = null_checking($data);
-        $this->db->where('type', 'clickatell_api_id');
-        $this->db->update('settings', $returned_array);
-    }
-
-    /////creates log/////
-    function create_log($data)
-    {
-        $data['timestamp'] = strtotime(date('Y-m-d') . ' ' . date('H:i:s'));
-        $data['ip'] = $_SERVER["REMOTE_ADDR"];
-        $location = new SimpleXMLElement(file_get_contents('http://freegeoip.net/xml/' . $_SERVER["REMOTE_ADDR"]));
-        $data['location'] = $location->City . ' , ' . $location->CountryName;
-        $this->db->insert('log', $data);
-    }
 
     ////////BACKUP RESTORE/////////
     function create_backup($type)
@@ -589,8 +598,7 @@ class Crud_model extends CI_Model
 
     function delete_hr_info($hr_id)
     {
-        $data = $this->db->where('hr_id', $hr_id);
-        $this->create_log($data);
+        $this->db->where('hr_id', $hr_id);
         $this->db->delete('hr');
     }
     function save_patient_info()
@@ -646,7 +654,7 @@ class Crud_model extends CI_Model
         $data['manufacturing_company']  = $this->input->post('manufacturing_company');
         $data['medicine_category_id']   = $this->input->post('medicine_category_id');
         $data['total_quantity']         = $this->input->post('total_quantity');
-        $data['sold_quantity']          = 0;
+        $data['status']          = 1;
         $returned_array = null_checking($data);
         $this->db->insert('medicine', $returned_array);
     }
@@ -668,6 +676,7 @@ class Crud_model extends CI_Model
         $data['manufacturing_company']  = $this->input->post('manufacturing_company');
         $data['medicine_category_id']   = $this->input->post('medicine_category_id');
         $data['total_quantity']         = $this->input->post('total_quantity');
+        $data['status']                 = $data['total_quantity'] > 0 ? 1 : 0;
         $returned_array = null_checking($data);
         $this->db->where('medicine_id', $medicine_id);
         $this->db->update('medicine', $returned_array);
@@ -715,230 +724,4 @@ class Crud_model extends CI_Model
         ))->result_array();
     }
 
-    function select_prescription_info_by_doctor_id()
-    {
-        $doctor_id = $this->session->userdata('login_user_id');
-        return $this->db->get_where('prescription', array('doctor_id' => $doctor_id))->result_array();
-    }
-
-    function select_medication_history($patient_id = '')
-    {
-        return $this->db->get_where('prescription', array('patient_id' => $patient_id))->result_array();
-    }
-
-    function select_prescription_info_by_patient_id()
-    {
-        $patient_id = $this->session->userdata('login_user_id');
-        return $this->db->get_where('prescription', array('patient_id' => $patient_id))->result_array();
-    }
-
-    function update_prescription_info($prescription_id)
-    {
-        $data['timestamp']      = strtotime($this->input->post('date_timestamp') . ' ' . $this->input->post('time_timestamp'));
-        $data['patient_id']     = $this->input->post('patient_id');
-        $data['case_history']   = $this->input->post('case_history');
-        $data['medication']     = $this->input->post('medication');
-        $data['note']           = $this->input->post('note');
-        $data['doctor_id']      = $this->session->userdata('login_user_id');
-        $returned_array = null_checking($data);
-        $this->db->where('prescription_id', $prescription_id);
-        $this->db->update('prescription', $returned_array);
-    }
-
-    function delete_prescription_info($prescription_id)
-    {
-        $this->db->where('prescription_id', $prescription_id);
-        $this->db->delete('prescription');
-    }
-
-    function save_diagnosis_report_info()
-    {
-        $data['timestamp']          = strtotime($this->input->post('date_timestamp') . ' ' . $this->input->post('time_timestamp'));
-        $data['report_type']        = $this->input->post('report_type');
-        $data['file_name']          = $_FILES["file_name"]["name"];
-        $data['document_type']      = $this->input->post('document_type');
-        $data['description']        = $this->input->post('description');
-        $data['prescription_id']    = $this->input->post('prescription_id');
-
-        $this->db->insert('diagnosis_report', $data);
-
-        $diagnosis_report_id        = $this->db->insert_id();
-        move_uploaded_file($_FILES["file_name"]["tmp_name"], 'uploads/diagnosis_report/' . $_FILES["file_name"]["name"]);
-    }
-
-    function select_diagnosis_report_info()
-    {
-        return $this->db->get('diagnosis_report')->result_array();
-    }
-
-    function delete_diagnosis_report_info($diagnosis_report_id)
-    {
-        $this->db->where('diagnosis_report_id', $diagnosis_report_id);
-        $this->db->delete('diagnosis_report');
-    }
-
-    function save_notice_info()
-    {
-        $data['title']              = $this->input->post('title');
-        $data['description']        = $this->input->post('description');
-        if ($this->input->post('start_timestamp') != '')
-            $data['start_timestamp']    = strtotime($this->input->post('start_timestamp'));
-        else
-            $data['start_timestamp']    = '';
-        if ($this->input->post('end_timestamp') != '')
-            $data['end_timestamp']      = strtotime($this->input->post('end_timestamp'));
-        else
-            $data['end_timestamp']      = $data['start_timestamp'];
-
-        $returned_array = null_checking($data);
-        $this->db->insert('notice', $returned_array);
-    }
-
-    function select_notice_info()
-    {
-        return $this->db->get('notice')->result_array();
-    }
-
-    function update_notice_info($notice_id)
-    {
-        $data['title']              = $this->input->post('title');
-        $data['description']        = $this->input->post('description');
-        if ($this->input->post('start_timestamp') != '')
-            $data['start_timestamp']    = strtotime($this->input->post('start_timestamp'));
-        else
-            $data['start_timestamp']    = '';
-        if ($this->input->post('end_timestamp') != '')
-            $data['end_timestamp']      = strtotime($this->input->post('end_timestamp'));
-        else
-            $data['end_timestamp']      = $data['start_timestamp'];
-
-        $returned_array = null_checking($data);
-        $this->db->where('notice_id', $notice_id);
-        $this->db->update('notice', $returned_array);
-    }
-
-    function delete_notice_info($notice_id)
-    {
-        $this->db->where('notice_id', $notice_id);
-        $this->db->delete('notice');
-    }
-
-    // TODO notification
-    function send_notification()
-    {
-    }
-    ////////private message//////
-    function send_new_private_message()
-    {
-        $message    = $this->input->post('message');
-        $timestamp  = strtotime(date("Y-m-d H:i:s"));
-
-        $reciever   = $this->input->post('reciever');
-        $sender     = $this->session->userdata('login_type') . '-' . $this->session->userdata('login_user_id');
-
-        //check if the thread between those 2 users exists, if not create new thread
-        $num1 = $this->db->get_where('message_thread', array('sender' => $sender, 'reciever' => $reciever))->num_rows();
-        $num2 = $this->db->get_where('message_thread', array('sender' => $reciever, 'reciever' => $sender))->num_rows();
-        if ($num1 == 0 && $num2 == 0) {
-            $message_thread_code                        = substr(md5(rand(100000000, 20000000000)), 0, 15);
-            $data_message_thread['message_thread_code'] = $message_thread_code;
-            $data_message_thread['sender']              = $sender;
-            $data_message_thread['reciever']            = $reciever;
-            $this->db->insert('message_thread', $data_message_thread);
-        }
-        if ($num1 > 0)
-            $message_thread_code = $this->db->get_where('message_thread', array('sender' => $sender, 'reciever' => $reciever))->row()->message_thread_code;
-        if ($num2 > 0)
-            $message_thread_code = $this->db->get_where('message_thread', array('sender' => $reciever, 'reciever' => $sender))->row()->message_thread_code;
-
-
-        $data_message['message_thread_code']    = $message_thread_code;
-        $data_message['message']                = $message;
-        $data_message['sender']                 = $sender;
-        $data_message['timestamp']              = $timestamp;
-        $this->db->insert('message', $data_message);
-
-        return $message_thread_code;
-    }
-
-    function send_reply_message($message_thread_code)
-    {
-        $message    = $this->input->post('message');
-        $timestamp  = strtotime(date("Y-m-d H:i:s"));
-        $sender     = $this->session->userdata('login_type') . '-' . $this->session->userdata('login_user_id');
-
-        $data_message['message_thread_code']    = $message_thread_code;
-        $data_message['message']                = $message;
-        $data_message['sender']                 = $sender;
-        $data_message['timestamp']              = $timestamp;
-        $this->db->insert('message', $data_message);
-    }
-
-    function mark_thread_messages_read($message_thread_code)
-    {
-        // mark read only the oponnent messages of this thread, not currently logged in user's sent messages
-        $current_user = $this->session->userdata('login_type') . '-' . $this->session->userdata('login_user_id');
-        $this->db->where('sender !=', $current_user);
-        $this->db->where('message_thread_code', $message_thread_code);
-        $this->db->update('message', array('read_status' => 1));
-    }
-
-    function count_unread_message_of_thread($message_thread_code)
-    {
-        $unread_message_counter = 0;
-        $current_user = $this->session->userdata('login_type') . '-' . $this->session->userdata('login_user_id');
-        $messages = $this->db->get_where('message', array('message_thread_code' => $message_thread_code))->result_array();
-        foreach ($messages as $row) {
-            if ($row['sender'] != $current_user && $row['read_status'] == '0')
-                $unread_message_counter++;
-        }
-        return $unread_message_counter;
-    }
-
-    // TODO CREATE MEDICINE SALE
-    function create_medicine_sale()
-    {
-        $data['patient_id']     = $this->input->post('patient_id');
-        $data['total_amount']   = $this->input->post('total_amount');
-        $medicines              = array();
-        $medicine_ids           = $this->input->post('medicine_id');
-        $medicine_quantities    = $this->input->post('medicine_quantity');
-        $number_of_entries      = sizeof($medicine_ids);
-
-        for ($i = 0; $i < $number_of_entries; $i++) {
-            if ($medicine_ids[$i] != "" && $medicine_quantities[$i] != "") {
-                $new_entry = array('medicine_id' => $medicine_ids[$i], 'quantity' => $medicine_quantities[$i]);
-                array_push($medicines, $new_entry);
-
-                // UPDATE MEDICINE INVENTORY
-                $sold_quantity = $this->db->get_where('medicine', array('medicine_id' => $medicine_ids[$i]))->row()->sold_quantity;
-
-                $data2['sold_quantity'] = $sold_quantity + $medicine_quantities[$i];
-
-                $this->db->update('medicine', $data2, array('medicine_id' => $medicine_ids[$i]));
-            }
-        }
-        $data['medicines']     = json_encode($medicines);
-        $returned_array = null_checking($data);
-        $this->db->insert('medicine_sale', $returned_array);
-    }
-
-    //upload pathology_report
-    function save_pathology_report($param1 = "")
-    {
-        if (!file_exists('uploads/pathology_reports/')) {
-            $oldmask = umask(0);  // helpful when used in linux server
-            mkdir('uploads/pathology_reports/', 0777);
-        }
-
-        $data['code']       = substr(md5(rand(0, 1000000000)), 0, 10);
-        $data['patient_id'] = $param1;
-        $data['test_name']  = $this->input->post('pathology_test_name');
-        $file_name = $_FILES['pathology_report']['name'];
-        $extension = pathinfo($file_name, PATHINFO_EXTENSION);
-        $modified_file_name = $data['code'] . '.' . $extension;
-        move_uploaded_file($_FILES['pathology_report']['tmp_name'], 'uploads/pathology_reports/' . $modified_file_name);
-        $data['pathology_report'] = $modified_file_name;
-        $this->db->insert('pathology_report', $data);
-    }
 }

@@ -24,6 +24,10 @@ class ComposerStaticInitd1078f3b0fa0704013e63a947b661eae
             'Mpdf\\' => 5,
             'Mike42\\' => 7,
         ),
+        'F' => 
+        array (
+            'Firebase\\JWT\\' => 13,
+        ),
         'D' => 
         array (
             'DeepCopy\\' => 9,
@@ -47,6 +51,10 @@ class ComposerStaticInitd1078f3b0fa0704013e63a947b661eae
         array (
             0 => __DIR__ . '/..' . '/mike42/escpos-php/src/Mike42',
             1 => __DIR__ . '/..' . '/mike42/gfx-php/src/Mike42',
+        ),
+        'Firebase\\JWT\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/firebase/php-jwt/src',
         ),
         'DeepCopy\\' => 
         array (

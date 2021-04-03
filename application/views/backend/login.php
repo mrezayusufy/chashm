@@ -59,14 +59,7 @@
                                 <button type="submit" class="btn btn-success"><?php echo get_phrase('login'); ?></button>
                             </form>
 
-                            <div class="section-field">
-                                <div class="remember-checkbox mb-30">
-                                    <a href="#" class="float-right" id = "forgot_password_button" onclick="toggleView(this)" style="color: black;"><?php echo get_phrase('forgot_password'); ?>?</a>
-
-                                    <!-- <a href="<?php echo base_url();?>" class="float-left" style="color: black;">
-                                        <i class="entypo-left-open"></i><?php echo get_phrase('back_to_website'); ?></a> -->
-                                </div>
-                            </div>
+                            
                         </div>
 
                         <div class="login-fancy pb-40 clearfix" id = "forgot_password_area" style="display: none;">

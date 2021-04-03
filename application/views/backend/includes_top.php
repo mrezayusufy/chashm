@@ -13,7 +13,9 @@
 <script src="<?= base_url()?>assets/js/vue.min.js"></script>
 <script src="<?= base_url()?>assets/js/vue-select.js"></script>
 <script src="<?= base_url()?>assets/js/axios.min.js"></script>
-<script src="<?= base_url()?>assets/js/moment/moment.js"></script>
+<script src="<?php echo base_url('assets/js/chart.js');?>"></script>
+<script src="<?php echo base_url('assets/js/vue-chart.js');?>"></script>
+<script src="<?php echo base_url('assets/js/moment/moment.js');?>"></script>
 
 <?php if ($text_align == 'right-to-left') : ?>
     <link rel="stylesheet" href="<?= base_url('assets/css/neon-rtl.css');?>">

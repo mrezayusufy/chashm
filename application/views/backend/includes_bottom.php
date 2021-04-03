@@ -26,7 +26,7 @@
 <script src="<?php echo base_url('assets/js/jquery.knob.js');?>"></script>
 <script src="<?php echo base_url('assets/js/selectboxit/jquery.selectBoxIt.min.js');?>"></script>
 <script src="<?php echo base_url('assets/js/jquery.inputmask.bundle.min.js');?>"></script>
-<script src="<?php echo base_url('assets/js/daterangepicker/moment.min.js');?>"></script>
+<!-- <script src="<?php echo base_url('assets/js/daterangepicker/moment.min.js');?>"></script> -->
 <script src="<?php echo base_url('assets/js/daterangepicker/daterangepicker.js');?>"></script>
 
 <link rel="stylesheet" href="<?php echo base_url('assets/js/dropzone/dropzone.css');?>">

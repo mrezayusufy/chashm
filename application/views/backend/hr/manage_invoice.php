@@ -11,12 +11,14 @@ $hrs = $this->db->get('hr')->result_array();
     <div v-if="loading" class="loading">
         <div class="spinner-border"></div>
     </div>
+     
     <table class="table table-bordered table-striped datatable" id="table-2">
         <thead>
             <tr>
                 <th><?= get_phrase('invoice_id'); ?></th>
                 <th><?= get_phrase('title'); ?></th>
                 <th><?= get_phrase('patient'); ?></th>
+                <th><?= get_phrase('doctor'); ?></th>
                 <th><?= get_phrase('creation_date'); ?></th>
                 <th><?= get_phrase('total'); ?></th>
                 <th><?= get_phrase('paid'); ?></th>
@@ -31,6 +33,7 @@ $hrs = $this->db->get('hr')->result_array();
                 <td>{{ i.invoice_id }} </td>
                 <td>{{ i.title }}</td>
                 <td>#{{ i.patient_name }}</td>
+                <td>{{ i.hr_name }}</td>
                 <td>{{ i.creation_timestamp | formatDate }}</td>
                 <td>{{ i.total }}</td>
                 <td>{{ i.paid }}</td>
@@ -140,6 +143,7 @@ $hrs = $this->db->get('hr')->result_array();
             api: '<?= site_url('hr/invoice/'); ?>',
             chooseInvoice: {},
             formValidate: [],
+            number: 1,
             medicines: <?= json_encode($medicines);?>,
             pos_api: "<?= site_url('/hr/pos/')?>",
         },
@@ -203,7 +207,7 @@ $hrs = $this->db->get('hr')->result_array();
             },
             deleteInvoice(){
                 axios
-                    .delete(this.api + "delete/" + Number(app.chooseInvoice.invoice_id))
+                    .delete(this.api + "delete/" + app.chooseInvoice.invoice_id)
                     .then(function(response) {
                         iziToast.success({
                                title: 'Delete', 
@@ -225,14 +229,11 @@ $hrs = $this->db->get('hr')->result_array();
                 axios
                     .get(this.api+"get/"+invoice.invoice_id)
                     .then(function(response) { 
-                        try {
-                            var i = response.data.invoice;
-                            app.chooseInvoice = i;
-                        } catch (error) {
-                            console.log('error', error);
-                        }
+                        var i = response.data.invoice;
+                        app.chooseInvoice = i;
+                        console.log('i', i);
                     })
-                    .catch(function(error) { console.log(error)});
+                    .catch(function(error) { console.error(error)});
             },
             formData(obj){
                 var formData = new FormData();
@@ -245,20 +246,12 @@ $hrs = $this->db->get('hr')->result_array();
                 app.invoices = data;
                 app.loading = false;
             },
-            addEntry(){
-                var i = this.chooseInvoice.invoice_entries;
-                i.push({ item: "", quantity: "", amount: ""});
-            },
             pos(){
                 axios.post(this.pos_api + app.chooseInvoice.invoice_id)
                 .then(function (response) { iziToast.success({ title: 'Printed invoice', message: ': ' + response.data.msg, position: 'topRight' }); })
                 .catch(function (error) { alert("error", error); })
             },
-            removeEntry(row){
-                var i = this.chooseInvoice.invoice_entries;
-                var index = i.indexOf(row);
-                i.splice(index, 1);
-            },
+            
             getRandomInt(max) {
                 return Math.floor(Math.random() * Math.floor(max));
             },
@@ -286,8 +279,8 @@ $hrs = $this->db->get('hr')->result_array();
             formatDate(date) {
                 return moment.unix(date).format('L');
             },
-            itemName(name) {
-                return name.replace(":", " ");
+            itemName(item) {
+                return item.replace(":", " ");
             }
         }
     });
@@ -303,7 +296,7 @@ $hrs = $this->db->get('hr')->result_array();
         $("#table-2").dataTable({
             "sPaginationType": "bootstrap",
             "aaSorting": [
-                [3, "desc"]
+                [4, "desc"]
             ],
             "aoColumnDefs": [
                 { "bSearchable": false, "aTargets": [ 3,4,5,6 ] }

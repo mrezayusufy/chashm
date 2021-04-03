@@ -44,7 +44,6 @@ class Login extends CI_Controller
     //Ajax login function 
     function do_login()
     {
-        
         //Recieving post input of email, password from ajax request
         $email    = $_POST["email"];
         $password = $_POST["password"];
@@ -60,89 +59,92 @@ class Login extends CI_Controller
     }
     
     //Validating login from ajax request
-    // TODO: Login by department name
     function validate_login($email = '', $password = '')
     {
         $credential = array(
             'email' => $email,
             'password' => sha1($password)
         );
-        
-        // Checking login credential for admin
-        $query = $this->db->get_where('admin', $credential);
-        if ($query->num_rows() > 0) {
-            $row = $query->row();
-            $this->session->set_userdata('admin_login', '1');
-            $this->session->set_userdata('login_user_id', $row->admin_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'admin');
-            $this->session->set_userdata('department', 'Admin');
+        try {
+            // admin ...
+            $query = $this->db->get_where('admin', $credential);
+            if ($query->num_rows() > 0) {
+                $row = $query->row();
+                $this->session->set_userdata('admin_login', '1');
+                $this->session->set_userdata('login_user_id', $row->admin_id);
+                $this->session->set_userdata('name', $row->name);
+                $this->session->set_userdata('login_type', 'admin');
+                $this->session->set_userdata('department', 'Admin');
 
-            return 'success';
+                return 'success';
+            }
+        } catch (\Throwable $th) {
+            throw $th;
         }
         
-        // hr
-        $join = array('department', 'department.department_id=hr.department_id');
-        $select = 'hr.hr_id as hr_id, department.name as department_name, concat_ws(" ",hr.first_name, hr.last_name) as name';
-        $query = $this->db->select($select)->join($join[0], $join[1])->get_where('hr', $credential);
-        if ($query->num_rows() > 0 && $query->row()->department_name == 'Doctor') {
-            $row = $query->row();
-            $this->session->set_userdata('hr_login', '1');
-            $this->session->set_userdata('login_user_id', $row->hr_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'hr');
-            $this->session->set_userdata('department', $query->row()->department_name);
-            return 'success';
-        }
-        
-        if ($query->num_rows() > 0 && $query->row()->department_name == 'Pharmacist') {
-            $row = $query->row();
-            $this->session->set_userdata('hr_login', '1');
-            $this->session->set_userdata('login_user_id', $row->hr_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('department', $query->row()->department_name);
-            $this->session->set_userdata('login_type', 'hr');
-            return 'success';
-        }
-        
-        if ($query->num_rows() > 0 && $query->row()->department_name == 'Laboratorist') {
-            $row = $query->row();
-            $this->session->set_userdata('hr_login', '1');
-            $this->session->set_userdata('login_user_id', $row->hr_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'hr');
-            $this->session->set_userdata('department', $query->row()->department_name);
-            return 'success';
-        }
-
-        if ($query->num_rows() > 0 && $query->row()->department_name == 'Accountant') {
-            $row = $query->row();
-            $this->session->set_userdata('hr_login', '1');
-            $this->session->set_userdata('login_user_id', $row->hr_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'hr');
-            $this->session->set_userdata('department', $query->row()->department_name);
-            return 'success';
-        }
-        
-        if ($query->num_rows() > 0 && $query->row()->department_name == 'Receptionist') {
-            $row = $query->row();
-            $this->session->set_userdata('hr_login', '1');
-            $this->session->set_userdata('login_user_id', $row->hr_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'hr');
-            $this->session->set_userdata('department', $query->row()->department_name);
-            return 'success';
-        }
-
-        if ($query->num_rows() > 0 && $query->row()->department_name == 'Optician') {
-            $row = $query->row();
-            $this->session->set_userdata('hr_login', '1');
-            $this->session->set_userdata('login_user_id', $row->hr_id);
-            $this->session->set_userdata('name', $row->name);
-            $this->session->set_userdata('login_type', 'hr');
-            $this->session->set_userdata('department', $query->row()->department_name);
-            return 'success';
+        try {
+            //code...
+            $join = array('department', 'department.department_id=hr.department_id');
+            $select = 'hr.hr_id as hr_id, department.name as department_name, concat_ws(" ",hr.first_name, hr.last_name) as name';
+            $query = $this->db->select($select)->join($join[0], $join[1])->get_where('hr', $credential)->row();
+            $department = $query->department_name;
+            $hr_id = $query->hr_id;
+            $name = $query->name;
+            if ($department == 'Doctor') {
+                $this->session->set_userdata('hr_login', '1');
+                $this->session->set_userdata('login_user_id', $hr_id);
+                $this->session->set_userdata('name', $name);
+                $this->session->set_userdata('login_type', 'hr');
+                $this->session->set_userdata('department', $department);
+                return 'success';
+            }
+            
+            if ($department == 'Pharmacist') {
+                $this->session->set_userdata('hr_login', '1');
+                $this->session->set_userdata('login_user_id', $hr_id);
+                $this->session->set_userdata('name', $name);
+                $this->session->set_userdata('department', $department);
+                $this->session->set_userdata('login_type', 'hr');
+                return 'success';
+            }
+            
+            if ($department == 'Laboratorist') {
+                $this->session->set_userdata('hr_login', '1');
+                $this->session->set_userdata('login_user_id', $hr_id);
+                $this->session->set_userdata('name', $name);
+                $this->session->set_userdata('login_type', 'hr');
+                $this->session->set_userdata('department', $department);
+                return 'success';
+            }
+    
+            if ($department == 'Accountant') {
+                $this->session->set_userdata('hr_login', '1');
+                $this->session->set_userdata('login_user_id', $hr_id);
+                $this->session->set_userdata('name', $name);
+                $this->session->set_userdata('login_type', 'hr');
+                $this->session->set_userdata('department', $department);
+                return 'success';
+            }
+            
+            if ($department == 'Receptionist') {
+                $this->session->set_userdata('hr_login', '1');
+                $this->session->set_userdata('login_user_id', $hr_id);
+                $this->session->set_userdata('name', $name);
+                $this->session->set_userdata('login_type', 'hr');
+                $this->session->set_userdata('department', $department);
+                return 'success';
+            }
+    
+            if ($department == 'Optician') {
+                $this->session->set_userdata('hr_login', '1');
+                $this->session->set_userdata('login_user_id', $hr_id);
+                $this->session->set_userdata('name', $name);
+                $this->session->set_userdata('login_type', 'hr');
+                $this->session->set_userdata('department', $department);
+                return 'success';
+            }
+        } catch (\Throwable $th) {
+            throw $th;
         }
         
         return 'invalid';

@@ -64,7 +64,7 @@ $department = $this->session->userdata('department');
             </a>
         </li>
         <!-- Receptionist -->
-        <?php if ($department == 'Receptionist') {?>
+        <?php if ($department == 'Accountant') {?>
         <li class="<?php if ($page_name == 'manage_patient' ||
             ($page_name == 'patient' && $menu_check == 'from_patient')) echo 'active'; ?> ">
                 <a href="<?php echo site_url('hr/patient');?>">
@@ -73,6 +73,26 @@ $department = $this->session->userdata('department');
                 </a>
         </li>
         <?php } ?>
+        <li class="<?php if ($page_name == 'add_invoice' || $page_name == 'manage_invoice') echo 'opened active has-sub'; ?> ">
+            <a href="#">
+                <i class="fas fa-list-alt"></i>
+                <span><?php echo get_phrase('invoice'); ?></span>
+            </a>
+            <ul>
+                <li class="<?php if ($page_name == 'add_invoice') echo 'active'; ?>">
+                    <a href="<?php echo site_url('hr/invoice_add');?>">
+                        <i class="fas fa-plus"></i>
+                        <span><?php echo get_phrase('add_invoice'); ?></span>
+                    </a>
+                </li>
+                <li class="<?php if ($page_name == 'manage_invoice') echo 'active'; ?>">
+                    <a href="<?php echo site_url('hr/invoice_manage');?>">
+                        <i class="fas fa-align-justify"></i>
+                        <span><?php echo get_phrase('manage_invoice'); ?></span>
+                    </a>
+                </li>
+            </ul>
+        </li>
         <!-- accountant -->
         <?php if ($department == 'Accountant') {?>
         <li class="<?php if ($page_name == 'manage_salary' ||
@@ -106,26 +126,7 @@ $department = $this->session->userdata('department');
             </ul>
         </li>
         <?php } ?>
-        <li class="<?php if ($page_name == 'add_invoice' || $page_name == 'manage_invoice') echo 'opened active has-sub'; ?> ">
-            <a href="#">
-                <i class="fas fa-list-alt"></i>
-                <span><?php echo get_phrase('invoice'); ?></span>
-            </a>
-            <ul>
-                <li class="<?php if ($page_name == 'add_invoice') echo 'active'; ?>">
-                    <a href="<?php echo site_url('hr/invoice_add');?>">
-                        <i class="fas fa-plus"></i>
-                        <span><?php echo get_phrase('add_invoice'); ?></span>
-                    </a>
-                </li>
-                <li class="<?php if ($page_name == 'manage_invoice') echo 'active'; ?>">
-                    <a href="<?php echo site_url('hr/invoice_manage');?>">
-                        <i class="fas fa-align-justify"></i>
-                        <span><?php echo get_phrase('manage_invoice'); ?></span>
-                    </a>
-                </li>
-            </ul>
-        </li>
+
 
         <li class="<?php if ($page_name == 'edit_profile') echo 'active'; ?> ">
             <a href="<?php echo site_url('hr/manage_profile');?>">

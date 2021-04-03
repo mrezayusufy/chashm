@@ -53,39 +53,23 @@
                     <hr>
                     <!-- invoice entry id -->
                     <div id="invoice_entries">
-
                         <div class="form-group" v-for="i in chooseInvoice.invoice_entries" :key="i.invoice_entry_id">
                             <label for="invoice_entries" class="col-sm-2 control-label"><?= get_phrase('invoice_entry'); ?></label>
-                                <div class="col-sm-4">
-                                    <input type="text" disabled class="form-control" name="item[]" :value="i.item | itemName" >
-                                </div>
-
-                                <div class="col-sm-2">
-                                    <input type="text" disabled class="form-control" name="quantity[]" :value="i.quantity">
-                                </div>
-                                <div class="col-sm-3">
-                                    <input type="number" disabled class="form-control" name="amount[]" :value="i.amount" min=0>
-                                </div>
-                                <div class="col-sm-1">
-                                    <button type="button" disabled class="btn btn-danger" @click="removeEntry(this)">
-                                        <i class="fas fa-trash"></i>
-                                    </button>
-                                </div>
-
+                            <div class="col-sm-4">
+                                <input type="text"  class="form-control" name="item[]" :value="i.item | itemName" >
                             </div>
-                    </div>
 
-                    <div class="form-group">
-                        <div class="col-sm-offset-3 col-sm-8">
-                            <button type="button" disabled class="btn btn-default btn-sm" @Click="addEntry()">
-                                <i class="fas fa-plus"></i> &nbsp;
-                                <?= get_phrase('add_invoice_entry'); ?>
-                            </button>
+                            <div class="col-sm-2">
+                                <input type="text"  class="form-control" name="quantity[]" :value="i.quantity">
+                            </div>
+                            <div class="col-sm-3">
+                                <input type="number"  class="form-control" name="amount[]" :value="i.amount" min=0>
+                            </div>
                         </div>
                     </div>
-                    
+
                 </form>
-            </div>
+            <!-- </div> -->
         </div>
     </div>
 </div>
