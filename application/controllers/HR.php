@@ -28,18 +28,11 @@ class HR extends CI_Controller
         $data['page_name']  = 'dashboard';
         $data['page_title'] = $this->session->userdata('department')." ".get_phrase('dashboard');
         $this->load->view('backend/index', $data);
-    }
+    } 
     // TODO: patient crud operation
-    function get($hr_id = ""){
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        if(!$hr_id) 
-            $data['hrs'] = $this->crud_model->select_hr_info();
-        else 
-            $data['hr'] = $this->crud_model->select_hr_info_by_id($hr_id);
-        header('Content-Type: application/json');
+    function get(){
+         
+        $data = $this->session->userdata();
         echo json_encode($data);
     }
     function salary($task = "", $salary_id = ""){
