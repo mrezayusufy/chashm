@@ -55,8 +55,8 @@ class Login extends CI_Controller
             $password = $this->input->post('password');
             $login_status = $this->validate_login($email, $password);
             if ($login_status == 'success') {
-                // redirect(site_url('login'), 'refresh');
-                var_dump($this->session->userdata());
+                redirect(site_url('login'), 'refresh');
+                echo $this->session->userdata();
             } else {
                 $this->session->set_flashdata('error_message', get_phrase('login_failed'));
                 redirect(site_url('login'), 'refresh');
