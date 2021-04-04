@@ -31,12 +31,10 @@ class Login extends CI_Controller
     //Default function, redirects to logged in user area
     public function index()
     {
-        
         if ($this->session->userdata('admin_login') == 1)
             redirect(site_url('admin/dashboard'), 'refresh');
-        
         else if ($this->session->userdata('hr_login') == 1)
-            redirect(site_url('hr'), 'refresh');
+            redirect(site_url('hr/dashboard'), 'refresh');
 
         $this->load->view('backend/login');
     }
@@ -95,66 +93,64 @@ class Login extends CI_Controller
             $department = $query->department_name;
             $hr_id = $query->hr_id;
             $name = $query->name;
+            $this->session->set_userdata('hr_login', '1');
+            $this->session->set_userdata('login_user_id', $hr_id);
+            $this->session->set_userdata('name', $name);
+            $this->session->set_userdata('login_type', 'hr');
+            $this->session->set_userdata('department', $department);
+            return 'success';
         } catch (Exception $e) {
             $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
         }
-        try {
-            if ($department == 'Doctor') {
-                $this->session->set_userdata('hr_login', '1');
-                $this->session->set_userdata('login_user_id', $hr_id);
-                $this->session->set_userdata('name', $name);
-                $this->session->set_userdata('login_type', 'hr');
-                $this->session->set_userdata('department', $department);
-                return 'success';
-            }
+        // try {
+        //     switch($department) {
+        //         case 'Doctor':
+        //             $this->session->set_userdata('hr_login', '1');
+        //             $this->session->set_userdata('login_user_id', $hr_id);
+        //             $this->session->set_userdata('name', $name);
+        //             $this->session->set_userdata('login_type', 'hr');
+        //             $this->session->set_userdata('department', $department);
+        //             return 'success';
+        //         case 'Pharmacist':
+        //             $this->session->set_userdata('hr_login', '1');
+        //             $this->session->set_userdata('login_user_id', $hr_id);
+        //             $this->session->set_userdata('name', $name);
+        //             $this->session->set_userdata('login_type', 'hr');
+        //             $this->session->set_userdata('department', $department);
+        //             return 'success';
+        //         case 'Laboratorist':
+        //             $this->session->set_userdata('hr_login', '1');
+        //             $this->session->set_userdata('login_user_id', $hr_id);
+        //             $this->session->set_userdata('name', $name);
+        //             $this->session->set_userdata('login_type', 'hr');
+        //             $this->session->set_userdata('department', $department);
+        //             return 'success';
+        //         case 'Accountant':
+        //             $this->session->set_userdata('hr_login', '1');
+        //             $this->session->set_userdata('login_user_id', $hr_id);
+        //             $this->session->set_userdata('name', $name);
+        //             $this->session->set_userdata('login_type', 'hr');
+        //             $this->session->set_userdata('department', $department);
+        //             return 'success';
+        //         case 'Receptionist':
+        //             $this->session->set_userdata('hr_login', '1');
+        //             $this->session->set_userdata('login_user_id', $hr_id);
+        //             $this->session->set_userdata('name', $name);
+        //             $this->session->set_userdata('login_type', 'hr');
+        //             $this->session->set_userdata('department', $department);
+        //             return 'success';
+        //         case 'Optician':
+        //             $this->session->set_userdata('hr_login', '1');
+        //             $this->session->set_userdata('login_user_id', $hr_id);
+        //             $this->session->set_userdata('name', $name);
+        //             $this->session->set_userdata('login_type', 'hr');
+        //             $this->session->set_userdata('department', $department);
+        //             return 'success';
+        //     }
             
-            if ($department == 'Pharmacist') {
-                $this->session->set_userdata('hr_login', '1');
-                $this->session->set_userdata('login_user_id', $hr_id);
-                $this->session->set_userdata('name', $name);
-                $this->session->set_userdata('department', $department);
-                $this->session->set_userdata('login_type', 'hr');
-                return 'success';
-            }
-            
-            if ($department == 'Laboratorist') {
-                $this->session->set_userdata('hr_login', '1');
-                $this->session->set_userdata('login_user_id', $hr_id);
-                $this->session->set_userdata('name', $name);
-                $this->session->set_userdata('login_type', 'hr');
-                $this->session->set_userdata('department', $department);
-                return 'success';
-            }
-    
-            if ($department == 'Accountant') {
-                $this->session->set_userdata('hr_login', '1');
-                $this->session->set_userdata('login_user_id', $hr_id);
-                $this->session->set_userdata('name', $name);
-                $this->session->set_userdata('login_type', 'hr');
-                $this->session->set_userdata('department', $department);
-                return 'success';
-            }
-            
-            if ($department == 'Receptionist') {
-                $this->session->set_userdata('hr_login', '1');
-                $this->session->set_userdata('login_user_id', $hr_id);
-                $this->session->set_userdata('name', $name);
-                $this->session->set_userdata('login_type', 'hr');
-                $this->session->set_userdata('department', $department);
-                return 'success';
-            }
-    
-            if ($department == 'Optician') {
-                $this->session->set_userdata('hr_login', '1');
-                $this->session->set_userdata('login_user_id', $hr_id);
-                $this->session->set_userdata('name', $name);
-                $this->session->set_userdata('login_type', 'hr');
-                $this->session->set_userdata('department', $department);
-                return 'success';
-            }
-        } catch (Exception $e) {
-            $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
-        }
+        // } catch (Exception $e) {
+        //     $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
+        // }
         
         return 'invalid';
     }
