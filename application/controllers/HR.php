@@ -13,7 +13,7 @@ class HR extends CI_Controller
     {
         parent::__construct();
         $this->load->database();
-        $this->load->library('session');
+        // $this->load->library('session');
         $this->load->model('crud_model');
         $this->load->model('frontend_model');
         // cache control
@@ -23,24 +23,20 @@ class HR extends CI_Controller
     
     function index()
     {
-        if ($this->session->userdata('hr_login') != 1 ) 
-            redirect(site_url(), 'refresh');
-        if ($this->session->userdata('hr_login') == 1 ) 
-            redirect(site_url('hr/dashboard'), 'refresh');
+        // if ($this->session->userdata('hr_login') != 1 ) 
+        //     redirect(site_url(), 'refresh');
+        // if ($this->session->userdata('hr_login') == 1 ) 
+        //     redirect(site_url('hr/dashboard'), 'refresh');
     } 
     function dashboard(){
-        if ($this->session->userdata('hr_login') != 1 ){
-            redirect(site_url(), 'refresh');
-            $this->session->set_userdata('last_page', current_url());
-        } 
+        // if ($this->session->userdata('hr_login') != 1 ){
+        //     redirect(site_url(), 'refresh');
+        //     $this->session->set_userdata('last_page', current_url());
+        // } 
         $data['page_name']  = 'dashboard';
-        $data['page_title'] = $this->session->userdata('department');
+        // $data['page_title'] = $this->session->userdata('department');
         $this->load->view('backend/index', $data);
-    }
-    function get(){
-        $data = $this->session->userdata();
-        echo json_encode($data);
-    }
+    } 
     function salary($task = "", $salary_id = ""){
         if ($this->session->userdata('hr_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
@@ -482,121 +478,7 @@ class HR extends CI_Controller
         $data['page_name']              = 'manage_medicine_category';
         $data['page_title']             = get_phrase('medicine_category');
         $this->load->view('backend/index', $data);
-    }
-    function medication_history($param1 = "", $prescription_id = "")
-    {
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        $patient_name              = $this->db->get_where('patient', array('patient_id' => $param1))->row()->name; // $param1 = $patient_id
-        $data['prescription_info'] = $this->crud_model->select_medication_history($param1); // $param1 = $patient_id
-        $data['menu_check']        = 'from_patient';
-        $data['page_name']         = 'manage_prescription';
-        $data['page_title']        = get_phrase('medication_history_of_:_') . $patient_name;
-        $this->load->view('backend/index', $data);
-    }
-    
-    function report($task = "", $report_id = "", $param3 = '')
-    {
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        if ($task == "create") {
-            $this->crud_model->save_report_info();
-            $this->session->set_flashdata('message', get_phrase('report_info_saved_successfuly'));
-            redirect(site_url('hr/report'), 'refresh');
-        }
-        
-        if ($task == "update") {
-            $this->crud_model->update_report_info($report_id);
-            $this->session->set_flashdata('message', get_phrase('report_info_updated_successfuly'));
-            redirect(site_url('hr/report'), 'refresh');
-        }
-        
-        if ($task == "delete") {
-            $this->crud_model->delete_report_info($report_id);
-            $this->session->set_flashdata('message', get_phrase('report_info_deleted_successfuly'));
-            redirect(site_url('hr/report'), 'refresh');
-        }
-        
-        if ($task == "delete_report_file") {
-            $this->crud_model->delete_report_file($report_id, $param3);
-            $this->session->set_flashdata('message', get_phrase('file_deleted_successfuly'));
-            redirect(site_url('hr/report'), 'refresh');
-        }
-        
-        $data['page_name']  = 'manage_report';
-        $data['page_title'] = get_phrase('report');
-        $this->load->view('backend/index', $data);
-    }
-
-    function operation_report_download(){
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        $all_report = $this->db->get_where('report', array('type' => 'operation'))->result_array();
-        $data = 'Type'.','.'Description'.','.'Patient'.','.'hr'.','.'Date'."\n";
-        foreach($all_report as $row1){
-            $hr_id = $row1['hr_id'];
-            $patient_id = $row1['patient_id'];
-            $date = date('M d Y',$row1['timestamp']);
-            $hr = $this->db->get_where('hr', array('hr_id' => $hr_id))->row('first_name');
-            $patient = $this->db->get_where('patient', array('patient_id' => $patient_id))->row('name');
-            $data .= $row1['type'].','.$row1['description'].','.$patient.','.$hr.','.$date."\n";
-        }
-
-        $file = file_put_contents('assets/report.xlsx', $data);
-        redirect(base_url('assets/report.xlsx'));
-    }
-
-    function birth_report_download(){
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        $all_report = $this->db->get_where('report', array('type' => 'birth'))->result_array();
-        $data = 'Type'.','.'Description'.','.'Patient'.','.'hr'.','.'Date'."\n";
-        foreach($all_report as $row1){
-            $hr_id = $row1['hr_id'];
-            $patient_id = $row1['patient_id'];
-            $date = date('M d Y',$row1['timestamp']);
-            $hr = $this->db->get_where('hr', array('hr_id' => $hr_id))->row('name');
-            $patient = $this->db->get_where('patient', array('patient_id' => $patient_id))->row('name');
-            $data .= $row1['type'].','.$row1['description'].','.$patient.','.$hr.','.$date."\n";
-        }
-
-        $file = file_put_contents('assets/report.xlsx', $data);
-        redirect(base_url('assets/report.xlsx'));
-    }
-
-    function death_report_download(){
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        $all_report = $this->db->get_where('report', array('type' => 'death'))->result_array();
-        $data = 'Type'.','.'Description'.','.'Patient'.','.'hr'.','.'Date'."\n";
-        foreach($all_report as $row1){
-            $hr_id = $row1['hr_id'];
-            $patient_id = $row1['patient_id'];
-            $date = date('M d Y',$row1['timestamp']);
-            $hr = $this->db->get_where('hr', array('hr_id' => $hr_id))->row('name');
-            $patient = $this->db->get_where('patient', array('patient_id' => $patient_id))->row('name');
-            $data .= $row1['type'].','.$row1['description'].','.$patient.','.$hr.','.$date."\n";
-        }
-
-        $file = file_put_contents('assets/report.xlsx', $data);
-        redirect(base_url('assets/report.xlsx'));
-    }
-    
+    } 
     function manage_profile($task = "")
     {
       
@@ -634,160 +516,6 @@ class HR extends CI_Controller
         $data['page_title'] = get_phrase('profile');
         $this->load->view('backend/index', $data);
     }
+     
     
-    function prescription($task = "", $prescription_id = "", $menu_check = '', $patient_id = '')
-    {
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        if ($task == "create") {
-            $this->crud_model->save_prescription_info();
-            $this->session->set_flashdata('message', get_phrase('prescription_info_saved_successfuly'));
-            redirect(site_url('hr/prescription'), 'refresh');
-        }
-        
-        if ($task == "update") {
-            $this->crud_model->update_prescription_info($prescription_id);
-            $this->session->set_flashdata('message', get_phrase('prescription_info_updated_successfuly'));
-            if ($menu_check == 'from_prescription')
-                redirect(site_url('hr/prescription'), 'refresh');
-            else
-                redirect(site_url('hr/medication_history/' . $patient_id), 'refresh');
-        }
-        
-        if ($task == "delete") {
-            $this->crud_model->delete_prescription_info($prescription_id);
-            if ($menu_check == 'from_prescription')
-                redirect(site_url('hr/prescription'), 'refresh');
-            else
-                redirect(site_url('hr/medication_history/' . $patient_id), 'refresh');
-        }
-        
-        $data['prescription_info'] = $this->crud_model->select_prescription_info_by_hr_id();
-        $data['menu_check']        = 'from_prescription';
-        $data['page_name']         = 'manage_prescription';
-        $data['page_title']        = get_phrase('prescription');
-        $this->load->view('backend/index', $data);
-    }
-    
-    function diagnosis_report($task = "", $diagnosis_report_id = "")
-    {
-        if ($this->session->userdata('hr_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-        
-        if ($task == "create") {
-            $this->crud_model->save_diagnosis_report_info();
-            $this->session->set_flashdata('message', get_phrase('diagnosis_report_info_saved_successfuly'));
-            redirect(site_url('hr/prescription'), 'refresh');
-        }
-        
-        if ($task == "delete") {
-            $this->crud_model->delete_diagnosis_report_info($diagnosis_report_id);
-            $this->session->set_flashdata('message', get_phrase('diagnosis_report_info_deleted_successfuly'));
-            redirect(site_url('hr/prescription'), 'refresh');
-        }
-    }
-    
-    /* private messaging */
-    
-    function message($param1 = 'message_home', $param2 = '', $param3 = '')
-    {
-        if ($this->session->userdata('hr_login') != 1)
-            redirect(site_url(), 'refresh');
-        
-        if ($param1 == 'send_new') {
-            $message_thread_code = $this->crud_model->send_new_private_message();
-            $this->session->set_flashdata('message', get_phrase('message_sent!'));
-            redirect(site_url('hr/message/message_read/' . $message_thread_code), 'refresh');
-        }
-        
-        if ($param1 == 'send_reply') {
-            $this->crud_model->send_reply_message($param2); //$param2 = message_thread_code
-            $this->session->set_flashdata('message', get_phrase('message_sent!'));
-            redirect(site_url('hr/message/message_read/' . $param2), 'refresh');
-        }
-        
-        if ($param1 == 'message_read') {
-            $page_data['current_message_thread_code'] = $param2; // $param2 = message_thread_code
-            $this->crud_model->mark_thread_messages_read($param2);
-        }
-        
-        $page_data['message_inner_page_name'] = $param1;
-        $page_data['page_name']               = 'message';
-        $page_data['page_title']              = get_phrase('private_messaging');
-        $this->load->view('backend/index', $page_data);
-    }
-    
-    function payroll_list($param1 = '', $param2 = '')
-    {
-        if ($this->session->userdata('hr_login') != 1)
-            redirect(site_url(), 'refresh');
-        
-        $page_data['page_name']  = 'payroll_list';
-        $page_data['page_title'] = get_phrase('payroll_list');
-        $this->load->view('backend/index', $page_data);
-    }
-    
-    function send_sms($message = '', $reciever_phone = '')
-    {
-        //$to = "[\"<$reciever_phone>\"]";
-        echo $to = $reciever_phone;
-        echo $text = $message;
-        $authToken = "ZaD9vMp5S3imW39pM77PEg==";
-        
-        $ch = curl_init();
-        
-        curl_setopt($ch, CURLOPT_URL, "https://api.clickatell.com/rest/message");
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
-        curl_setopt($ch, CURLOPT_POST, 1);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, "{\"text\":\"$text\",\"to\":$to}");
-        curl_setopt($ch, CURLOPT_HTTPHEADER, array(
-            "X-Version: 1",
-            "Content-Type: application/json",
-            "Accept: application/json",
-            "Authorization: Bearer $authToken"
-        ));
-        
-        $result = curl_exec($ch);
-        
-        echo $result;
-    }
-    
-}
-class item
-{
-    private $name;
-    private $price;
-    private $qty;
-
-    public function __construct($name = '', $price = '', $qty = '')
-    {
-        $this->name = $name;
-        $this->price = $price;
-        $this->qty = $qty;
-    }
-
-    public function getAsString($width = 48)
-    {
-        $rightCols = 10;
-        $leftCols = $width - $rightCols;
-        if ($this->qty) {
-            $leftCols = $leftCols / 2 - $rightCols / 2;
-        }
-        $left = str_pad($this->name, $leftCols);
-
-        $sign = ($this->qty ? '*' . $this->qty.'='.($this->qty*$this->price) : '');
-        $right = str_pad($this->price , $rightCols, ' ', STR_PAD_LEFT);
-        return "$left$right\n";
-    }
-
-    public function __toString()
-    {
-        return $this->getAsString();
-    }
-
 }
