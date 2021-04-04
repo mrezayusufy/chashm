@@ -17,11 +17,8 @@ class Admin extends CI_Controller
     {
         parent::__construct();
         $this->load->database();
-
         $this->load->library('session');
         $this->load->model('crud_model');
-        $this->load->model('email_model');
-        $this->load->model('sms_model');
         $this->load->model('frontend_model');
         
         // cache control
