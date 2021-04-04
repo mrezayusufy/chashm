@@ -26,7 +26,7 @@ class Login extends CI_Controller
         if ($this->session->userdata('admin_login') == 1)
             redirect(site_url('admin/dashboard'), 'refresh');
         else if ($this->session->userdata('hr_login') == 1)
-            redirect(site_url('hr/dashboard'), 'refresh');
+            redirect(site_url('HR/dashboard'), 'refresh');
 
         $this->load->view('backend/login');
     }

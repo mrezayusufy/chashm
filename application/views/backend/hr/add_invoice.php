@@ -202,7 +202,7 @@ $index = 1;
                     }
                 ],
             },
-            api: '<?= site_url('hr/invoice/'); ?>',
+            api: '<?= site_url('HR/invoice/'); ?>',
             hrs: <?= json_encode($hrs); ?>,
             formValidate: [],
             patients: <?= json_encode($patients); ?>,

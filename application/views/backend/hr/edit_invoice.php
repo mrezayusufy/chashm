@@ -13,7 +13,7 @@ $total = $this->crud_model->calculate_invoice_total_amount($row['invoice_id']);
             <div class="panel panel-primary" data-collapsed="0">
                 <!-- start panel-body -->
                 <div class="panel-body">
-                    <?php echo form_open(site_url('hr/invoice_manage/update/' . $param2), array('class' => 'form-horizontal form-groups invoice-edit', 'enctype' => 'multipart/form-data')); ?>
+                    <?php echo form_open(site_url('HR/invoice_manage/update/' . $param2), array('class' => 'form-horizontal form-groups invoice-edit', 'enctype' => 'multipart/form-data')); ?>
 
                         <!-- invoice title -->
                         <div class="form-group">

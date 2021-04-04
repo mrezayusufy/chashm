@@ -17,7 +17,7 @@ foreach ($single_hr_info as $row) {
                 <div class="panel-body">
 
                     <form role="form" class="form-horizontal form-groups"
-                          action="<?php echo site_url('hr/manage_profile/update'); ?>"
+                          action="<?php echo site_url('HR/manage_profile/update'); ?>"
                             method="post" enctype="multipart/form-data">
 
                         <div class="form-group">
@@ -113,7 +113,7 @@ foreach ($single_hr_info as $row) {
 
                 <div class="panel-body">
 
-                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('hr/manage_profile/change_password'); ?>" 
+                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('HR/manage_profile/change_password'); ?>" 
                         method="post" enctype="multipart/form-data">
 
                         <div class="form-group">

@@ -157,7 +157,7 @@ $hr_list = json_encode($hrs);
         date: "",
         status: "",
       },
-      api: '<?= site_url('hr/salary/'); ?>',
+      api: '<?= site_url('HR/salary/'); ?>',
       chooseSalary: {},
       formValidate: [],
     },

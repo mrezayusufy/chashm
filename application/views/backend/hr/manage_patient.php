@@ -110,7 +110,7 @@
             },
             loading: true,
             patients: [],
-            api: '<?= site_url('hr/patient_api/'); ?>',
+            api: '<?= site_url('HR/patient_api/'); ?>',
             editModal: false,
             addModal: false,
             deleteModal: false,

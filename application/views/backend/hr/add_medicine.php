@@ -12,7 +12,7 @@
 
             <div class="panel-body">
 
-                <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('hr/medicine/create'); ?>" 
+                <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('HR/medicine/create'); ?>" 
                     method="post" enctype="multipart/form-data">
                     <!-- name -->
                     <div class="form-group">

@@ -24,7 +24,7 @@
                         <i class="fas fa-pencil-alt"></i> &nbsp;
                         <?php echo get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?php echo site_url('hr/medicine_category/delete/' . $row['medicine_category_id']); ?>')"
+                    <a onclick="confirm_modal('<?php echo site_url('HR/medicine_category/delete/' . $row['medicine_category_id']); ?>')"
                        class="btn btn-danger btn-sm">
                         <i class="fas fa-trash"></i> &nbsp;
                         <?php echo get_phrase('delete');?>

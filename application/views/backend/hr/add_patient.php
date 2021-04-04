@@ -11,7 +11,7 @@
 
             <div class="panel-body">
 
-                <form role="form" class="form-horizontal form-groups" action="<?= site_url('hr/patient/create'); ?>" 
+                <form role="form" class="form-horizontal form-groups" action="<?= site_url('HR/patient/create'); ?>" 
                     method="post" enctype="multipart/form-data">
                     <!-- name -->
                     <div class="form-group">

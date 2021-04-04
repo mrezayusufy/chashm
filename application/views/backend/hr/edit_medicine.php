@@ -16,7 +16,7 @@ foreach ($single_medicine_info as $row) { ?>
 
                 <div class="panel-body">
 
-                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('hr/medicine/update/' . $row['medicine_id']); ?>" 
+                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('HR/medicine/update/' . $row['medicine_id']); ?>" 
                         method="post" enctype="multipart/form-data">
 
                         <div class="form-group">

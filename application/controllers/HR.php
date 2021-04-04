@@ -12,10 +12,9 @@ class HR extends CI_Controller
     public function __construct()
     {
         parent::__construct();
-        // $this->load->database();
-        // $this->load->library('session');
-        // $this->load->model('crud_model');
-        // $this->load->model('frontend_model');
+        $this->load->database();
+        $this->load->library('session');
+        $this->load->model('crud_model');
         // cache control
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
         $this->output->set_header('Pragma: no-cache');
@@ -23,18 +22,18 @@ class HR extends CI_Controller
     
     function index()
     {
-        // if ($this->session->userdata('hr_login') != 1 ) 
-        //     redirect(site_url(), 'refresh');
-        // if ($this->session->userdata('hr_login') == 1 ) 
-        //     redirect(site_url('hr/dashboard'), 'refresh');
+        if ($this->session->userdata('hr_login') != 1 ) 
+            redirect(site_url(), 'refresh');
+        if ($this->session->userdata('hr_login') == 1 ) 
+            redirect(site_url('HR/dashboard'), 'refresh');
     } 
     function dashboard(){
-        // if ($this->session->userdata('hr_login') != 1 ){
-        //     redirect(site_url(), 'refresh');
-        //     $this->session->set_userdata('last_page', current_url());
-        // } 
+        if ($this->session->userdata('hr_login') != 1 ){
+            redirect(site_url(), 'refresh');
+            $this->session->set_userdata('last_page', current_url());
+        } 
         $data['page_name']  = 'dashboard';
-        // $data['page_title'] = $this->session->userdata('department');
+        $data['page_title'] = $this->session->userdata('department');
         $this->load->view('backend/index', $data);
     } 
     function salary($task = "", $salary_id = ""){
@@ -315,7 +314,7 @@ class HR extends CI_Controller
         if ($task == "create") {
             $data = $this->crud_model->create_invoice();
             $this->session->set_flashdata('message', get_phrase('invoice_info_saved_successfuly'));
-            redirect(site_url('hr/invoice_manage'), 'refresh');
+            redirect(site_url('HR/invoice_manage'), 'refresh');
         }
         
         $data['page_name']  = 'add_invoice';
@@ -352,7 +351,7 @@ class HR extends CI_Controller
                     $this->crud_model->add_invoice($invoice_id);
                     $result['error'] = false;
                     $result['msg'] = 'The invoice info was updated successfully.';
-                    redirect(site_url('hr/invoice_manage'), 'refresh');
+                    redirect(site_url('HR/invoice_manage'), 'refresh');
                 }
 
                 echo json_encode($result);
@@ -407,7 +406,7 @@ class HR extends CI_Controller
 
         if ($task == "delete") {
             $this->crud_model->delete_invoice($invoice_id);
-            redirect(site_url('hr/invoice_manage'), 'refresh');
+            redirect(site_url('HR/invoice_manage'), 'refresh');
         }
         
         $department = $this->session->userdata('department');
@@ -431,18 +430,18 @@ class HR extends CI_Controller
         if ($task == "create") {
             $this->crud_model->save_medicine_info();
             $this->session->set_flashdata('message', get_phrase('medicine_info_saved_successfuly'));
-            redirect(site_url('hr/medicine'), 'refresh');
+            redirect(site_url('HR/medicine'), 'refresh');
         }
         
         if ($task == "update") {
             $this->crud_model->update_medicine_info($medicine_id);
             $this->session->set_flashdata('message', get_phrase('medicine_info_updated_successfuly'));
-            redirect(site_url('hr/medicine'), 'refresh');
+            redirect(site_url('HR/medicine'), 'refresh');
         }
         
         if ($task == "delete") {
             $this->crud_model->delete_medicine_info($medicine_id);
-            redirect(site_url('hr/medicine'), 'refresh');
+            redirect(site_url('HR/medicine'), 'refresh');
         }
         
         $data['medicine_info'] = $this->crud_model->select_medicine_info();
@@ -460,18 +459,18 @@ class HR extends CI_Controller
         if ($task == "create") {
             $this->crud_model->save_medicine_category_info();
             $this->session->set_flashdata('message', get_phrase('medicine_category_info_saved_successfuly'));
-            redirect(site_url('hr/medicine_category'), 'refresh');
+            redirect(site_url('HR/medicine_category'), 'refresh');
         }
         
         if ($task == "update") {
             $this->crud_model->update_medicine_category_info($medicine_category_id);
             $this->session->set_flashdata('message', get_phrase('medicine_category_info_updated_successfuly'));
-            redirect(site_url('hr/medicine_category'), 'refresh');
+            redirect(site_url('HR/medicine_category'), 'refresh');
         }
         
         if ($task == "delete") {
             $this->crud_model->delete_medicine_category_info($medicine_category_id);
-            redirect(site_url('hr/medicine_category'), 'refresh');
+            redirect(site_url('HR/medicine_category'), 'refresh');
         }
         
         $data['medicine_category_info'] = $this->crud_model->select_medicine_category_info();
@@ -485,7 +484,7 @@ class HR extends CI_Controller
         $hr_id = $this->session->userdata('login_user_id');
         if ($task == "update") {
             $this->crud_model->update_hr_info($hr_id);
-            redirect(site_url('hr/manage_profile'), 'refresh');
+            redirect(site_url('HR/manage_profile'), 'refresh');
         }
         
         if ($task == "change_password") {
@@ -503,10 +502,10 @@ class HR extends CI_Controller
                 $this->db->update('hr', $data);
                 
                 $this->session->set_flashdata('message', get_phrase('password_info_updated_successfuly'));
-                redirect(site_url('hr/manage_profile'), 'refresh');
+                redirect(site_url('HR/manage_profile'), 'refresh');
             } else {
                 $this->session->set_flashdata('message', get_phrase('password_update_failed'));
-                redirect(site_url('hr/manage_profile'), 'refresh');
+                redirect(site_url('HR/manage_profile'), 'refresh');
             }
         }
         $page_data['edit_data']  = $this->db->get_where('hr', array(
