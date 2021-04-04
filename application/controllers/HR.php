@@ -228,7 +228,7 @@ class HR extends CI_Controller
         header("Access-Control-Allow-Methods:POST,GET");
         header("Access-Control-Max-Age: 3600");
         header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    $data = new class{};
+        $data = new class{};
         $system_name = $this->db->get_where('settings', array('type' => 'system_name'))->row()->description;
         $address = $this->db->get_where('settings', array('type' => 'address'))->row()->description;
         $phone = $this->db->get_where('settings', array('type' => 'phone'))->row()->description;
@@ -357,7 +357,9 @@ class HR extends CI_Controller
                     $this->crud_model->add_invoice($invoice_id);
                     $result['error'] = false;
                     $result['msg'] = 'The invoice info was updated successfully.';
+                    redirect(site_url('hr/invoice_manage'), 'refresh');
                 }
+
                 echo json_encode($result);
                 break;
             case "edit":

@@ -5,7 +5,9 @@ if($department == 'Pharmacist')
 $hrs = $this->db->get('hr')->result_array();
 ?>
 <div id="app">
-    
+    <button @click="AddInvoice" class="btn btn-primary pull-right">
+        <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_invoice'); ?>
+    </button>
     <div style="clear:both;"></div>
     <br>
     <div v-if="loading" class="loading">
@@ -43,17 +45,17 @@ $hrs = $this->db->get('hr')->result_array();
                 </td>
                 <td>
                     <?php if ($department == "Accountant") : ?>
-                        <a @click="editInvoice=true;selectInvoice(i);" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i></a>
+                        <a @click="editModal=true;selectInvoice(i);" class="btn btn-info btn-sm"><i class="fas fa-pencil-alt"></i></a>
                     <?php endif; ?>
                     <a @click="selectInvoice(i); viewInvoice=true" class="btn btn-primary btn-sm"><i class="fas fa-eye"></i></a>
-                    <a @click="selectInvoice(i); deleteModal=true" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
+                    <a @click="deleteModal=true;selectInvoice(i)" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i></a>
                 </td>
             </tr>
 
         </tbody>
     </table>
 
-    <view-modal v-if="viewInvoice" @close="clearAll();" >
+    <view-modal v-if="viewInvoice" @close="clearAll" >
         <div slot="header">
             <h4 class="modal-title"><?= get_phrase('view_invoice')?> : {{chooseInvoice.invoice_id}}</h4>
         </div>
@@ -71,7 +73,7 @@ $hrs = $this->db->get('hr')->result_array();
         </div>
     </view-modal>
     <!-- edit invoice modal -->
-    <edit-modal v-if="editInvoice" @close="clearAll();" >
+    <edit-modal v-if="editModal" @close="clearAll" >
         <div slot="header">
             <h4 class="modal-title"><?= get_phrase('edit_invoice')?> : {{ chooseInvoice.invoice_id }}</h4>
         </div>
@@ -88,8 +90,19 @@ $hrs = $this->db->get('hr')->result_array();
             </div>
         </div>
     </edit-modal>
-    <!-- delete invoice -->
-    <delete-modal v-if="deleteModal" @close="clearAll();" >
+    </view-modal>
+    <!-- add invoice modal -->
+    <add-modal v-if="addModal" @close="clearAll" >
+        <div slot="header">
+            <h4 class="modal-title"><?= get_phrase('add_invoice')?> : {{ chooseInvoice.invoice_id }}</h4>
+        </div>
+        <div slot="body" class="modal-body" :style="modalStyle">
+            <?php include 'add_invoice.php';?>
+        </div>
+        
+    </add-modal>
+    <!-- delete modal -->
+    <delete-modal v-if="deleteModal" @close="clearAll" >
         <div slot="header">
             <h4 class="modal-title" style="text-align:center;"><?= get_phrase('Are_you_sure_to_delete_this_information?')?></h4>
         </div>
@@ -105,8 +118,7 @@ $hrs = $this->db->get('hr')->result_array();
                 </div>
             </div>
         </div>
-    </delete-modal>
-
+    </delete-modal> 
 </div>
 
 <script type="text/javascript">
@@ -134,7 +146,8 @@ $hrs = $this->db->get('hr')->result_array();
             loading: true,
             viewInvoice: false,
             home: '<?= site_url('hr/');?>',
-            editInvoice: false,
+            editModal: false,
+            addModal: false,
             deleteModal: false,
             myHeight: screen.height - 250,
             invoices: [],
@@ -225,6 +238,9 @@ $hrs = $this->db->get('hr')->result_array();
                            app.clearAll();
                     });
             }, 
+            AddInvoice(){
+                window.location.replace("/hr/invoice_add");
+            },
             selectInvoice(invoice){
                 axios
                     .get(this.api+"get/"+invoice.invoice_id)
@@ -250,8 +266,7 @@ $hrs = $this->db->get('hr')->result_array();
                 axios.post(this.pos_api + app.chooseInvoice.invoice_id)
                 .then(function (response) { iziToast.success({ title: 'Printed invoice', message: ': ' + response.data.msg, position: 'topRight' }); })
                 .catch(function (error) { alert("error", error); })
-            },
-            
+            },            
             getRandomInt(max) {
                 return Math.floor(Math.random() * Math.floor(max));
             },
@@ -259,7 +274,8 @@ $hrs = $this->db->get('hr')->result_array();
                 app.loading = false;
                 app.formValidate = false;
                 app.chooseInvoice = {};
-                app.editInvoice = false;
+                app.editModal = false;
+                app.addModal = false;
                 app.deleteModal = false;
                 app.viewInvoice = false;
                 app.refresh();
@@ -287,10 +303,7 @@ $hrs = $this->db->get('hr')->result_array();
     jQuery(window).load(function() {
         
         var $ = jQuery;
-        $(".select2").select2({
-            placeholder: 'This is my placeholder',
-            allowClear: true
-        });
+         
         $('.modal-body').css("height", screen.height - 250);
         $('.modal-body').css("overflow", "auto");
         $("#table-2").dataTable({

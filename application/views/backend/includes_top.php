@@ -12,7 +12,7 @@
 <link rel="stylesheet" href="<?= base_url('assets/izitoast/dist/css/iziToast.min.css');?>">
 <script src="<?= base_url()?>assets/js/vue.min.js"></script>
 <script src="<?= base_url()?>assets/js/vue-select.js"></script>
-<!-- <script src="<?= base_url()?>assets/js/vuex.js"></script> -->
+<script src="<?= base_url()?>assets/js/vuex.js"></script>
 <script src="<?= base_url()?>assets/js/axios.min.js"></script>
 <script src="<?php echo base_url('assets/js/chart.js');?>"></script>
 <script src="<?php echo base_url('assets/js/vue-chart.js');?>"></script>

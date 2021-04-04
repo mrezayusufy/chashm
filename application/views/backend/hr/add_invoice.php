@@ -82,8 +82,7 @@ $index = 1;
                             v-for="(invoice_entry, index) in newInvoice.invoice_entries" 
                             :invoice_entry="invoice_entry"
                             :key="index"
-                            v-on:setSelected="setSelected"
-                            v-on:remove-entry="removeEntry(this)">
+                            @remove-entry="removeEntry(this)">
                         </invoice-entries>
                     </div>
                     <!-- TODO FORM ENTRY STARTS HERE-->
@@ -112,7 +111,6 @@ $index = 1;
             </div>
         </div>
     </div>
- 
 </div>
 <script type="text/x-template" id="invoice-entry-template">
     <div class="form-group">
@@ -122,12 +120,12 @@ $index = 1;
             <div class="col-sm-4">
                  
                 <medicine-select id="medicine_id" 
-                    :options="medicines" 
+                    :options="medicines"
                     label="medicine_id" 
                     :reduce="o => `${o.name}:${o.manufacturing_company}:${o.medicine_id}:${o.price}`" 
                     :get-option-label="o => `${o.medicine_id} ${o.name} ${o.total_quantity} ${o.manufacturing_company} ${o.price}`" 
                     :create-option="o => ({ name: name, medicine_id: medicine_id, total_quantity: total_quantity, manufacturing_company: manufacturing_company, price: price })" 
-                    @input="$emit('setSelected')"
+                    @input="setAmountMedicine"
                     v-model="invoice_entry.item">
                     <template slot="option" slot-scope="option">
                         ID:{{ option.medicine_id }} _ {{ option.name }} _ {{ option.manufacturing_company }}
@@ -141,11 +139,11 @@ $index = 1;
             </div>
             <!-- medicine qty -->
             <div class="col-sm-2">
-                <input type="number" class="form-control" name="quantity" name="quantity[n]" v-model="invoice_entry.quantity" min=1 placeholder="<?= get_phrase('quantity'); ?>">
+                <input type="number" class="form-control" name="quantity" name="quantity" v-model="invoice_entry.quantity" min=1 placeholder="<?= get_phrase('quantity'); ?>">
             </div>
             <!-- medicine amount -->
             <div class="col-sm-2">
-                <input type="number" class="form-control" name="amount" name="amount[n]" v-model="invoice_entry.amount" min=0 placeholder="<?= get_phrase('amount'); ?>">
+                <input type="number" class="form-control" name="amount" name="amount" v-model="amount" min=0 placeholder="<?= get_phrase('amount'); ?>">
             </div>
         <?php else : ?>
         <div class="col-sm-3">
@@ -163,6 +161,7 @@ $index = 1;
                 <i class="fas fa-trash"></i>
             </button>
         </div>
+
     </div>
 </script>
 <script>
@@ -171,9 +170,16 @@ $index = 1;
         data: function(){
             return {
                 medicines: <?= json_encode($medicines); ?>,
-                n: 0,
+                amount: "0"
             }
-        }, 
+        },
+        methods: {
+            setAmountMedicine(val) {
+                console.log('val', val);
+                var amount = val.split(':');
+                this.amount = amount[3];
+            },  
+        },
         template: "#invoice-entry-template"
     }); 
     Vue.component("title-select", VueSelect.VueSelect);
@@ -201,15 +207,8 @@ $index = 1;
             formValidate: [],
             patients: <?= json_encode($patients); ?>,
             invoiceTitle: ['Pharmacist','Checkout','Optician','Surgery','BScan','Pharmacist']
-        }, 
-        methods: {
-             setSelected(option){
-                console.log('option', option);
-                // var item = option.split(":");
-                // console.log('item', item[3]);
-                // this.amount++;
-                // console.log('this.amount', this.amount);
-            },
+        },  
+        methods: { 
             createInvoice() {
                 var i = app.newInvoice; 
                 var invoice_entries = JSON.stringify(i.invoice_entries);
@@ -225,7 +224,6 @@ $index = 1;
                                message: 'Invoice Paid successfully.', 
                                position: 'topRight'
                            });
-                           console.log('response', response)
                         } else {
                            app.clearAll();
                         }
@@ -237,9 +235,8 @@ $index = 1;
             },
             addEntry(){
                 var i = this.newInvoice.invoice_entries;
-                var o = { item: "", quantity: "1", amount: ""};
+                var o = { item: "", quantity: "1", amount: "0"};
                 i.push(o);
-                console.log('i', i);
             },
             removeEntry(row){
                 var i = this.newInvoice.invoice_entries;
@@ -253,77 +250,21 @@ $index = 1;
                 }
                 return formData;
             }, 
+            clearAll(){
+                app.newInvoice = {
+                title: "",
+                patient_id: "",
+                hr_id: "<?= $login_user_id ?>",
+                invoice_entries: [
+                        {
+                            item: "",
+                            quantity: "1",
+                            amount: "0"
+                        }
+                    ]
+                };
+            }
         },
 
     });
-    // CREATING BLANK INVOICE ENTRY
-    let i = 2;
-    // $(document).ready(function() {
-    //     blank_invoice_entry = $('#invoice_entry').html();
-    //     $("#select").change(function() {
-    //         var selectedItem = $(this).children("option:selected").val();
-    //         var medicine_array = selectedItem.split(':');
-    //         var index = m.findIndex((i) => i.medicine_id == medicine_array[2]);
-    //         $("input[name='amount[1]'").val(index != -1 ? m[index].price : 0);
-    //     }); 
-    // });
-
-    // function add_amount(id) {
-    //     var v = $(`select[name='item[${id}]'`).val();
-    //     var medicine_array = v.split(':');
-    //     var index = m.findIndex((i) => i.medicine_id == medicine_array[2]);
-    //     $(`input[name='amount[${id}]'`).val(index != -1 ? m[index].price : 0);
-    // }
-
-    // function add_entry() {
-    //     let template = `
-    //         <div class="form-group">
-    //         <label for="field-1" class="col-sm-3 control-label"><?= get_phrase('invoice_entry'); ?></label>
-    //         <?php if ($this->session->userdata('department') == 'Pharmacist') : ?>
-    //         <div class="col-sm-3">
-    //             <select name="item[${i}]" class="form-control" onclick="add_amount(${i})" required>
-    //                 <option value=""><?= get_phrase('select_a_item') ?></option>
-    //                 <?php foreach ($medicines as $m) : ?>
-    //                 <option value="<?= $m['name'] . ":" . $m['manufacturing_company'] . ":" . $m['medicine_id']; ?>"> <?= $m['name'] . " - " . $m['manufacturing_company'] ?> </option>
-    //                 <?php endforeach; ?>
-    //             </select>
-    //         </div>
-    //         <div class="col-sm-2">
-    //             <input type="number" class="form-control" name="quantity[${i}]" value="1" min=1
-    //                     placeholder="<?= get_phrase('quantity'); ?>" >
-    //         </div>
-    //         <!-- medicine amount -->
-    //         <div class="col-sm-2">
-    //             <input type="number" class="form-control" name="amount[${i}]" value="0"
-    //                     placeholder="<?= get_phrase('amount'); ?>" min=0>
-    //         </div>
-    //         <?php else : ?>
-    //         <div class="col-sm-3">
-    //             <input type="text" class="form-control" name="item[${i}]"  value=""
-    //                     placeholder="<?= get_phrase('item'); ?>" >
-    //         </div>
-    //         <div class="col-sm-2">
-    //             <input type="number" hidden class="form-control" name="quantity[${i}]"  value=1 min=1
-    //                     placeholder="<?= get_phrase('quantity'); ?>" >
-    //         </div>
-    //         <div class="col-sm-2">
-    //             <input type="number" class="form-control" name="amount[${i}]"  value=""
-    //                     placeholder="<?= get_phrase('amount'); ?>" min=0>
-    //         </div>
-    //         <?php endif; ?>
-    //         <div class="col-sm-2">
-    //             <button type="button" class="btn btn-danger" onclick="deleteParentElement(this)">
-    //                 <i class="fas fa-trash"></i>
-    //             </button>
-    //         </div>
-    //         </div>
-    //         `;
-    //     $("#invoice_entry").append(template);
-
-    //     i++;
-    // }
-    // REMOVING INVOICE ENTRY
-    // function deleteParentElement(n) {
-    //     n.parentNode.parentNode.parentNode.removeChild(n.parentNode.parentNode);
-    // }
 </script>

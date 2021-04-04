@@ -62,15 +62,19 @@ class Crud_model extends CI_Model
         $invoice_entries                      = json_decode($this->input->post('invoice_entries'));
         $total = 0;
         for ($i = 0; $i <= count($invoice_entries); $i++) {
-            $invoice_item = $invoice_entries[$i]->item;
+            $invoice_item = $invoice_entries[$i]->item; 
             $invoice_amount = $invoice_entries[$i]->amount;
             $invoice_quantity = $invoice_entries[$i]->quantity;
+            $medicine_items = explode(":", $invoice_item);
+            $amount = $medicine_items["3"];
+            if($amount && count($medicine_items) > 0) {
+                $invoice_amount = $amount;
+            }
             if ($invoice_item != "" && $invoice_amount != "" && $invoice_quantity != "") {
                 $new_entry          = array('item' => $invoice_item, 'quantity' => $invoice_quantity, 'amount' => $invoice_amount);
                 $this->db->insert('invoice_entry', $new_entry);
                 $invoice_entry_id_item = $this->db->insert_id();
                 if ($this->session->userdata('department') == "Pharmacist") {
-                    $medicine_items = explode(":", $invoice_item);
                     $medicine = $this->db->get_where("medicine", array("medicine_id" => $medicine_items["2"]))->row();
                     if($medicine->total_quantity > 0){
                         $quantity = $medicine->total_quantity - $invoice_quantity;
