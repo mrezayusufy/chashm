@@ -1,5 +1,5 @@
 ---
 deployment:
   tasks:
-    - export DEPLOYPATH=/home3/kazemahm/nooreyehealthcenter
+    - export DEPLOYPATH=/home3/kazemahm/nooreyehealthcenter 
     - /bin/cp -R * $DEPLOYPATH
