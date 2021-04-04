@@ -86,8 +86,8 @@ class Login extends CI_Controller
 
                 return 'success';
             }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
         }
         
         try {
@@ -98,8 +98,8 @@ class Login extends CI_Controller
             $department = $query->department_name;
             $hr_id = $query->hr_id;
             $name = $query->name;
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
         }
         try {
             if ($department == 'Doctor') {
@@ -155,8 +155,8 @@ class Login extends CI_Controller
                 $this->session->set_userdata('department', $department);
                 return 'success';
             }
-        } catch (\Throwable $th) {
-            throw $th;
+        } catch (Exception $e) {
+            $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
         }
         
         return 'invalid';
