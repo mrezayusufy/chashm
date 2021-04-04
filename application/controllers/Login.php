@@ -98,6 +98,10 @@ class Login extends CI_Controller
             $department = $query->department_name;
             $hr_id = $query->hr_id;
             $name = $query->name;
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+        try {
             if ($department == 'Doctor') {
                 $this->session->set_userdata('hr_login', '1');
                 $this->session->set_userdata('login_user_id', $hr_id);
