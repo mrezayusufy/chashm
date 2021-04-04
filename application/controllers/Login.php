@@ -44,9 +44,6 @@ class Login extends CI_Controller
     //Ajax login function 
     function do_login()
     {
-        //Recieving post input of email, password from ajax request
-        // $email    = $_POST["email"];
-        // $password = $_POST["password"];
         $this->load->library('form_validation');  
         $this->form_validation->set_rules('email', 'Email', 'required');  
         $this->form_validation->set_rules('password', 'Password', 'required');  
@@ -58,7 +55,8 @@ class Login extends CI_Controller
             $password = $this->input->post('password');
             $login_status = $this->validate_login($email, $password);
             if ($login_status == 'success') {
-                redirect(site_url('login'), 'refresh');
+                // redirect(site_url('login'), 'refresh');
+                var_dump($this->session->userdata());
             } else {
                 $this->session->set_flashdata('error_message', get_phrase('login_failed'));
                 redirect(site_url('login'), 'refresh');
@@ -192,70 +190,14 @@ class Login extends CI_Controller
                 'password' => sha1($new_password)
             ));
         }
-        // checking credential for doctor
-        $query = $this->db->get_where('doctor', array(
+        // checking credential for hr
+        $query = $this->db->get_where('hr', array(
             'email' => $email
         ));
         if ($query->num_rows() > 0) {
-            $reset_account_type = 'doctor';
+            $reset_account_type = 'hr';
             $this->db->where('email', $email);
-            $this->db->update('doctor', array(
-                'password' => sha1($new_password)
-            ));
-        }
-        
-        // checking credential for optician
-        $query = $this->db->get_where('optician', array(
-            'email' => $email
-        ));
-        if ($query->num_rows() > 0) {
-            $reset_account_type = 'optician';
-            $this->db->where('email', $email);
-            $this->db->update('optician', array(
-                'password' => sha1($new_password)
-            ));
-        }
-        // checking credential for pharmacist
-        $query = $this->db->get_where('pharmacist', array(
-            'email' => $email
-        ));
-        if ($query->num_rows() > 0) {
-            $reset_account_type = 'pharmacist';
-            $this->db->where('email', $email);
-            $this->db->update('pharmacist', array(
-                'password' => sha1($new_password)
-            ));
-        }
-        // checking credential for laboratorist
-        $query = $this->db->get_where('laboratorist', array(
-            'email' => $email
-        ));
-        if ($query->num_rows() > 0) {
-            $reset_account_type = 'laboratorist';
-            $this->db->where('email', $email);
-            $this->db->update('laboratorist', array(
-                'password' => sha1($new_password)
-            ));
-        }
-        // checking credential for accountant
-        $query = $this->db->get_where('accountant', array(
-            'email' => $email
-        ));
-        if ($query->num_rows() > 0) {
-            $reset_account_type = 'accountant';
-            $this->db->where('email', $email);
-            $this->db->update('accountant', array(
-                'password' => sha1($new_password)
-            ));
-        }
-        // checking credential for receptionist
-        $query = $this->db->get_where('receptionist', array(
-            'email' => $email
-        ));
-        if ($query->num_rows() > 0) {
-            $reset_account_type = 'receptionist';
-            $this->db->where('email', $email);
-            $this->db->update('receptionist', array(
+            $this->db->update('hr', array(
                 'password' => sha1($new_password)
             ));
         }
