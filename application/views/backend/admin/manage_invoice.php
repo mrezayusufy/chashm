@@ -1,8 +1,5 @@
 <!-- FIXME: date and time -->
-<button onclick="showAjaxModal('<?= site_url('modal/popup/add_invoice');?>');" 
-    class="btn btn-primary pull-right">
-        <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_invoice'); ?>
-</button>
+
 <div style="clear:both;"></div>
 <br>
 
@@ -37,15 +34,10 @@
                 <td><?= $row['total'] - $row['paid']?></td>
                 <td><div class="btn <?= $row['status'] == 'paid'? 'btn-primary' : 'btn-danger'?> btn-sm"><?= $row['status']?></div></td>
                 <td>
-                    <a onclick="showAjaxModal('<?= site_url('modal/popup/edit_invoice/'.$row['invoice_id']);?>');" 
+                    <a onclick="showAjaxModal('<?= site_url('modal/popup/show_invoice/'.$row['invoice_id']);?>');" 
                         class="btn btn-info btn-sm">
                             <i class="fas fa-pencil-alt"></i>&nbsp;
-                            <?= get_phrase('edit');?>
-                    </a>
-                    <a onclick="confirm_modal('<?= site_url('admin/invoice/delete/'.$row['invoice_id']); ?>')"
-                        class="btn btn-danger btn-sm">
-                            <i class="fas fa-trash"></i>&nbsp;
-                            <?= get_phrase('delete');?>
+                            <?= get_phrase('show');?>
                     </a>
                 </td>
             </tr>
