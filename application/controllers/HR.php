@@ -27,8 +27,6 @@ class HR extends CI_Controller
             redirect(site_url(), 'refresh');
         if ($this->session->userdata('hr_login') == 1 ) 
             redirect(site_url('hr/dashboard'), 'refresh');
-
-        
     } 
     function dashboard(){
         if ($this->session->userdata('hr_login') != 1 ){

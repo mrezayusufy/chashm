@@ -4,7 +4,7 @@ if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
 /*
- *     @author : Creativeitem
+ *     @author : Reyu
  *     date    : 1 August, 2014
  *      
  *     http://zareenbit.com
@@ -48,82 +48,7 @@ class Admin extends CI_Controller
         $page_data['page_title'] = get_phrase('admin_dashboard');
         $this->load->view('backend/index', $page_data);
     }
-    
-    // LANGUAGE SETTINGS
-    
-    function manage_language($param1 = '', $param2 = '', $param3 = '')
-    {
-        if ($this->session->userdata('admin_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
-
-        if ($param1 == 'edit_phrase') {
-            $page_data['edit_profile'] = $param2;
-        }
-        // if ($param1 == 'update_phrase') {
-        //     $language     = $param2;
-        //     $total_phrase = $this->input->post('total_phrase');
-        //     for ($i = 1; $i < $total_phrase; $i++) {
-        //         //$data[$language]    =    $this->input->post('phrase').$i;
-        //         $this->db->where('phrase_id', $i);
-        //         $this->db->update('language', array(
-        //             $language => $this->input->post('phrase' . $i)
-        //         ));
-        //     }
-        //     redirect(site_url('admin/manage_language/edit_phrase/' . $language), 'refresh');
-        // }
-        if ($param1 == 'do_update') {
-            $language        = $this->input->post('language');
-            $data[$language] = $this->input->post('phrase');
-            $this->db->where('phrase_id', $param2);
-            $this->db->update('language', $data);
-            $this->session->set_flashdata('message', get_phrase('settings_updated'));
-            redirect(site_url('admin/manage_language'), 'refresh');
-        }
-        if ($param1 == 'add_phrase') {
-            $data['phrase'] = $this->input->post('phrase');
-            $this->db->insert('language', $data);
-            $this->session->set_flashdata('message', get_phrase('settings_updated'));
-            redirect(site_url('admin/manage_language'), 'refresh');
-        }
-        if ($param1 == 'add_language') {
-            $language = $this->input->post('language');
-            $this->load->dbforge();
-            $fields = array(
-                $language => array(
-                    'type' => 'LONGTEXT'
-                )
-            );
-            $this->dbforge->add_column('language', $fields);
-            
-            $this->session->set_flashdata('message', get_phrase('settings_updated'));
-            redirect(site_url('admin/manage_language'), 'refresh');
-        }
-        if ($param1 == 'delete_language') {
-            $language = $param2;
-            $this->load->dbforge();
-            $this->dbforge->drop_column('language', $language);
-            $this->session->set_flashdata('message', get_phrase('settings_updated'));
-            
-            redirect(site_url('admin/manage_language'), 'refresh');
-        }
-        $page_data['page_name']  = 'manage_language';
-        $page_data['page_title'] = get_phrase('manage_language');
-        //$page_data['language_phrases'] = $this->db->get('language')->result_array();
-        $this->load->view('backend/index', $page_data);
-    }
-
-    public function update_phrase_with_ajax() {
-        $checker['phrase_id']                = $this->input->post('phraseId');
-        $updater[$this->input->post('currentEditingLanguage')] = $this->input->post('updatedValue');
-
-        $this->db->where('phrase_id', $checker['phrase_id']);
-        $this->db->update('language', $updater);
-
-        echo $checker['phrase_id'].' '.$this->input->post('currentEditingLanguage').' '.$this->input->post('updatedValue');
-    }
-    
+     
     // SYSTEM SETTINGS
     
     function system_settings($param1 = '', $param2 = '', $param3 = '')
@@ -258,13 +183,6 @@ class Admin extends CI_Controller
         $data['page_name']       = 'department_facilities';
         $data['page_title']      = get_phrase('department_facilities') . ' | ' . $data['department_info']->name . ' ' . get_phrase('department');
         $this->load->view('backend/index', $data);
-    }
-    
-    function invoice_api($task = "", $invoice_id = ""){
-        if ($this->session->userdata('admin_login') != 1) {
-            $this->session->set_userdata('last_page', current_url());
-            redirect(site_url(), 'refresh');
-        }
     }
 
     function invoice($task = "", $invoice_id = ""){
