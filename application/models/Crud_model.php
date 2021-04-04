@@ -3,9 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-use Mike42\Escpos\PrintConnectors\WindowsPrintConnector;
-use Mike42\Escpos\Printer;
-
 class Crud_model extends CI_Model
 {
 
@@ -24,8 +21,6 @@ class Crud_model extends CI_Model
     function create_log($data = array()) {
         $data['timestamp'] = now('Asia/Kabul');
         $data['ip'] = $_SERVER["REMOTE_ADDR"];
-        // $location = new SimpleXMLElement(file_get_contents('http://freegeoip.net/xml/' . $_SERVER["REMOTE_ADDR"]));
-        // $data['location'] = $location->City . ' , ' . $location->CountryName;
         $this->db->insert('log', $data);
     }
     function get_type_name_by_id($type, $type_id = '', $field = 'name')

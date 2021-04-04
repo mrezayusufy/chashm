@@ -3,14 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-/*     
- *     @author : Creativeitem
- *     30th July, 2014
- *     Creative Item
- *     www.creativeitem.com
- *     http://codecanyon.net/user/creativeitem
- */
-
 class Login extends CI_Controller
 {
     
@@ -102,55 +94,6 @@ class Login extends CI_Controller
         } catch (Exception $e) {
             $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
         }
-        // try {
-        //     switch($department) {
-        //         case 'Doctor':
-        //             $this->session->set_userdata('hr_login', '1');
-        //             $this->session->set_userdata('login_user_id', $hr_id);
-        //             $this->session->set_userdata('name', $name);
-        //             $this->session->set_userdata('login_type', 'hr');
-        //             $this->session->set_userdata('department', $department);
-        //             return 'success';
-        //         case 'Pharmacist':
-        //             $this->session->set_userdata('hr_login', '1');
-        //             $this->session->set_userdata('login_user_id', $hr_id);
-        //             $this->session->set_userdata('name', $name);
-        //             $this->session->set_userdata('login_type', 'hr');
-        //             $this->session->set_userdata('department', $department);
-        //             return 'success';
-        //         case 'Laboratorist':
-        //             $this->session->set_userdata('hr_login', '1');
-        //             $this->session->set_userdata('login_user_id', $hr_id);
-        //             $this->session->set_userdata('name', $name);
-        //             $this->session->set_userdata('login_type', 'hr');
-        //             $this->session->set_userdata('department', $department);
-        //             return 'success';
-        //         case 'Accountant':
-        //             $this->session->set_userdata('hr_login', '1');
-        //             $this->session->set_userdata('login_user_id', $hr_id);
-        //             $this->session->set_userdata('name', $name);
-        //             $this->session->set_userdata('login_type', 'hr');
-        //             $this->session->set_userdata('department', $department);
-        //             return 'success';
-        //         case 'Receptionist':
-        //             $this->session->set_userdata('hr_login', '1');
-        //             $this->session->set_userdata('login_user_id', $hr_id);
-        //             $this->session->set_userdata('name', $name);
-        //             $this->session->set_userdata('login_type', 'hr');
-        //             $this->session->set_userdata('department', $department);
-        //             return 'success';
-        //         case 'Optician':
-        //             $this->session->set_userdata('hr_login', '1');
-        //             $this->session->set_userdata('login_user_id', $hr_id);
-        //             $this->session->set_userdata('name', $name);
-        //             $this->session->set_userdata('login_type', 'hr');
-        //             $this->session->set_userdata('department', $department);
-        //             return 'success';
-        //     }
-            
-        // } catch (Exception $e) {
-        //     $this->session->set_flashdata('error_message', 'Caught exception: ' .  $e->getMessage());
-        // }
         
         return 'invalid';
     }

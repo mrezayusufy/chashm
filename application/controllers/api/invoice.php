@@ -9,12 +9,11 @@ class Invoice extends CI_Controller{
     $this->load->database();
     $this->load->library('session');
     $this->load->model('crud_model');
-    if ($this->session->userdata('hr_login') != 1 || $this->session->userdata('admin_login') != 1 ) {
-      $this->session->set_userdata('last_page', current_url());
-      $result = array("message" => "You are not allowed.");
-      echo json_encode($result);
-      redirect(site_url(), 'refresh');
-    }
+    // if ($this->session->userdata('hr_login') != 1 || $this->session->userdata('admin_login') != 1 ) {
+    //   $this->session->set_userdata('last_page', current_url());
+    //   $result = array("message" => "You are not allowed.");
+    //   echo json_encode($result);
+    // }
   }
   function index(){ 
     $data['invoices'] = $this->crud_model->select_invoice();

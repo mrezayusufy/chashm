@@ -3,13 +3,6 @@
 if (!defined('BASEPATH'))
     exit('No direct script access allowed');
 
-/*
- *     @author : Reyu
- *     date    : 1 August, 2014
- *      
- *     http://zareenbit.com
- */
-
 class Admin extends CI_Controller
 {
     
@@ -27,7 +20,6 @@ class Admin extends CI_Controller
     }
     
     // default function, redirects to login page if no admin logged in yet
-    
     public function index()
     {
         if ($this->session->userdata('admin_login') != 1)
@@ -37,7 +29,6 @@ class Admin extends CI_Controller
     }
     
     // ADMIN DASHBOARD
-    
     function dashboard()
     {
         if ($this->session->userdata('admin_login') != 1) {
@@ -50,7 +41,6 @@ class Admin extends CI_Controller
     }
      
     // SYSTEM SETTINGS
-    
     function system_settings($param1 = '', $param2 = '', $param3 = '')
     {
         if ($this->session->userdata('admin_login') != 1) {
