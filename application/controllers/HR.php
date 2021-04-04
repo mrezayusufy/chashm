@@ -23,18 +23,24 @@ class HR extends CI_Controller
     
     function index()
     {
-        if ($this->session->userdata('hr_login') != 1 ) {
-            $this->session->set_userdata('last_page', current_url());
+        if ($this->session->userdata('hr_login') != 1 ) 
             redirect(site_url(), 'refresh');
-        }
+        if ($this->session->userdata('hr_login') == 1 ) 
+            redirect(site_url('hr/dashboard'), 'refresh');
+
         
-        $data['page_name']  = 'dashboard';
-        $data['page_title'] = $this->session->userdata('department')." ".get_phrase('dashboard');
-        $this->load->view('backend/index', $data);
     } 
+    function dashboard(){
+        if ($this->session->userdata('hr_login') != 1 ){
+            redirect(site_url(), 'refresh');
+            $this->session->set_userdata('last_page', current_url());
+        } 
+        $data['page_name']  = 'dashboard';
+        $data['page_title'] = $this->session->userdata('department');
+        $this->load->view('backend/index', $data);
+    }
     // TODO: patient crud operation
     function get(){
-         
         $data = $this->session->userdata();
         echo json_encode($data);
     }
