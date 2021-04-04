@@ -37,7 +37,6 @@ class HR extends CI_Controller
         $data['page_title'] = $this->session->userdata('department');
         $this->load->view('backend/index', $data);
     }
-    // TODO: patient crud operation
     function get(){
         $data = $this->session->userdata();
         echo json_encode($data);
