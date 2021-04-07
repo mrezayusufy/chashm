@@ -2,6 +2,7 @@
 $patients = $this->db->get('patient')->result_array();
 $hrs = $this->db->get('hr')->result_array();
 $medicines = $this->db->get_where('medicine', array('status' => 1))->result_array();
+$departments = $this->db->get('department')->result();
 $login_user_id = $this->session->userdata('login_user_id');
 $name = $this->session->userdata('name');
 $index = 1;
@@ -115,7 +116,7 @@ $index = 1;
 <script type="text/x-template" id="invoice-entry-template">
     <div class="form-group">
     
-        <?php if ($this->session->userdata('department') == 'Accountant') : ?>
+        <?php if ($this->session->userdata('department') == 'Pharmacist') : ?>
                             
             <div class="col-sm-4">
                  
@@ -206,9 +207,18 @@ $index = 1;
             hrs: <?= json_encode($hrs); ?>,
             formValidate: [],
             patients: <?= json_encode($patients); ?>,
-            invoiceTitle: ['Pharmacist','Checkout','Optician','Surgery','BScan','Pharmacist']
-        },  
+            invoiceTitle: [],
+        },
+        mounted(){
+            this.setDepartments();
+        },
         methods: { 
+            setDepartments(){
+                var departments = <?= json_encode($departments) ?>;
+                var title = [];
+                departments.forEach(i=> title.push(i.name));
+                this.invoiceTitle = title;
+            },
             createInvoice() {
                 var i = app.newInvoice; 
                 var invoice_entries = JSON.stringify(i.invoice_entries);
@@ -216,22 +226,19 @@ $index = 1;
                 var formData = app.formData(i);
                 axios
                     .post(this.api + "add", formData)
-                    .then(function (response) {
+                    .then(response => {
                         if (response.data.error) {
                             app.formValidate = response.data.msg;
+                        } else {
                             iziToast.success({
                                title: 'Successs', 
-                               message: 'Invoice Paid successfully.', 
+                               message: 'Invoice created successfully.', 
                                position: 'topRight'
                            });
-                        } else {
                            app.clearAll();
                         }
                     })
-                    .catch(function(error){
-                        console.error(error);
-                        alert(error);
-                    });
+                    .catch(err => alert(err));
             },
             addEntry(){
                 var i = this.newInvoice.invoice_entries;
@@ -263,6 +270,7 @@ $index = 1;
                         }
                     ]
                 };
+                window.location.replace('/invoice_manage');
             }
         },
 

@@ -82,25 +82,7 @@ class Crud_model extends CI_Model
                 $invoice_entry_id[] = $invoice_entry_id_item;
             }
         }
-        // for ($i = 0; $i <= count($items); $i++) {
-        //     if ($items[$i] != "" && $amounts[$i] != "" && $quantities[$i] != "") {
-        //         $new_entry          = array('item' => $items[$i], 'quantity' => $quantities[$i], 'amount' => $amounts[$i]);
-        //         $this->db->insert('invoice_entry', $new_entry);
-        //         $invoice_entry_id_item = $this->db->insert_id();
-        //         if ($this->session->userdata('department') == "Pharmacist") {
-        //             $medicine_items = explode(":", $items[$i]);
-        //             $medicine = $this->db->get_where("medicine", array("medicine_id" => $medicine_items["2"]))->row();
-        //             if($medicine->total_quantity > 0){
-        //                 $quantity = $medicine->total_quantity - $quantities[$i];
-        //                 $status = $quantity > 0 ? 1 : 0;
-        //                 $update_medicine = array("total_quantity" => $quantity, "status" => $status);
-        //             }
-        //             $this->db->update("medicine", $update_medicine, array("medicine_id" => $medicine->medicine_id));
-        //         }
-        //         $total += $amounts[$i] * $quantities[$i];
-        //         $invoice_entry_id[] = $invoice_entry_id_item;
-        //     }
-        // }
+         
         $data['invoice_entry_id']    = json_encode($invoice_entry_id);
         $data['total']              = $total;
         $returned_array = null_checking($data);
@@ -175,7 +157,23 @@ class Crud_model extends CI_Model
         $data->invoice_entries = $invoice_entry;
         return $data;
     }
-    function select_invoice()
+    
+    function get_invoice($limit = "", $offset = "", $hr_id = "")
+    {
+        $query = 'date(from_unixtime(i.creation_timestamp)) as daily, sum(i.paid) as total, concat_ws(" ", h.first_name, h.last_name) as hr_name';
+        $this->db->select($query)
+            ->from('invoice i')
+            ->join('hr h', 'i.hr_id=h.hr_id', 'left')
+            ->where(array('status' => 'paid', 'i.hr_id' => $hr_id))
+            ->limit($limit)
+            ->offset($offset)
+            ->group_by('date(from_unixtime(i.creation_timestamp))')
+            ->order_by('date(from_unixtime(i.creation_timestamp))', 'desc');
+        $query = $this->db->get();
+        return $query->result_array();
+    }
+    
+    function select_invoice($limit = "", $offset = "")
     {
         $query = 'i.invoice_id as invoice_id, i.total as total, i.invoice_entry_id as invoice_entry_id, i.title as title, concat_ws(" ", h.hr_id, h.first_name, h.last_name) as hr_name, concat_ws(" ", p.patient_id, p.name, p.father_name) as patient_name, i.creation_timestamp as creation_timestamp, i.status as status, i.paid as paid';
         $this->db->select($query)
@@ -183,6 +181,8 @@ class Crud_model extends CI_Model
             ->join('hr h', 'i.hr_id=h.hr_id', 'left')
             ->join('patient p', 'i.patient_id=p.patient_id', 'left')
             ->join('invoice_entry ie', 'i.invoice_entry_id=ie.invoice_entry_id', 'left')
+            ->limit($limit)
+            ->offset($offset)
             ->order_by('i.creation_timestamp', 'desc');
         $query = $this->db->get();
         return $query->result_array();
@@ -200,7 +200,8 @@ class Crud_model extends CI_Model
         }
         return $query;
     }
-    function select_invoice_by_hr($hr_id)
+    
+    function select_invoice_by_hr($hr_id, $limit = "", $offset = "")
     {
         $query = 'i.invoice_id as invoice_id, i.total as total, i.invoice_entry_id as invoice_entry_id,  i.title as title, concat_ws(" ", h.hr_id, h.first_name, h.last_name) as hr_name, concat_ws(" ", p.patient_id, p.name, p.father_name) as patient_name, i.creation_timestamp as creation_timestamp, i.status as status, i.paid as paid';
         $this->db->select($query)
@@ -209,9 +210,12 @@ class Crud_model extends CI_Model
             ->join('patient p', 'i.patient_id=p.patient_id', 'left')
             ->join('invoice_entry ie', 'i.invoice_entry_id=ie.invoice_entry_id', 'left')
             ->where('i.hr_id', $hr_id)
+            ->limit($limit)
+            ->offset($offset)
             ->order_by('invoice_id', 'desc');
         return $this->db->get()->result_array();
     }
+
     function select_invoice_info_by_hr_id()
     {
         $hr_id = $this->session->userdata('login_user_id');
@@ -258,7 +262,7 @@ class Crud_model extends CI_Model
         $this->db->where('type', 'system_title');
         $this->db->update('settings', $returned_array);
 
-    $data['description'] = $this->input->post('address');
+        $data['description'] = $this->input->post('address');
         $returned_array = null_checking($data);
         $this->db->where('type', 'address');
         $this->db->update('settings', $returned_array);
@@ -554,8 +558,14 @@ class Crud_model extends CI_Model
         }
     }
 
+    function get_hr()
+    {
+        $this->db->order_by('hr_id', 'desc');
+        return $this->db->get('hr')->result();
+    }
     function select_hr_info()
     {
+        $this->db->order_by('hr_id', 'desc');
         return $this->db->get('hr')->result_array();
     }
     function select_hr_info_by_id($hr_id)

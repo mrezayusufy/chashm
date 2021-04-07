@@ -31,7 +31,8 @@ class HR extends CI_Controller
         if ($this->session->userdata('hr_login') != 1 ){
             redirect(site_url(), 'refresh');
             $this->session->set_userdata('last_page', current_url());
-        } 
+        }
+        
         $data['page_name']  = 'dashboard';
         $data['page_title'] = $this->session->userdata('department');
         $this->load->view('backend/index', $data);
@@ -321,7 +322,7 @@ class HR extends CI_Controller
         $data['page_title'] = get_phrase('invoice');
         $this->load->view('backend/index', $data);
     }
-    function invoice($task = "", $invoice_id=""){
+    function invoice($task = "", $invoice_id = "", $limit = "", $offset = "", $hrId = ""){
         if ($this->session->userdata('hr_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
@@ -375,17 +376,39 @@ class HR extends CI_Controller
                 break;
             case "list":
                  if($department == "Accountant" || $department == "Receptionist" ) {
-                    $data['invoices'] = $this->crud_model->select_invoice();
+                    $data['limit'] = $limit;
+                    $data['offset'] = $offset;
+                    $data['total'] = $this->db->count_all_results('invoice');
+                    $data['invoices'] = $this->crud_model->select_invoice($limit, $offset);
                     $data['msg'] = "invoice list";
-                 } else {
-                    $data['invoices'] = $this->crud_model->select_invoice_by_hr($hr_id);
+                } else {
+                    $data['limit'] = $limit;
+                    $data['offset'] = $offset;
+                    $data['invoices'] = $this->crud_model->select_invoice_by_hr($hr_id, $limit, $offset);
                     $data['msg'] = "Invoice list by HR.";
                  }
+                
+                $data['limit'] = $limit;
+                $data['offset'] = $offset;
+                $data['total'] = $this->db->count_all_results('invoice');
+                $data['msg'] = "invoice list";
+                $data['invoices'] = $this->crud_model->select_invoice($limit, $offset);
                 echo json_encode($data);
-                break;
+                break; 
             case "get": 
                 $data['invoice'] = $this->crud_model->select_invoice_by_id($invoice_id);
                 $data['msg'] = "Invoice ";
+                echo json_encode($data);
+                break;
+            case "all": 
+                if(!empty($hrId) && $hrId != "") {
+                    $data['hrId'] = $hrId;
+                    $data['limit'] = $limit;
+                    $data['offset'] = $offset;
+                    $data['total'] = $this->db->count_all_results('invoice');
+                    $data['msg'] = "invoice list";
+                    $data['invoices'] = $this->crud_model->get_invoice($limit, $offset, $hrId);
+                }
                 echo json_encode($data);
                 break;
             case "delete": 
@@ -415,6 +438,7 @@ class HR extends CI_Controller
         } else {
             $data['invoices'] = $this->crud_model->select_invoice_info_by_hr_id();
         }
+        
         $data['page_name']    = 'manage_invoice';
         $data['page_title']   = get_phrase('invoice');
         $this->load->view('backend/index', $data);

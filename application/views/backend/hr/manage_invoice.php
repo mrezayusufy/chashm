@@ -1,5 +1,6 @@
 <?php 
 $department = $this->session->userdata('department');
+
 if($department == 'Pharmacist')
     $medicines = $this->db->get('medicine')->result_array();
 $hrs = $this->db->get('hr')->result_array();
@@ -157,6 +158,7 @@ $hrs = $this->db->get('hr')->result_array();
             chooseInvoice: {},
             formValidate: [],
             number: 1,
+            total: "",
             medicines: <?= json_encode($medicines);?>,
             pos_api: "<?= site_url('/hr/pos/')?>",
         },
@@ -173,11 +175,11 @@ $hrs = $this->db->get('hr')->result_array();
         methods: {
             showAll() {
                 axios
-                    .get(this.api + 'list')
-                    .then(function(response){
-                        app.setData(response.data.invoices);
+                    .get(`${this.api}/list`)
+                    .then((response)=>{
+                        app.setData(response.data);
                     })
-                    .catch(function(error){
+                    .catch((error)=>{
                         console.log('error', error);
                     });
             },
@@ -187,12 +189,12 @@ $hrs = $this->db->get('hr')->result_array();
             getPatients(){
                 axios
                     .get(this.home + 'patient_api/get')
-                    .then(function(response){
+                    .then((response) => {
                         patients = response.data.patients;
                         app.patients = patients;
                         app.loading = false;
                     })
-                    .catch(function(error){
+                    .catch((error) => {
                         iziToast.error({
                             title: 'Error',
                             message: ': ' + error,
@@ -239,7 +241,7 @@ $hrs = $this->db->get('hr')->result_array();
                     });
             }, 
             AddInvoice(){
-                window.location.replace("/hr/invoice_add");
+                window.location.replace("/HR/invoice_add");
             },
             selectInvoice(invoice){
                 axios
@@ -259,7 +261,8 @@ $hrs = $this->db->get('hr')->result_array();
                 return formData;
             },
             setData(data) {
-                app.invoices = data;
+                app.invoices = data.invoices;
+                app.total = data.total;
                 app.loading = false;
             },
             pos(){
@@ -333,7 +336,6 @@ $hrs = $this->db->get('hr')->result_array();
             });
         });
 
-        // Replace Checboxes
         $(".pagination a").click(function(ev) {
             replaceCheckboxes();
         });
