@@ -11,8 +11,8 @@ class Admin extends CI_Controller
         parent::__construct();
         $this->load->database();
         $this->load->library('session');
-        $this->load->model('frontend_model');
         $this->load->model('crud_model');
+        // $this->load->model('frontend_model');
         
         // cache control
         $this->output->set_header('Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0');
@@ -28,8 +28,7 @@ class Admin extends CI_Controller
     }
     
     // ADMIN DASHBOARD
-    function dashboard()
-    {
+    function dashboard() {
         if ($this->session->userdata('admin_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');

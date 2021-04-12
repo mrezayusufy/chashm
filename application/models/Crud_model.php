@@ -316,6 +316,7 @@ class Crud_model extends CI_Model
         $this->db->where('invoice_id', $invoice_id);
         $this->db->delete('invoice');
     }
+    
     function calculate_invoice_total_amount($invoice_id)
     {
         $total_amount           = 0;

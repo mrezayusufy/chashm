@@ -13,7 +13,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
 <div id="app">
     <div class="row">
         <div class="col-sm-3">
-            <a href="<?= site_url('Admin/doctor'); ?>">
+            <a href="<?= site_url('Admin/hr'); ?>">
                 <div class="tile-stats tile-white tile-white-primary">
                     <div class="icon"><i class="fas fa-user-md"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('hr'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('hr'); ?></div>
@@ -96,16 +96,50 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         </div>
         
         <div class="col-sm-12">
-        <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="$store.state.setActiveHr" :value="$store.state.hr">
-            <template slot="option" slot-scope="option">
-                ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
-            </template>
-            <template slot="selected-option" slot-scope="option">
-                <div class="selected d-center">
+            <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="$store.state.setActiveHr" :value="$store.state.hr">
+                <template slot="option" slot-scope="option">
                     ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
-                </div>
-            </template>
-        </hr-select>
+                </template>
+                <template slot="selected-option" slot-scope="option">
+                    <div class="selected d-center">
+                        ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
+                    </div>
+                </template>
+            </hr-select>
+            <div style="clear:both;"></div>
+        <br>
+        <div v-if="$store.state.loading==='pending'" class="loading">
+            <div class="spinner-border"></div>
+        </div>
+        <div v-if="$store.state.loading==='idle' || $store.state.invoiceData.length === 0" class="col-md-12">
+            <div>No data</div>
+        </div>
+        <table 
+            v-if="$store.state.loading==='finished'"
+            class="table table-bordered table-striped datatable display" id="invoice-table">
+            <thead>
+                <tr>
+                    <th><?= get_phrase('index'); ?></th>
+                    <th><?= get_phrase('doctor'); ?></th>
+                    <th><?= get_phrase('date'); ?></th>
+                    <th><?= get_phrase('total'); ?></th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr v-for="(i, index) in $store.state.invoiceData" :key="index">
+                    <td>{{ index }} </td>
+                    <td>{{ i.hr_name }}</td>
+                    <td>{{ i.daily }}</td>
+                    <td>{{ i.total }}</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <th colspan="3" style="text-align:right">Total: </th>
+                    <th>{{ $store.state.totalInvoice }}</th>
+                </tr>
+            </tfoot>
+        </table>
         </div>
 
         <div class="col-sm-12">
@@ -124,7 +158,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
 </div>
 <script>
     Vue.component('hr-select', VueSelect.VueSelect);
-const store = new Vuex.Store({
+    const store = new Vuex.Store({
         state: {
             loading: 'idle',
             hrs: <?= json_encode($hrs) ?>,
@@ -262,22 +296,18 @@ const store = new Vuex.Store({
         created(){
             this.getInvoiceList();
             this.getSalaryList();
-            console.log('app.invoiceData', this.invoiceData);
         },
         methods: {
-            
             getInvoiceList(){
-                axios.get(this.api + 'api/invoice')
-                .then(r=>app.setInvoices(r.data.invoices))
+                axios.get(this.api + 'api/invoice/list')
+                .then(r=>app.setInvoice(r.data))
                 .catch(e=>alert(e));
             },
             getSalaryList(){
                 axios.get(this.api + 'api/salary').then(r=>app.setSalaries(r.data.salaries)).catch(e=>alert(e));
             },
-            setInvoices(response){
-                app.invoices = response;
-                app.loading = false;
-                this.$store.commit('setInvoice', data)
+            setInvoice(data){
+                this.$store.commit('setInvoice', data.invoices)
             },
             setSalaries(response){
                 app.invoices = response;
