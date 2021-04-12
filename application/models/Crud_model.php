@@ -31,21 +31,21 @@ class Crud_model extends CI_Model
     }
     function deposit($amount = ""){
         $query = $this->db->get('balance')->first_row();
-        // echo $query;
-        // if($query){
-        //     $this->db->insert('balance', array(
-        //         "owner" => "1",
-        //         "amount" => "0",
-        //         "timestamp" => now("Asia/Kabul"),
-        //     ));
-        // } else {
+        echo $query;
+        if($query){
+            $this->db->insert('balance', array(
+                "owner" => "1",
+                "amount" => "0",
+                "timestamp" => now("Asia/Kabul"),
+            ));
+        } else {
             $this->db->where('balance_id', $query->balance_id);
             $this->db->update('balance', array(
                 "owner" => "1",
                 "amount" => (int)$query->amount + (int)$amount,
                 "timestamp" => now('Asia/Kabul') 
             ));
-        // }
+        }
     }
     function withdraw($amount = 0){
         $query = $this->db->get('balance')->first_row();
