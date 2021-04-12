@@ -16,7 +16,7 @@ foreach ($single_salary_info as $row) {
 
                 <div class="panel-body">
 
-                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('admin/salary/update/'.$row['salary_id']); ?>" 
+                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('Admin/salary/update/'.$row['salary_id']); ?>" 
                         method="post" enctype="multipart/form-data">
 
                         <div class="form-group">

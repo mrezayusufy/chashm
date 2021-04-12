@@ -24,7 +24,7 @@
                 <td><?php echo $row['name']; ?></td>
                 <td><?php echo substr($row['description'], 0, 200); ?> ...</td>
                 <td>
-                    <a href="<?php echo site_url('admin/department_facilities/'.$row['department_id']);?>"
+                    <a href="<?php echo site_url('Admin/department_facilities/'.$row['department_id']);?>"
                         class="btn btn-default btn-sm">
                         <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('manage_facilities');?>
                     </a>
@@ -32,7 +32,7 @@
                         class="btn btn-info btn-sm">
                         <i class="fas fa-pencil-alt"></i>&nbsp;<?php echo get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?php echo site_url('admin/department/delete/'.$row['department_id']); ?>')"
+                    <a onclick="confirm_modal('<?php echo site_url('Admin/department/delete/'.$row['department_id']); ?>')"
                        class="btn btn-danger btn-sm">
                         <i class="fas fa-trash"></i>&nbsp;<?php echo get_phrase('delete');?>
                     </a>

@@ -16,7 +16,7 @@ foreach ($staff as $row) {
 
             <div class="panel-body">
 
-                <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('admin/staff/update/'.$row["staff_id"]); ?>" 
+                <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('Admin/staff/update/'.$row["staff_id"]); ?>" 
                     method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('tazkira_id'); ?></label>

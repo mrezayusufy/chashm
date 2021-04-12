@@ -24,11 +24,10 @@ class Admin extends CI_Controller
         if ($this->session->userdata('admin_login') != 1)
             redirect(site_url('login'), 'refresh');
         if ($this->session->userdata('admin_login') == 1)
-            redirect(site_url('admin/dashboard'), 'refresh');
-        echo phpinfo();
-        $page_data['page_name']  = 'dashboard';
-        $page_data['page_title'] = get_phrase('admin_dashboard');
-        $this->load->view('backend/index', $page_data);
+            redirect(site_url('Admin/dashboard'), 'refresh');
+        // $page_data['page_name']  = 'dashboard';
+        // $page_data['page_title'] = get_phrase('admin_dashboard');
+        // $this->load->view('backend/index', $page_data);
     }
     
     // ADMIN DASHBOARD
@@ -86,7 +85,7 @@ class Admin extends CI_Controller
         if ($param1 == 'do_update') {
             $this->crud_model->update_system_settings();
             $this->session->set_flashdata('message', get_phrase('settings_updated'));
-            redirect(site_url('admin/system_settings'), 'refresh');
+            redirect(site_url('Admin/system_settings'), 'refresh');
         }
         
         $page_data['page_name']  = 'system_settings';
@@ -111,10 +110,10 @@ class Admin extends CI_Controller
                 $this->db->where('admin_id', $this->session->userdata('login_user_id'));
                 $this->db->update('admin', $returned_array);
                 $this->session->set_flashdata('message', get_phrase('profile_info_updated_successfuly'));
-                redirect(site_url('admin/manage_profile'), 'refresh');
+                redirect(site_url('Admin/manage_profile'), 'refresh');
             } else {
                 $this->session->set_flashdata('error_message', get_phrase('duplicate_email'));
-                redirect(site_url('admin/manage_profile'), 'refresh');
+                redirect(site_url('Admin/manage_profile'), 'refresh');
             }
             
         }
@@ -134,10 +133,10 @@ class Admin extends CI_Controller
                 ));
                 
                 $this->session->set_flashdata('message', get_phrase('password_info_updated_successfuly'));
-                redirect(site_url('admin/manage_profile'), 'refresh');
+                redirect(site_url('Admin/manage_profile'), 'refresh');
             } else {
                 $this->session->set_flashdata('message', get_phrase('password_update_failed'));
-                redirect(site_url('admin/manage_profile'), 'refresh');
+                redirect(site_url('Admin/manage_profile'), 'refresh');
             }
         }
         $page_data['page_name']  = 'manage_profile';
@@ -158,18 +157,18 @@ class Admin extends CI_Controller
         if ($task == "create") {
             $this->crud_model->save_department_info();
             $this->session->set_flashdata('message', get_phrase('department_info_saved_successfuly'));
-            redirect(site_url('admin/department'), 'refresh');
+            redirect(site_url('Admin/department'), 'refresh');
         }
         
         if ($task == "update") {
             $this->crud_model->update_department_info($department_id);
             $this->session->set_flashdata('message', get_phrase('department_info_updated_successfuly'));
-            redirect(site_url('admin/department'), 'refresh');
+            redirect(site_url('Admin/department'), 'refresh');
         }
         
         if ($task == "delete") {
             $this->crud_model->delete_department_info($department_id);
-            redirect(site_url('admin/department'), 'refresh');
+            redirect(site_url('Admin/department'), 'refresh');
         }
         
         $data['department_info'] = $this->crud_model->select_department_info();
@@ -188,19 +187,19 @@ class Admin extends CI_Controller
         if ($param1 == 'add') {
             $this->frontend_model->add_department_facility($param2);
             $this->session->set_flashdata('message', get_phrase('facility_saved_successfully'));
-            redirect(site_url('admin/department_facilities/' . $param2), 'refresh');
+            redirect(site_url('Admin/department_facilities/' . $param2), 'refresh');
         }
         
         if ($param1 == 'edit') {
             $this->frontend_model->edit_department_facility($param2);
             $this->session->set_flashdata('message', get_phrase('facility_updated_successfully'));
-            redirect(site_url('admin/department_facilities/' . $param3), 'refresh');
+            redirect(site_url('Admin/department_facilities/' . $param3), 'refresh');
         }
         
         if ($param1 == 'delete') {
             $this->frontend_model->delete_department_facility($param2);
             $this->session->set_flashdata('message', get_phrase('facility_deleted_successfully'));
-            redirect(site_url('admin/department_facilities/' . $param3), 'refresh');
+            redirect(site_url('Admin/department_facilities/' . $param3), 'refresh');
         }
         
         $data['department_info'] = $this->frontend_model->get_department_info($param1);
@@ -229,15 +228,15 @@ class Admin extends CI_Controller
         if ($task == "create") {
                 $this->crud_model->save_salary_info();
                 $this->session->set_flashdata('message', get_phrase('salary_info_saved_successfuly'));
-            redirect(site_url('admin/salary'), 'refresh');
+            redirect(site_url('Admin/salary'), 'refresh');
         }
         if ($task == "update") {
             $this->crud_model->update_salary_info($salary_id);
-            redirect(site_url('admin/salary'), 'refresh');
+            redirect(site_url('Admin/salary'), 'refresh');
         }
         if ($task == "delete") {
             $this->crud_model->delete_salary_info($salary_id);
-            redirect(site_url('admin/salary'), 'refresh');
+            redirect(site_url('Admin/salary'), 'refresh');
         }
         $data['salary_info'] = $this->crud_model->select_salary_info();
         $data['page_name']   = 'manage_salary';
@@ -254,16 +253,16 @@ class Admin extends CI_Controller
         if ($task == "create") {
                 $this->crud_model->save_staff_info();
                 $this->session->set_flashdata('message', get_phrase('staff_info_saved_successfuly'));
-            redirect(site_url('admin/staff'), 'refresh');
+            redirect(site_url('Admin/staff'), 'refresh');
         }
         if ($task == "update") {
             $this->crud_model->update_staff_info($staff_id);
-            redirect(site_url('admin/staff'), 'refresh');
+            redirect(site_url('Admin/staff'), 'refresh');
         }
         
         if ($task == "delete") {
             $this->crud_model->delete_staff_info($staff_id);
-            redirect(site_url('admin/staff'), 'refresh');
+            redirect(site_url('Admin/staff'), 'refresh');
         }
         $data['staff_info'] = $this->crud_model->select_staff_info();
         $data['page_name']   = 'manage_staff';
@@ -280,11 +279,11 @@ class Admin extends CI_Controller
         if ($task == "create") {
             $this->crud_model->save_hr_info();
             $this->session->set_flashdata('message', get_phrase('hr_info_saved_successfuly'));
-            redirect(site_url('admin/hr'), 'refresh');
+            redirect(site_url('Admin/hr'), 'refresh');
         }
         if ($task == "update") {
             $this->crud_model->update_hr_info($hr_id);
-            redirect(site_url('admin/hr'), 'refresh');
+            redirect(site_url('Admin/hr'), 'refresh');
         }
         
         if ($task == "delete") {
@@ -292,7 +291,7 @@ class Admin extends CI_Controller
             $data['title'] = $hr_id." The Doctor info is deleted";
             $this->crud_model->create_log($data);
             $this->crud_model->delete_hr_info($hr_id);
-            redirect(site_url('admin/hr'), 'refresh');
+            redirect(site_url('Admin/hr'), 'refresh');
         }
         $data['hr_info'] = $this->crud_model->select_hr_info();
         $data['page_name']   = 'manage_hr';
@@ -322,17 +321,17 @@ class Admin extends CI_Controller
         if ($task == "create") {
             $this->crud_model->save_patient_info();
             $this->session->set_flashdata('message', get_phrase('patient_info_saved_successfuly'));
-            redirect(site_url('admin/patient'), 'refresh');
+            redirect(site_url('Admin/patient'), 'refresh');
         }
         
         if ($task == "update") {
             $this->crud_model->update_patient_info($patient_id);
-            redirect(site_url('admin/patient'), 'refresh');
+            redirect(site_url('Admin/patient'), 'refresh');
         }
         
         if ($task == "delete") {
             $this->crud_model->delete_patient_info($patient_id);
-            redirect(site_url('admin/patient'), 'refresh');
+            redirect(site_url('Admin/patient'), 'refresh');
         }
         
         $data['patient_info'] = $this->crud_model->select_patient_info();

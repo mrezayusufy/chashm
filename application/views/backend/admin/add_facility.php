@@ -15,7 +15,7 @@
             <div class="panel-body">
 
                 <form role="form" class="form-horizontal form-groups"
-                      action="<?php echo site_url('admin/department_facilities/add/'.$department->department_id); ?>"
+                      action="<?php echo site_url('Admin/department_facilities/add/'.$department->department_id); ?>"
                       method="post" enctype="multipart/form-data">
 
                     <div class="form-group">

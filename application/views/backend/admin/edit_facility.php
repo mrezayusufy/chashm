@@ -16,7 +16,7 @@ foreach ($facility as $row) { ?>
             <div class="panel-body">
 
                 <form role="form" class="form-horizontal form-groups"
-                      action="<?php echo site_url('admin/department_facilities/edit/'.$row['facility_id'].'/'.$row['department_id']); ?>"
+                      action="<?php echo site_url('Admin/department_facilities/edit/'.$row['facility_id'].'/'.$row['department_id']); ?>"
                       method="post" enctype="multipart/form-data">
 
                     <div class="form-group">

@@ -41,7 +41,7 @@
                             <i class="fas fa-pencil-alt"></i>&nbsp;
                             <?= get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?= site_url('admin/salary/delete/'.$row['salary_id']); ?>')"
+                    <a onclick="confirm_modal('<?= site_url('Admin/salary/delete/'.$row['salary_id']); ?>')"
                         class="btn btn-danger btn-sm">
                             <i class="fas fa-trash"></i>&nbsp;
                             <?= get_phrase('delete');?>

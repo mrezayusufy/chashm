@@ -12,7 +12,7 @@
 
             <div class="panel-body">
 
-                <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('admin/staff/create'); ?>" 
+                <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('Admin/staff/create'); ?>" 
                     method="post" enctype="multipart/form-data">
                     <div class="form-group">
                         <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('tazkira_id'); ?></label>

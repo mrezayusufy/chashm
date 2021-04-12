@@ -18,7 +18,7 @@
             <div class="panel-body">
 
                 <form role="form" class="form-horizontal form-groups validate"
-                      action="<?php echo site_url('admin/frontend_settings/service_edit/'.$param2); ?>"
+                      action="<?php echo site_url('Admin/frontend_settings/service_edit/'.$param2); ?>"
                       method="post" enctype="multipart/form-data">
 
                     <div class="form-group">

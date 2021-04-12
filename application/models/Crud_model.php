@@ -635,7 +635,7 @@ class Crud_model extends CI_Model
             $email = $this->session->set_flashdata('error_message', get_phrase('duplicate_email'));
             $tazkira = $this->session->set_flashdata('error_message', get_phrase('duplicate_tazkira'));
             $validation == 0 ? $email : $tazkira;
-            redirect(site_url('admin/hr'), 'refresh');
+            redirect(site_url('Admin/hr'), 'refresh');
         }
     }
 
@@ -682,7 +682,7 @@ class Crud_model extends CI_Model
             $email      = $this->session->set_flashdata('error_message', get_phrase('duplicate_email'));
             $tazkira    = $this->session->set_flashdata('error_message', get_phrase('duplicate_tazkira'));
             $validation == 0 ? $email : $tazkira;
-            redirect(site_url('admin/hr'), 'refresh');
+            redirect(site_url('Admin/hr'), 'refresh');
         }
     }
 

@@ -10,7 +10,7 @@ $hrs = $this->crud_model->select_hr_by_tazkira_id();
                 </div>
             </div>
             <div class="panel-body">
-              <form role="form" class="form-horizontal form-groups" action="<?= site_url('admin/salary/create'); ?>" 
+              <form role="form" class="form-horizontal form-groups" action="<?= site_url('Admin/salary/create'); ?>" 
                     method="post" enctype="multipart/form-data">
                     
                     <div class="form-group">

@@ -13,7 +13,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
 <div id="app">
     <div class="row">
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/doctor'); ?>">
+            <a href="<?= site_url('Admin/doctor'); ?>">
                 <div class="tile-stats tile-white tile-white-primary">
                     <div class="icon"><i class="fas fa-user-md"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('hr'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('hr'); ?></div>
@@ -23,7 +23,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         </div>
 
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/patient'); ?>">
+            <a href="<?= site_url('Admin/patient'); ?>">
                 <div class="tile-stats tile-white-red">
                     <div class="icon"><i class="fas fa-user"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('patient'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('patient'); ?></div>
@@ -33,7 +33,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         </div>
 
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/invoice'); ?>">
+            <a href="<?= site_url('Admin/invoice'); ?>">
                 <div class="tile-stats tile-white-aqua">
                     <div class="icon"><i class="fas fa-file-invoice-dollar"></i></div>
                     <div class="num" data-start="0" data-end="<?= $pa; ?>" data-duration="1500" data-delay="0"><?= $pa; ?></div>
@@ -43,7 +43,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         </div>
 
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/invoice'); ?>">
+            <a href="<?= site_url('Admin/invoice'); ?>">
                 <div class="tile-stats tile-white-blue">
                     <div class="icon"><i class="fas fa-money-bill-alt"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('invoice'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('invoice'); ?></div>
@@ -57,7 +57,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
 
     <div class="row">
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/salary'); ?>">
+            <a href="<?= site_url('Admin/salary'); ?>">
                 <div class="tile-stats tile-white-cyan">
                     <div class="icon"><i class="fas fa-money-bill"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('salary'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('salary'); ?></div>
@@ -66,7 +66,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             </a>
         </div>
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/salary'); ?>">
+            <a href="<?= site_url('Admin/salary'); ?>">
                 <div class="tile-stats tile-white-cyan">
                     <div class="icon"><i class="fas fa-money-bill-alt"></i></div>
                     <div class="num" data-start="0" data-end="<?= $sp ?>" data-duration="1500" data-delay="0"><?= $sp ?></div>
@@ -76,7 +76,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         </div>
 
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/department'); ?>">
+            <a href="<?= site_url('Admin/department'); ?>">
                 <div class="tile-stats tile-white-purple">
                     <div class="icon"><i class="fas fa-book"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('department'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('department'); ?></div>
@@ -86,7 +86,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         </div>
 
         <div class="col-sm-3">
-            <a href="<?= site_url('admin/medicine'); ?>">
+            <a href="<?= site_url('Admin/medicine'); ?>">
                 <div class="tile-stats tile-white-orange">
                     <div class="icon"><i class="fas fa-medkit"></i></div>
                     <div class="num" data-start="0" data-end="<?= $this->db->count_all('medicine'); ?>" data-duration="1500" data-delay="0"><?= $this->db->count_all('medicine'); ?></div>

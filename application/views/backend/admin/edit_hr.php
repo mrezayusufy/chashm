@@ -16,7 +16,7 @@ foreach ($single_hr_info as $row) {
 
                 <div class="panel-body">
 
-                    <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('admin/hr/update/'.$row['hr_id']); ?>" 
+                    <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('Admin/hr/update/'.$row['hr_id']); ?>" 
                         method="post" enctype="multipart/form-data">
 
                         <div class="form-group">

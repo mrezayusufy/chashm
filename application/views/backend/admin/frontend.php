@@ -2,23 +2,23 @@
 <div class="row">
 
     <div class="col-md-2">
-        <a href="<?php echo site_url('admin/frontend/home_page');?>"
+        <a href="<?php echo site_url('Admin/frontend/home_page');?>"
             class="btn btn-<?php echo $inner_page == 'frontend_home_page' ? 'primary' : 'default';?> btn-block">
             <?php echo get_phrase('home_page'); ?>
         </a>
-        <a href="<?php echo site_url('admin/frontend/about_us');?>"
+        <a href="<?php echo site_url('Admin/frontend/about_us');?>"
             class="btn btn-<?php echo $inner_page == 'frontend_about_us' ? 'primary' : 'default';?> btn-block">
             <?php echo get_phrase('about_us'); ?>
         </a>
-        <a href="<?php echo site_url('admin/frontend/blog');?>"
+        <a href="<?php echo site_url('Admin/frontend/blog');?>"
             class="btn btn-<?php echo ($inner_page == 'frontend_blog' || $inner_page == 'frontend_blog_new' || $inner_page == 'frontend_blog_edit') ? 'primary' : 'default';?> btn-block">
             <?php echo get_phrase('blog'); ?>
         </a>
-        <a href="<?php echo site_url('admin/frontend/service');?>"
+        <a href="<?php echo site_url('Admin/frontend/service');?>"
             class="btn btn-<?php echo $inner_page == 'frontend_service' ? 'primary' : 'default';?> btn-block">
             <?php echo get_phrase('services'); ?>
         </a>
-        <a href="<?php echo site_url('admin/frontend/settings');?>"
+        <a href="<?php echo site_url('Admin/frontend/settings');?>"
             class="btn btn-<?php echo $inner_page == 'frontend_settings' ? 'primary' : 'default';?> btn-block">
             <?php echo get_phrase('settings'); ?>
         </a>

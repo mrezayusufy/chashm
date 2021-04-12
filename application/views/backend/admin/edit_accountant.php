@@ -15,7 +15,7 @@ foreach ($single_accountant_info as $row) {
 
                 <div class="panel-body">
 
-                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('admin/accountant/update/'.$row['accountant_id']); ?>" 
+                    <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('Admin/accountant/update/'.$row['accountant_id']); ?>" 
                         method="post" enctype="multipart/form-data">
 
                         <div class="form-group">

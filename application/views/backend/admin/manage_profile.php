@@ -10,7 +10,7 @@
                 <?php
                 foreach($edit_data as $row):
                     ?>
-                    <?php echo form_open(site_url('admin/manage_profile/update_profile_info'), array('class' => 'form-horizontal form-groups validate','target'=>'_top'));?>
+                    <?php echo form_open(site_url('Admin/manage_profile/update_profile_info'), array('class' => 'form-horizontal form-groups validate','target'=>'_top'));?>
                         <div class="form-group">
                             <label class="col-sm-3 control-label"><?php echo get_phrase('name');?></label>
                             <div class="col-sm-5">
@@ -53,7 +53,7 @@
 					<?php
                     foreach($edit_data as $row):
                         ?>
-                        <?php echo form_open(site_url('admin/manage_profile/change_password'), array('class' => 'form-horizontal form-groups validate','target'=>'_top'));?>
+                        <?php echo form_open(site_url('Admin/manage_profile/change_password'), array('class' => 'form-horizontal form-groups validate','target'=>'_top'));?>
                             <div class="form-group">
                                 <label class="col-sm-3 control-label"><?php echo get_phrase('current_password');?></label>
                                 <div class="col-sm-5">

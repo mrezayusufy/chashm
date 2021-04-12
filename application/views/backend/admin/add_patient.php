@@ -11,7 +11,7 @@
 
             <div class="panel-body">
 
-                <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('admin/patient/create'); ?>" 
+                <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('Admin/patient/create'); ?>" 
                     method="post" enctype="multipart/form-data">
 
                     <div class="form-group">

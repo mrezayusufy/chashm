@@ -1,6 +1,6 @@
 <div class="row">
     <div class="col-md-12">
-        <?= form_open(site_url('admin/system_settings/do_update'), array(
+        <?= form_open(site_url('Admin/system_settings/do_update'), array(
             'class' => 'form-horizontal form-groups validate', 'target' => '_top', 'enctype' => 'multipart/form-data'
         ));
         ?>

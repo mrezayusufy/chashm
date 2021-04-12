@@ -30,7 +30,7 @@
                             <i class="fas fa-pencil-alt"></i>&nbsp;
                             <?php echo get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?php echo site_url('admin/staff/delete/'.$row['staff_id']); ?>')"
+                    <a onclick="confirm_modal('<?php echo site_url('Admin/staff/delete/'.$row['staff_id']); ?>')"
                         class="btn btn-danger btn-sm">
                             <i class="fas fa-trash"></i>&nbsp;
                             <?php echo get_phrase('delete');?>
