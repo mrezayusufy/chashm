@@ -8,6 +8,7 @@
 <link rel="stylesheet" href="<?= base_url('assets/css/neon-theme.css');?>">
 <link rel="stylesheet" href="<?= base_url('assets/css/neon-forms.css');?>">
 <link rel="stylesheet" href="<?= base_url('assets/css/custom.css');?>">
+<link rel="stylesheet" href="<?= base_url('assets/js/printer/print.min.css');?>">
 <link rel="stylesheet" href="<?= base_url('assets/css/vue-select.css');?>">
 <link rel="stylesheet" href="<?= base_url('assets/izitoast/dist/css/iziToast.min.css');?>">
 <script src="<?= base_url()?>assets/js/vue.min.js"></script>
@@ -16,6 +17,7 @@
 <script src="<?= base_url()?>assets/js/vuex.js"></script>
 <script src="<?= base_url()?>assets/js/axios.min.js"></script>
 <script src="<?= base_url('assets/js/chart.js');?>"></script>
+<script src="<?= base_url('assets/js/printer/print.min.js');?>"></script>
 <script src="<?= base_url('assets/js/vue-chart.js');?>"></script>
 <script src="<?= base_url('assets/js/moment/moment.js');?>"></script>
 
@@ -165,5 +167,9 @@
     .tile-stats .icon
     {
         bottom: 30px;
+    }  
+    @page {
+        size: 75mm;
     }
-</style>
+     
+</style>  

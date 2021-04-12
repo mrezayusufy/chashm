@@ -2,14 +2,14 @@
     <header class="logo-env" >
 
         <!-- logo -->
-        <div class="logo" style="">
+        <div class="logo">
             <a href="<?php echo site_url('login'); ?>">
                 <img src="<?php echo base_url('uploads/logo.png');?>"  style="max-height:60px;"/>
             </a>
         </div>
 
         <!-- logo collapse icon -->
-        <div class="sidebar-collapse" style="">
+        <div class="sidebar-collapse">
             <a href="#" class="sidebar-collapse-icon with-animation">
 
                 <i class="entypo-menu"></i>
@@ -98,6 +98,27 @@
             <a href="<?php echo site_url('admin/invoice');?>">
                 <i class="fas fa-receipt"></i>
                 <span><?php echo get_phrase('invoice'); ?></span>
+            </a>
+        </li>
+
+        <li class="<?php if ($page_name == 'balance') echo 'active'; ?> ">
+            <a href="<?php echo site_url('admin/balance');?>">
+                <i class="fas fa-receipt"></i>
+                <span><?php echo get_phrase('balance'); ?></span>
+            </a>
+        </li>
+
+        <li class="<?php if ($page_name == 'transaction') echo 'active'; ?> ">
+            <a href="<?php echo site_url('admin/transaction');?>">
+                <i class="fas fa-receipt"></i>
+                <span><?php echo get_phrase('transaction'); ?></span>
+            </a>
+        </li>
+
+        <li class="<?php if ($page_name == 'report') echo 'active'; ?> ">
+            <a href="<?php echo site_url('admin/report');?>">
+                <i class="fas fa-receipt"></i>
+                <span><?php echo get_phrase('report'); ?></span>
             </a>
         </li>
 

@@ -23,6 +23,78 @@ class Crud_model extends CI_Model
         $data['ip'] = $_SERVER["REMOTE_ADDR"];
         $this->db->insert('log', $data);
     }
+
+    // balance
+    function select_balance(){
+         
+        return $this->db->get('balance')->result();
+    }
+    function deposit($amount = ""){
+        $query = $this->db->get('balance')->first_row();
+        // echo $query;
+        // if($query){
+        //     $this->db->insert('balance', array(
+        //         "owner" => "1",
+        //         "amount" => "0",
+        //         "timestamp" => now("Asia/Kabul"),
+        //     ));
+        // } else {
+            $this->db->where('balance_id', $query->balance_id);
+            $this->db->update('balance', array(
+                "owner" => "1",
+                "amount" => (int)$query->amount + (int)$amount,
+                "timestamp" => now('Asia/Kabul') 
+            ));
+        // }
+    }
+    function withdraw($amount = 0){
+        $query = $this->db->get('balance')->first_row();
+        if($query){
+            $this->db->insert('balance', array(
+                "owner" => "1",
+                "amount" => "0",
+                "timestamp" => now("Asia/Kabul"),
+            ));
+        } else {
+            $this->db->where('balance_id', $query->balance_id);
+            $this->db->update('balance', array(
+                "owner" => "1",
+                "amount" => (int)$query->amount - (int)$amount,
+                "timestamp" => now('Asia/Kabul') 
+            ));
+        }
+    }
+    // transaction 
+    function select_transaction(){
+        $this->db->order_by('timestamp', 'desc');
+        return $this->db->get('transaction')->result();
+    }
+    function create_transaction($data = array()){
+
+        $this->db->insert('transaction', array(
+            'title' => $data['title'],
+            'type' => $data['type'],
+            'amount' => $data['amount'],
+            'sender' => $data['sender'],
+            'receiver' => $data['receiver'],
+            "timestamp" => now('Asia/Kabul')
+        ));
+    }
+    // report => title type amount description
+    function select_report(){
+        $this->db->order_by('timestamp', 'desc');
+        $this->db->get('report')->result();
+    }
+    function create_report(){
+        $data = array(
+            'title' => $this->input->post('title'),
+            'type' => $this->input->post('type'),
+            'amount' => $this->input->post('amount'),
+            'description' => $this->input->post('description'),
+            "timestamp" => now('Asia/Kabul')
+        );
+        $this->db->insert('report', $data);
+    }
     function get_type_name_by_id($type, $type_id = '', $field = 'name')
     {
         $this->db->where($type . '_id', $type_id);
@@ -138,7 +210,16 @@ class Crud_model extends CI_Model
         $data['paid']               = $this->input->post('paid');
         $data['creation_timestamp'] = now('Asia/Kabul');
         $data['status']             = $invoice->total == $data['paid'] ? 'paid' : 'unpaid';
-
+        $patient = $this->db->get_where('patient', array('patient_id'=>$data['patient_id']))->row();
+        $hr = $this->db->get_where('hr', array('hr_id'=>$data['hr_id']))->row();
+        $this->deposit($data['paid']);
+        $this->create_transaction(array(
+            'title' => 'deposit',
+            'type' => 'deposit',
+            'amount' => $data['paid'],
+            'sender' => $patient->name." ".$patient->father_name,
+            'receiver' => $hr->first_name. " " . $hr->last_name,
+        ));
         $this->db->where('invoice_id', $invoice_id);
         $this->db->update('invoice', $data);
     }

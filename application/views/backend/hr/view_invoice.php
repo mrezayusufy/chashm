@@ -148,7 +148,7 @@ value = {
       "hr_id": "9",
       "title": "Laboratorist",
       "paid": "0",
-      "invoice_entries": "[{\"id\":\"570afeb983ad8\",\"item\":\"3:Amoxicillin:India\",\"quantity\":\"6\",\"amount\":\"20\"}]",
+      "invoice_entries": "[{\"item\":\"3:Amoxicillin:India\",\"quantity\":\"6\",\"amount\":\"20\"}]",
       "total": "120",
       "creation_timestamp": "1615824962",
       "status": "unpaid"
@@ -168,13 +168,21 @@ var print = new Vue({
     },
     methods: {
         pos(){
-            axios.post(this.url, this.contents)
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                alert("error", error);
-            })
+            console.log('this.content', this.contents)
+            printJS({
+                printable: this.contents.invoice_entries,
+                type: 'json',
+                properties: ['item', 'quantity', 'amount'],
+                header: '<h4 class="custom-h3">My custom header</h4>',
+                style: '.custom-h3 { color: black; }'
+            });
+            // axios.post(this.url, this.contents)
+            // .then(function(response) {
+            //     console.log(response);
+            // })
+            // .catch(function (error) {
+            //     alert("error", error);
+            // })
         }
     }
 });

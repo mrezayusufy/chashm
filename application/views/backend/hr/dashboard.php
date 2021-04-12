@@ -1,6 +1,6 @@
 <?php
 $hr_id = $this->session->userdata('login_user_id');
-$hrs = $this->crud_model->select_hr_info();
+$hrs = $this->crud_model->get_hr();
 $paid = $this->crud_model->total_count('paid', array('status' => 'paid', 'hr_id' => $hr_id), 'invoice')->paid;
 $p = $paid ? $paid : 0;
 $paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
@@ -73,11 +73,11 @@ $count_invoice = $this->crud_model->count_invoice();
     <div class="col-sm-12">
         <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="setActiveHr" :value="$store.state.hr">
             <template slot="option" slot-scope="option">
-                ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }}
+                ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
             </template>
             <template slot="selected-option" slot-scope="option">
                 <div class="selected d-center">
-                    ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }}
+                    ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
                 </div>
             </template>
         </hr-select>
@@ -151,27 +151,6 @@ $count_invoice = $this->crud_model->count_invoice();
             },
         }
     });
-    // var invoiceChart = {
-    //     extends: VueChartJs.Bar,
-    //     props: ['chartData', 'options'], 
-    //     data: () => ({
-    //         chartdata: {
-    //             labels: [],
-    //             datasets: [{
-    //                 label: '',
-    //                 backgroundColor: 'orange',
-    //                 data: []
-    //             }]
-    //         },
-    //         options:{
-    //             responsive: true,
-    //             maintainAspectRatio: false
-    //         }
-    //     }),
-    //     mounted() {
-    //         this.renderChart(this.chartdata, this.options);
-    //     },
-    // };
     var app = new Vue({
         el: "#app",
         store,

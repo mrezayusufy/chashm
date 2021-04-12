@@ -9,11 +9,11 @@ class Invoice extends CI_Controller{
     $this->load->database();
     $this->load->library('session');
     $this->load->model('crud_model');
-    // if ($this->session->userdata('hr_login') != 1 || $this->session->userdata('admin_login') != 1 ) {
-    //   $this->session->set_userdata('last_page', current_url());
-    //   $result = array("message" => "You are not allowed.");
-    //   echo json_encode($result);
-    // }
+    if ($this->session->userdata('hr_login') != 1 || $this->session->userdata('admin_login') != 1 ) {
+      $this->session->set_userdata('last_page', current_url());
+      $result = array("message" => "You are not allowed.");
+      echo json_encode($result);
+    }
   }
   function index(){ 
     $data['invoices'] = $this->crud_model->select_invoice();
@@ -54,6 +54,17 @@ class Invoice extends CI_Controller{
   function delete($invoice_id){
     $this->crud_model->delete_invoice($invoice_id);
     $data['msg'] = "Invoice " . $invoice_id . " deleted successfully.";
+    echo json_encode($data);
+  }
+  function list($limit = "", $offset = "", $hrId = ""){
+    if(!empty($hrId) && $hrId != "") {
+        $data['hrId'] = $hrId;
+        $data['limit'] = $limit;
+        $data['offset'] = $offset;
+        $data['total'] = $this->db->count_all_results('invoice');
+        $data['msg'] = "invoice list";
+        $data['invoices'] = $this->crud_model->get_invoice($limit, $offset, $hrId);
+    }
     echo json_encode($data);
   }
 }

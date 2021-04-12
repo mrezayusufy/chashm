@@ -174,21 +174,15 @@ $hrs = $this->db->get('hr')->result_array();
         },
         methods: {
             showAll() {
-                axios
-                    .get(`${this.api}/list`)
-                    .then((response)=>{
-                        app.setData(response.data);
-                    })
-                    .catch((error)=>{
-                        console.log('error', error);
-                    });
+                axios.get(`${this.api}/list`)
+                    .then((response)=>{ app.setData(response.data); })
+                    .catch((error)=>console.log('error', error));
             },
             setSelected(option) {
                 console.log('option', option);
             },
             getPatients(){
-                axios
-                    .get(this.home + 'patient_api/get')
+                axios.get(this.home + 'patient_api/get')
                     .then((response) => {
                         patients = response.data.patients;
                         app.patients = patients;
@@ -266,9 +260,11 @@ $hrs = $this->db->get('hr')->result_array();
                 app.loading = false;
             },
             pos(){
-                axios.post(this.pos_api + app.chooseInvoice.invoice_id)
-                .then(function (response) { iziToast.success({ title: 'Printed invoice', message: ': ' + response.data.msg, position: 'topRight' }); })
-                .catch(function (error) { alert("error", error); })
+                printJS({
+                    style: "#print table{ width: 75mm !important;} tr { border: 1px solid !important; border-collapse: collapse;} h4 { padding: 0; margin:10px 0 0 0;} hr {margin:0px;padding:0px;}",
+                    printable: "print",
+                    type: "html",
+                });    
             },            
             getRandomInt(max) {
                 return Math.floor(Math.random() * Math.floor(max));
@@ -299,7 +295,9 @@ $hrs = $this->db->get('hr')->result_array();
                 return moment.unix(date).format('L');
             },
             itemName(item) {
-                return item.replace(":", " ");
+                var name = item.split(":");
+                var res = `${name[0]} ${name[1] ? name[1] : " "}`;
+                return name[0];
             }
         }
     });

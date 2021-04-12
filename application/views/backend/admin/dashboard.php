@@ -1,6 +1,8 @@
 <?php
 $paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
 $pa = $paid_accountant ? $paid_accountant : 0;
+$hrs = $this->crud_model->get_hr();
+
 $salary_paid = $this->crud_model->total_count('salary', array('status' => 'paid'), 'salary')->salary;
 $sp = $salary_paid ? $salary_paid : 0;
 $sm = $this->db->select('sum(salary) as y, month(from_unixtime(date)) as x')->where('status', 'paid')->group_by('month(from_unixtime(date))')->get('salary')->result_array();
@@ -92,6 +94,19 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
                 </div>
             </a>
         </div>
+        
+        <div class="col-sm-12">
+        <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="$store.state.setActiveHr" :value="$store.state.hr">
+            <template slot="option" slot-scope="option">
+                ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
+            </template>
+            <template slot="selected-option" slot-scope="option">
+                <div class="selected d-center">
+                    ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
+                </div>
+            </template>
+        </hr-select>
+        </div>
 
         <div class="col-sm-12">
             <invoice-chart></invoice-chart>
@@ -108,6 +123,37 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
     </div>
 </div>
 <script>
+    Vue.component('hr-select', VueSelect.VueSelect);
+const store = new Vuex.Store({
+        state: {
+            loading: 'idle',
+            hrs: <?= json_encode($hrs) ?>,
+            invoiceData: [],
+            hr: "10",
+            limit: "30",
+            totalInvoice: 0,
+            message: ""
+        },
+        mutations: {
+            setActiveHr(state, hr) {
+                state.hr = hr;
+            },
+            setInvoice(state, data) {
+                state.loading = 'pending';
+                var invoices = data.invoices;
+                state.invoiceData = invoices;
+                if(invoices.length > 0) {
+                    var invoiceTotal = [];
+                    invoices.forEach(i=> invoiceTotal.push(parseInt(i.total)) );
+                    state.totalInvoice = invoiceTotal.reduce((a,c) => a + c);
+                } else {
+                    state.totalInvoice = 0;
+                }
+                state.loading = 'finished';
+            },
+        }
+    });
+
     var invoiceData = <?= json_encode($ii); ?>;
     var invoiceX = [];
     invoiceData.forEach(i=> {
@@ -201,6 +247,12 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
     });
     var app = new Vue({
         el: '#app',
+        store,
+        computed: {
+            store(){
+                return this.$store.state;
+            }
+        },
         data: {
             loading: true,
             invoices: [],
@@ -213,8 +265,11 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             console.log('app.invoiceData', this.invoiceData);
         },
         methods: {
+            
             getInvoiceList(){
-                axios.get(this.api + 'api/invoice').then(r=>app.setInvoices(r.data.invoices)).catch(e=>alert(e));
+                axios.get(this.api + 'api/invoice')
+                .then(r=>app.setInvoices(r.data.invoices))
+                .catch(e=>alert(e));
             },
             getSalaryList(){
                 axios.get(this.api + 'api/salary').then(r=>app.setSalaries(r.data.salaries)).catch(e=>alert(e));
@@ -222,6 +277,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             setInvoices(response){
                 app.invoices = response;
                 app.loading = false;
+                this.$store.commit('setInvoice', data)
             },
             setSalaries(response){
                 app.invoices = response;
@@ -229,6 +285,5 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             }
         }
     });
-    // vue chart js bar by days for invoice income
    
 </script>

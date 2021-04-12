@@ -270,7 +270,7 @@ $index = 1;
                         }
                     ]
                 };
-                window.location.replace('/invoice_manage');
+                window.location.replace('/HR/invoice_manage');
             }
         },
 
