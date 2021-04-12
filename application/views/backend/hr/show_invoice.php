@@ -13,7 +13,7 @@ $phone = $this->db->get_where('settings', array('type' => 'phone'))->row()->desc
                     <tr>
                         <td><img src="<?= site_url('uploads/logo.png'); ?>" style="max-height:80px;"></td>
                         <td align="right">
-                            <h5><?= get_phrase('issue_date'); ?> : {{ chooseInvoice.creation_timestamp }}</h5>
+                            <h5><?= get_phrase('issue_date'); ?> : {{ chooseInvoice.creation_timestamp | formatDate }}</h5>
                             <h5><?= get_phrase('status'); ?> : {{ chooseInvoice.status }}</h5>
                         </td>
                     </tr>
