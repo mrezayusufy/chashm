@@ -24,7 +24,7 @@ class Admin extends CI_Controller
         if ($this->session->userdata('admin_login') != 1)
             redirect(site_url('login'), 'refresh');
         if ($this->session->userdata('admin_login') == 1)
-            redirect(site_url('admin/dashboard'), 'refresh');
+            redirect(site_url('admin'), 'refresh');
         echo phpinfo();
         $page_data['page_name']  = 'dashboard';
         $page_data['page_title'] = get_phrase('admin_dashboard');
