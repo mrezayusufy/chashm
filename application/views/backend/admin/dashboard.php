@@ -301,12 +301,13 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             getInvoiceList(){
                 axios.get(this.api + 'api/invoice/list')
                 .then(r=>app.setInvoice(r.data))
-                .catch(e=>alert(e));
+                .catch(e=>console.log('error',e));
             },
             getSalaryList(){
-                axios.get(this.api + 'api/salary').then(r=>app.setSalaries(r.data.salaries)).catch(e=>alert(e));
+                axios.get(this.api + 'api/salary').then(r=>app.setSalaries(r.data.salaries)).catch(e=>console.log(e));
             },
             setInvoice(data){
+                console.log('data', data);
                 this.$store.commit('setInvoice', data.invoices)
             },
             setSalaries(response){
