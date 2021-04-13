@@ -1,17 +1,11 @@
 <?php
-$single_department_info = $this->db->get_where('department', array('department_id' => $param2))->result_array();
+$single_department_info = $this->db->get_where('department', array('department_id' => $department_id))->result_array();
 foreach ($single_department_info as $row) {
 ?>
     <div class="row">
         <div class="col-md-12">
 
             <div class="panel panel-primary" data-collapsed="0">
-
-                <div class="panel-heading">
-                    <div class="panel-title">
-                        <h3><?php echo get_phrase('edit_department'); ?></h3>
-                    </div>
-                </div>
 
                 <div class="panel-body">
 

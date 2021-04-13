@@ -142,7 +142,27 @@ class Admin extends CI_Controller
         ))->result_array();
         $this->load->view('backend/index', $page_data);
     }
-    
+    function add_department($task = "")
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $data['page_name']       = 'add_department';
+        $data['page_title']      = get_phrase('add_department');
+        $this->load->view('backend/index', $data);
+    }
+    function edit_department($department_id = "")
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $data['department_id']   = $department_id;
+        $data['page_name']       = 'edit_department';
+        $data['page_title']      = get_phrase('edit_department');
+        $this->load->view('backend/index', $data);
+    }
     function department($task = "", $department_id = "")
     {
         if ($this->session->userdata('admin_login') != 1) {

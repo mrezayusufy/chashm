@@ -642,8 +642,11 @@ class Crud_model extends CI_Model
 
     function get_hr()
     {
-        $this->db->order_by('hr_id', 'desc');
-        return $this->db->get('hr')->result();
+        $this->db->select('h.hr_id as hr_id, h.first_name as first_name, h.last_name as last_name, d.name as name,')
+            ->from('hr h')
+            ->join('department d', 'h.department_id=d.department_id')
+            ->order_by('h.hr_id', 'desc');
+        return $this->db->get()->result();
     }
     function select_hr_info()
     {

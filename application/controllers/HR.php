@@ -323,10 +323,10 @@ class HR extends CI_Controller
         $this->load->view('backend/index', $data);
     }
     function invoice($task = "", $invoice_id = "", $limit = "", $offset = "", $hrId = ""){
-        // if ($this->session->userdata('hr_login') != 1) {
-        //     $this->session->set_userdata('last_page', current_url());
-        //     redirect(site_url(), 'refresh');
-        // }
+        if ($this->session->userdata('hr_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
         header('Content-Type: application/json');
         $department = $this->session->userdata('department');
         $hr_id = $this->session->userdata('login_user_id');

@@ -1,16 +1,17 @@
-<button onclick="showAjaxModal('<?php echo site_url('modal/popup/add_department'); ?>');" 
-    class="btn btn-primary pull-right">
-    <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('add_department'); ?>
-</button>
+<a href="<?= site_url('Admin/add_department');?>" >
+    <button class="btn btn-primary pull-right">
+        <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_department'); ?>
+    </button>
+</a>
 <div style="clear:both;"></div>
 <br>
 <table class="table table-bordered table-striped datatable" id="table-2">
     <thead>
         <tr>
-            <th><?php echo get_phrase('icon');?></th>
-            <th><?php echo get_phrase('name'); ?></th>
-            <th width="50%"><?php echo get_phrase('description'); ?></th>
-            <th><?php echo get_phrase('options'); ?></th>
+            <th><?= get_phrase('icon');?></th>
+            <th><?= get_phrase('name'); ?></th>
+            <th width="50%"><?= get_phrase('description'); ?></th>
+            <th><?= get_phrase('options'); ?></th>
         </tr>
     </thead>
 
@@ -18,23 +19,19 @@
         <?php foreach ($department_info as $row) { ?>   
             <tr>
                 <td>
-                    <img src="<?php echo base_url();?>uploads/frontend/department_images/<?php echo $row['department_id'];?>.png"
+                    <img src="<?= base_url();?>uploads/frontend/department_images/<?= $row['department_id'];?>.png"
                         width="40">
                 </td>
-                <td><?php echo $row['name']; ?></td>
-                <td><?php echo substr($row['description'], 0, 200); ?> ...</td>
+                <td><?= $row['name']; ?></td>
+                <td><?= substr($row['description'], 0, 200); ?> ...</td>
                 <td>
-                    <a href="<?php echo site_url('Admin/department_facilities/'.$row['department_id']);?>"
-                        class="btn btn-default btn-sm">
-                        <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('manage_facilities');?>
-                    </a>
-                    <a  onclick="showAjaxModal('<?php echo site_url('modal/popup/edit_department/'.$row['department_id']); ?>');" 
+                    <a  href="<?= site_url('Admin/edit_department/'.$row['department_id']); ?>" 
                         class="btn btn-info btn-sm">
-                        <i class="fas fa-pencil-alt"></i>&nbsp;<?php echo get_phrase('edit');?>
+                        <i class="fas fa-pencil-alt"></i>&nbsp;<?= get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?php echo site_url('Admin/department/delete/'.$row['department_id']); ?>')"
+                    <a onclick="confirm_modal('<?= site_url('Admin/department/delete/'.$row['department_id']); ?>')"
                        class="btn btn-danger btn-sm">
-                        <i class="fas fa-trash"></i>&nbsp;<?php echo get_phrase('delete');?>
+                        <i class="fas fa-trash"></i>&nbsp;<?= get_phrase('delete');?>
                     </a>
                 </td>
             </tr>

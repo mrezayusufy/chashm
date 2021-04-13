@@ -2,7 +2,7 @@
 $paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
 $pa = $paid_accountant ? $paid_accountant : 0;
 $hrs = $this->crud_model->get_hr();
-
+$hr = $this->db->get('hr')->first_row();
 $salary_paid = $this->crud_model->total_count('salary', array('status' => 'paid'), 'salary')->salary;
 $sp = $salary_paid ? $salary_paid : 0;
 $sm = $this->db->select('sum(salary) as y, month(from_unixtime(date)) as x')->where('status', 'paid')->group_by('month(from_unixtime(date))')->get('salary')->result_array();
@@ -94,7 +94,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
                 </div>
             </a>
         </div>
-        
+
         <div class="col-sm-12">
             <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="$store.state.setActiveHr" :value="$store.state.hr">
                 <template slot="option" slot-scope="option">
@@ -107,41 +107,39 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
                 </template>
             </hr-select>
             <div style="clear:both;"></div>
-        <br>
-        <div v-if="$store.state.loading==='pending'" class="loading">
-            <div class="spinner-border"></div>
+            <br>
+            <div v-if="$store.state.loading==='pending'" class="loading">
+                <div class="spinner-border"></div>
+            </div>
+            <div v-if="$store.state.loading==='idle' || $store.state.invoiceData.length === 0" class="col-md-12">
+                <div>No data</div>
+            </div>
+            <table v-if="$store.state.loading==='finished' || $store.state.invoiceData.length > 0" class="table table-bordered table-striped datatable display" id="invoice-table">
+                <thead>
+                    <tr>
+                        <th><?= get_phrase('index'); ?></th>
+                        <th><?= get_phrase('doctor'); ?></th>
+                        <th><?= get_phrase('date'); ?></th>
+                        <th><?= get_phrase('total'); ?></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(i, index) in $store.state.invoiceData" :key="index">
+                        <td>{{ index }} </td>
+                        <td>{{ i.hr_name }}</td>
+                        <td>{{ i.daily }}</td>
+                        <td>{{ i.total }}</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <th colspan="3" style="text-align:right">Total: </th>
+                        <th>{{ $store.state.totalInvoice }}</th>
+                    </tr>
+                </tfoot>
+            </table>
         </div>
-        <div v-if="$store.state.loading==='idle' || $store.state.invoiceData.length === 0" class="col-md-12">
-            <div>No data</div>
-        </div>
-        <table 
-            v-if="$store.state.loading==='finished'"
-            class="table table-bordered table-striped datatable display" id="invoice-table">
-            <thead>
-                <tr>
-                    <th><?= get_phrase('index'); ?></th>
-                    <th><?= get_phrase('doctor'); ?></th>
-                    <th><?= get_phrase('date'); ?></th>
-                    <th><?= get_phrase('total'); ?></th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr v-for="(i, index) in $store.state.invoiceData" :key="index">
-                    <td>{{ index }} </td>
-                    <td>{{ i.hr_name }}</td>
-                    <td>{{ i.daily }}</td>
-                    <td>{{ i.total }}</td>
-                </tr>
-            </tbody>
-            <tfoot>
-                <tr>
-                    <th colspan="3" style="text-align:right">Total: </th>
-                    <th>{{ $store.state.totalInvoice }}</th>
-                </tr>
-            </tfoot>
-        </table>
-        </div>
-
+<!-- chart -->
         <div class="col-sm-12">
             <invoice-chart></invoice-chart>
         </div>
@@ -163,7 +161,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             loading: 'idle',
             hrs: <?= json_encode($hrs) ?>,
             invoiceData: [],
-            hr: "10",
+            hr: '<?= $hr->hr_id; ?>',
             limit: "30",
             totalInvoice: 0,
             message: ""
@@ -176,10 +174,10 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
                 state.loading = 'pending';
                 var invoices = data.invoices;
                 state.invoiceData = invoices;
-                if(invoices.length > 0) {
+                if (invoices.length > 0) {
                     var invoiceTotal = [];
-                    invoices.forEach(i=> invoiceTotal.push(parseInt(i.total)) );
-                    state.totalInvoice = invoiceTotal.reduce((a,c) => a + c);
+                    invoices.forEach(i => invoiceTotal.push(parseInt(i.total)));
+                    state.totalInvoice = invoiceTotal.reduce((a, c) => a + c);
                 } else {
                     state.totalInvoice = 0;
                 }
@@ -190,12 +188,12 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
 
     var invoiceData = <?= json_encode($ii); ?>;
     var invoiceX = [];
-    invoiceData.forEach(i=> {
+    invoiceData.forEach(i => {
         var x = moment(i.x).format('LL');
         invoiceX.push(x);
     });
-    
-    var invoiceY = invoiceData.forEach(i=> i.y);
+
+    var invoiceY = invoiceData.forEach(i => i.y);
     Vue.component('invoice-chart', {
         extends: VueChartJs.Bar,
         mounted() {
@@ -214,11 +212,11 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
     });
     var invoiceMData = <?= json_encode($im); ?>;
     var invoiceMX = [];
-    invoiceMData.forEach(i=> {
+    invoiceMData.forEach(i => {
         var x = moment(i.x).format('MMM');
         invoiceMX.push(x);
     });
-     Vue.component('invoice-monthly-chart', {
+    Vue.component('invoice-monthly-chart', {
         extends: VueChartJs.Bar,
         mounted() {
             this.renderChart({
@@ -234,14 +232,14 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             });
         }
     });
-     
+
     var salaryMData = <?= json_encode($sm); ?>;
     var salaryMX = [];
-    salaryMData.forEach(i=> {
+    salaryMData.forEach(i => {
         var x = moment(i.x).format('MMM');
         salaryMX.push(x);
     });
-     Vue.component('salary-monthly-chart', {
+    Vue.component('salary-monthly-chart', {
         extends: VueChartJs.Bar,
         mounted() {
             this.renderChart({
@@ -259,7 +257,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
     });
     var patientData = <?= json_encode($patient); ?>;
     var patientX = [];
-    patientData.forEach(i=> {
+    patientData.forEach(i => {
         var x = moment(i.x).format('MMM');
         patientX.push(x);
     });
@@ -283,7 +281,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         el: '#app',
         store,
         computed: {
-            store(){
+            store() {
                 return this.$store.state;
             }
         },
@@ -293,28 +291,27 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             salaries: [],
             api: '<?= site_url(); ?>',
         },
-        created(){
+        created() {
             this.getInvoiceList();
             this.getSalaryList();
         },
         methods: {
-            getInvoiceList(){
+            getInvoiceList() {
                 axios.get(this.api + 'api/invoice/list')
-                .then(r=>app.setInvoice(r.data))
-                .catch(e=>console.log('error',e));
+                    .then(r => app.setInvoice(r.data))
+                    .catch(e => console.log('error', e));
             },
-            getSalaryList(){
-                axios.get(this.api + 'api/salary').then(r=>app.setSalaries(r.data.salaries)).catch(e=>console.log(e));
+            getSalaryList() {
+                axios.get(this.api + 'api/salary').then(r => app.setSalaries(r.data.salaries)).catch(e => console.log(e));
             },
-            setInvoice(data){
+            setInvoice(data) {
                 console.log('data', data);
                 this.$store.commit('setInvoice', data.invoices)
             },
-            setSalaries(response){
+            setSalaries(response) {
                 app.invoices = response;
                 app.loading = false;
             }
         }
     });
-   
 </script>
