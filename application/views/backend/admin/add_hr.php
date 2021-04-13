@@ -5,17 +5,17 @@
 
             <div class="panel-body">
 
-                <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('Admin/hr/create'); ?>" 
+                <form role="form" class="form-horizontal form-groups validate" action="<?=site_url('Admin/hr/create'); ?>" 
                     method="post" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('tazkira_id'); ?></label>
+                        <label for="field-1" class="col-sm-3 control-label"><?=get_phrase('tazkira_id'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="text" name="tazkira_id" class="form-control" id="field-1" required>
                         </div>
                     </div>
                     <div class="form-group">
-                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('first_name'); ?></label>
+                        <label for="field-1" class="col-sm-3 control-label"><?=get_phrase('first_name'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="text" name="first_name" class="form-control" id="field-1" required>
@@ -23,7 +23,7 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('last_name'); ?></label>
+                        <label for="field-1" class="col-sm-3 control-label"><?=get_phrase('last_name'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="text" name="last_name" class="form-control" id="field-1" required>
@@ -31,7 +31,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('email'); ?></label>
+                        <label for="field-1" class="col-sm-3 control-label"><?=get_phrase('email'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="email" name="email" class="form-control" id="field-1" required>
@@ -39,7 +39,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('password'); ?></label>
+                        <label for="field-1" class="col-sm-3 control-label"><?=get_phrase('password'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="password" name="password" class="form-control" id="field-1" required>
@@ -47,7 +47,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('salary'); ?></label>
+                        <label for="field-ta" class="col-sm-3 control-label"><?=get_phrase('salary'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="number" name="salary" class="form-control" id="field-1" required/>
@@ -55,7 +55,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('address'); ?></label>
+                        <label for="field-ta" class="col-sm-3 control-label"><?=get_phrase('address'); ?></label>
 
                         <div class="col-sm-7">
                             <textarea name="address" class="form-control" id="field-ta" rows="5"></textarea>
@@ -63,7 +63,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="field-1" class="col-sm-3 control-label"><?php echo get_phrase('phone'); ?></label>
+                        <label for="field-1" class="col-sm-3 control-label"><?=get_phrase('phone'); ?></label>
 
                         <div class="col-sm-7">
                             <input type="text" name="phone" class="form-control" id="field-1" >
@@ -71,21 +71,21 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('department'); ?></label>
+                        <label for="field-ta" class="col-sm-3 control-label"><?=get_phrase('department'); ?></label>
 
                         <div class="col-sm-7">
                             <select name="department_id" class="form-control" required
                                 class="form-control">
-                                <option value=""><?php echo get_phrase('select_department'); ?></option>
+                                <option value=""><?=get_phrase('select_department'); ?></option>
                                 <?php foreach ($department_info as $row) { ?>
-                                    <option value="<?php echo $row['department_id']; ?>"><?php echo $row['name']; ?></option>
+                                    <option value="<?=$row['department_id']; ?>"><?=$row['name']; ?></option>
                                 <?php } ?>
                             </select>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="col-sm-3 control-label"><?php echo get_phrase('image'); ?></label>
+                        <label class="col-sm-3 control-label"><?=get_phrase('image'); ?></label>
 
                         <div class="col-sm-5">
 
@@ -109,7 +109,7 @@
 
                     <div class="col-sm-3 control-label col-sm-offset-2">
                         <button type="submit" class="btn btn-success">
-                            <i class="fas fa-check"></i> <?php echo get_phrase('save');?>
+                            <i class="fas fa-check"></i> <?=get_phrase('save');?>
                         </button>
                     </div>
                 </form>

@@ -1,15 +1,3 @@
-<?php
-$hr_id = $this->session->userdata('login_user_id');
-$hrs = $this->crud_model->get_hr();
-$paid = $this->crud_model->total_count('paid', array('status' => 'paid', 'hr_id' => $hr_id), 'invoice')->paid;
-$p = $paid ? $paid : 0;
-$paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
-$pa = $paid_accountant ? $paid_accountant : 0;
-
-
-$department = $this->session->userdata('department');
-$count_invoice = $this->crud_model->count_invoice();
-?>
 <div id="app">
     <div class="row">
 
@@ -69,6 +57,7 @@ $count_invoice = $this->crud_model->count_invoice();
     </div>
     <div style="clear:both;"></div>
     <br>
+    <!-- hr invoice -->
     <?php if($department == 'Accountant'): ?>
     <div class="col-sm-12">
         <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="setActiveHr" :value="$store.state.hr">
@@ -90,7 +79,7 @@ $count_invoice = $this->crud_model->count_invoice();
             <div>No data</div>
         </div>
         <table 
-            v-if="$store.state.loading==='finished'"
+            v-if="$store.state.loading==='finished' && $store.state.invoiceData.length > 0"
             class="table table-bordered table-striped datatable display" id="invoice-table">
             <thead>
                 <tr>

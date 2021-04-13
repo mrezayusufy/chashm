@@ -12,6 +12,7 @@ class Admin extends CI_Controller
         $this->load->database();
         $this->load->library('session');
         $this->load->model('crud_model');
+        $this->load->model('email_model');
         // $this->load->model('frontend_model');
         
         // cache control
@@ -33,6 +34,24 @@ class Admin extends CI_Controller
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
         }
+        $paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
+        $pa = $paid_accountant ? $paid_accountant : 0;
+        $hrs = $this->crud_model->get_hr();
+        $hr = $this->db->get('hr')->first_row();
+        $salary_paid = $this->crud_model->total_count('salary', array('status' => 'paid'), 'salary')->salary;
+        $sp = $salary_paid ? $salary_paid : 0;
+        $sm = $this->db->select('sum(salary) as y, month(from_unixtime(date)) as x')->where('status', 'paid')->group_by('month(from_unixtime(date))')->get('salary')->result_array();
+        $ii = $this->db->select('sum(paid) as y, date(from_unixtime(creation_timestamp)) as x')->where('status', 'paid')->group_by('date(from_unixtime(creation_timestamp))')->get('invoice')->result_array();
+        $im = $this->db->select('sum(paid) as y, month(from_unixtime(creation_timestamp)) as x')->where('status', 'paid')->group_by('month(from_unixtime(creation_timestamp))')->get('invoice')->result_array();
+        $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created_at)) as x')->group_by('date(from_unixtime(created_at))')->get('patient')->result_array();
+        $page_data['pa'] = $pa;
+        $page_data['hrs'] = $hrs;
+        $page_data['hr'] = $hr;
+        $page_data['sp'] = $sp;
+        $page_data['sm'] = $sm;
+        $page_data['ii'] = $ii;
+        $page_data['im'] = $im;
+        $page_data['patient'] = $patient;
         $page_data['page_name']  = 'dashboard';
         $page_data['page_title'] = get_phrase('admin_dashboard');
         $this->load->view('backend/index', $page_data);
@@ -302,8 +321,8 @@ class Admin extends CI_Controller
             redirect(site_url(), 'refresh');
         }
         if ($task == "create") {
-                $this->crud_model->save_staff_info();
-                $this->session->set_flashdata('message', get_phrase('staff_info_saved_successfuly'));
+            $this->crud_model->save_staff_info();
+            $this->session->set_flashdata('message', get_phrase('staff_info_saved_successfuly'));
             redirect(site_url('Admin/staff'), 'refresh');
         }
         if ($task == "update") {

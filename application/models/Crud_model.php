@@ -10,6 +10,8 @@ class Crud_model extends CI_Model
     {
         parent::__construct();
         $this->load->helper("date");
+        $this->load->model('email_model');
+
     }
 
     function clear_cache()
@@ -513,7 +515,7 @@ class Crud_model extends CI_Model
 
         $returned_array = null_checking($data);
         $this->db->insert('staff', $returned_array);
-        $staff_id  =   $this->db->insert_id();
+        $staff_id = $this->db->insert_id();
         move_uploaded_file($_FILES["image"]["tmp_name"], 'uploads/doctor_image/' . $staff_id . '.jpg');
     }
     function select_staff_info()
@@ -522,7 +524,6 @@ class Crud_model extends CI_Model
     }
     function update_staff_info($staff_id)
     {
-        $type = $this->session->userdata('login_type');
         $data['tazkira_id']     = $this->input->post('tazkira_id');
         $data['name']             = $this->input->post('name');
         $data['address']         = $this->input->post('address');
@@ -610,22 +611,24 @@ class Crud_model extends CI_Model
         $data['email']              = $this->input->post('email');
         $data['password']           = sha1($this->input->post('password'));
         $data['address']            = $this->input->post('address');
-        $data['salary']            = $this->input->post('salary');
+        $data['salary']             = $this->input->post('salary');
         $data['phone']              = $this->input->post('phone');
         $data['department_id']      = $this->input->post('department_id');
+
         $hr_id = $this->db->insert_id();
         $validation = email_validation_on_create($data['email'], $hr_id, 'hr');
-        $tazkira_validation = tazkira_id_validation_on_create($data['tazkira_id'], $hr_id, 'hr');
-        if ($validation == 1 && $tazkira_validation == 1) {
+        if ($validation == 1 ) {
             $returned_array = null_checking($data);
             $this->db->insert('hr', $returned_array);
             $this->email_model->account_opening_email('hr', $data['email'], $this->input->post('password'));
+            if (!is_dir('uploads/hr_image')) {
+                mkdir('./uploads/hr_image', 0777, true);
+            }
             move_uploaded_file($_FILES["image"]["tmp_name"], 'uploads/hr_image/' . $hr_id . '.jpg');
         } else {
             $this->session->set_flashdata('error_message', get_phrase('duplicate_email'));
-            $email = $this->session->set_flashdata('error_message', get_phrase('duplicate_email'));
-            $tazkira = $this->session->set_flashdata('error_message', get_phrase('duplicate_tazkira'));
-            $validation == 0 ? $email : $tazkira;
+            // $tazkira = $this->session->set_flashdata('error_message', get_phrase('duplicate_tazkira'));
+            // $validation == 0 ? $email : $tazkira;
             redirect(site_url('Admin/hr'), 'refresh');
         }
     }
@@ -645,7 +648,6 @@ class Crud_model extends CI_Model
 
     function update_hr_info($hr_id)
     {
-        $type  = $this->session->userdata('login_type');
         $data['tazkira_id']    = $this->input->post('tazkira_id');
         $data['first_name']    = $this->input->post('first_name');
         $data['last_name']     = $this->input->post('last_name');
@@ -658,7 +660,7 @@ class Crud_model extends CI_Model
         $validation = email_validation_on_edit($data['email'], $hr_id, 'hr');
         $tazkira_validation = tazkira_id_validation_on_edit($data['tazkira_id'], $hr_id, 'hr');
 
-        if ($validation == 1 && $tazkira_validation == 1) {
+        if ($validation == 1) {
             $returned_array = null_checking($data);
             $this->db->where('hr_id', $hr_id);
             $this->db->update('hr', $returned_array);

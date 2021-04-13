@@ -1,15 +1,4 @@
-<?php
-$paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
-$pa = $paid_accountant ? $paid_accountant : 0;
-$hrs = $this->crud_model->get_hr();
-$hr = $this->db->get('hr')->first_row();
-$salary_paid = $this->crud_model->total_count('salary', array('status' => 'paid'), 'salary')->salary;
-$sp = $salary_paid ? $salary_paid : 0;
-$sm = $this->db->select('sum(salary) as y, month(from_unixtime(date)) as x')->where('status', 'paid')->group_by('month(from_unixtime(date))')->get('salary')->result_array();
-$ii = $this->db->select('sum(paid) as y, date(from_unixtime(creation_timestamp)) as x')->where('status', 'paid')->group_by('date(from_unixtime(creation_timestamp))')->get('invoice')->result_array();
-$im = $this->db->select('sum(paid) as y, month(from_unixtime(creation_timestamp)) as x')->where('status', 'paid')->group_by('month(from_unixtime(creation_timestamp))')->get('invoice')->result_array();
-$patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created_at)) as x')->group_by('date(from_unixtime(created_at))')->get('patient')->result_array();
-?>
+
 <div id="app">
     <div class="row">
         <div class="col-sm-3">
@@ -94,9 +83,9 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
                 </div>
             </a>
         </div>
-
+        <!-- hr invoice -->
         <div class="col-sm-12">
-            <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="$store.state.setActiveHr" :value="$store.state.hr">
+            <hr-select id="hr_id" :options="$store.state.hrs" label="hr_id" :reduce="o => `${o.hr_id}`" :get-option-label="o => `${o.hr_id} ${o.first_name} ${o.last_name}`" :create-option="o => ({ first_name: first_name, last_name: last_name, hr_id: hr_id })" @input="setActiveHr" :value="$store.state.hr">
                 <template slot="option" slot-scope="option">
                     ID:{{ option.hr_id }} _ {{ option.first_name }} _ {{ option.last_name }} _ {{ option.name }}
                 </template>
@@ -114,7 +103,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             <div v-if="$store.state.loading==='idle' || $store.state.invoiceData.length === 0" class="col-md-12">
                 <div>No data</div>
             </div>
-            <table v-if="$store.state.loading==='finished' || $store.state.invoiceData.length > 0" class="table table-bordered table-striped datatable display" id="invoice-table">
+            <table v-if="$store.state.loading==='finished' && $store.state.invoiceData.length > 0" class="table table-bordered table-striped datatable display" id="invoice-table">
                 <thead>
                     <tr>
                         <th><?= get_phrase('index'); ?></th>
@@ -161,7 +150,7 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
             loading: 'idle',
             hrs: <?= json_encode($hrs) ?>,
             invoiceData: [],
-            hr: '<?= $hr->hr_id; ?>',
+            hr: '10',
             limit: "30",
             totalInvoice: 0,
             message: ""
@@ -297,7 +286,9 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
         },
         methods: {
             getInvoiceList() {
-                axios.get(this.api + 'api/invoice/list')
+                var limit = this.$store.state.limit;
+                var hr = this.$store.state.hr;
+                axios.get(`${this.api}/api/invoice/list/${limit}/0/${hr}`)
                     .then(r => app.setInvoice(r.data))
                     .catch(e => console.log('error', e));
             },
@@ -305,13 +296,15 @@ $patient = $this->db->select('count(patient_id) as y, date(from_unixtime(created
                 axios.get(this.api + 'api/salary').then(r => app.setSalaries(r.data.salaries)).catch(e => console.log(e));
             },
             setInvoice(data) {
-                console.log('data', data);
-                this.$store.commit('setInvoice', data.invoices)
+                this.$store.commit('setInvoice', data)
             },
             setSalaries(response) {
                 app.invoices = response;
                 app.loading = false;
-            }
+            },
+            setActiveHr(val) {
+                this.$store.commit('setActiveHr', val);
+            },
         }
     });
 </script>

@@ -32,7 +32,22 @@ class HR extends CI_Controller
             redirect(site_url(), 'refresh');
             $this->session->set_userdata('last_page', current_url());
         }
-        
+        $hr_id = $this->session->userdata('login_user_id');
+        $hrs = $this->crud_model->get_hr();
+        $paid = $this->crud_model->total_count('paid', array('status' => 'paid', 'hr_id' => $hr_id), 'invoice')->paid;
+        $p = $paid ? $paid : 0;
+        $paid_accountant = $this->crud_model->total_count('paid', array('status' => 'paid'), 'invoice')->paid;
+        $pa = $paid_accountant ? $paid_accountant : 0;
+
+
+        $department = $this->session->userdata('department');
+        $count_invoice = $this->crud_model->count_invoice();
+        $data['hr_id']  = $hr_id;
+        $data['hrs']  = $hrs;
+        $data['p']  = $p;
+        $data['pa']  = $pa;
+        $data['department']  = $department;
+        $data['count_invoice']  = $count_invoice;
         $data['page_name']  = 'dashboard';
         $data['page_title'] = $this->session->userdata('department');
         $this->load->view('backend/index', $data);
