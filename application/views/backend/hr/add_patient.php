@@ -2,12 +2,6 @@
     <div class="col-md-12">
 
         <div class="panel panel-primary" data-collapsed="0">
-<!-- 
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h3>add patient</h3>
-                </div>
-            </div> -->
 
             <div class="panel-body">
 

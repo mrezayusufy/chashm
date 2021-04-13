@@ -4,12 +4,6 @@
 
         <div class="panel panel-primary" data-collapsed="0">
 
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h3><?php echo get_phrase('add_staff'); ?></h3>
-                </div>
-            </div>
-
             <div class="panel-body">
 
                 <form role="form" class="form-horizontal form-groups validate" action="<?php echo site_url('Admin/staff/create'); ?>" 

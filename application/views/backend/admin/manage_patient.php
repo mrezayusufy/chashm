@@ -1,9 +1,10 @@
  
 <div>
-<button onclick="showAjaxModal('<?=site_url('modal/popup/add_patient');?>');" 
-    class="btn btn-primary pull-right">
-        <i class="fas fa-plus"></i>&nbsp;<?=get_phrase('add_patient'); ?>
-</button>
+<a href="<?=site_url('Admin/add_patient');?>">
+    <button class="btn btn-primary pull-right">
+            <i class="fas fa-plus"></i>&nbsp;<?=get_phrase('add_patient'); ?>
+    </button>
+</a>
 <div style="clear:both;"></div>
 <br>
 

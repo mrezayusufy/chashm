@@ -1,11 +1,9 @@
-<!-- TODO: 1 change file name to manage_hr and change table -->
-<button onclick="showAjaxModal('<?= site_url('modal/popup/add_hr');?>');" 
-    class="btn btn-primary pull-right">
-        <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_hr'); ?>
-</button>
-<?php $query = $this->db->select("department.name as department_name")->join('department','department.department_id=hr.department_id')->get_where("hr", array( 'email' => 'hamedhamidi@gmail.com'));
-echo $query->row()->department_name;
-?>
+<a href="<?= site_url('Admin/add_hr'); ?>">
+    <button class="btn btn-primary pull-right">
+            <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_hr'); ?>
+    </button>
+</a>
+
 <div style="clear:both;"></div>
 <br>
 <table class="table table-bordered table-striped datatable" id="table-2">
@@ -29,13 +27,9 @@ echo $query->row()->department_name;
                 <td><?= $row['first_name']. " " . $row['last_name'];?></td>
                 <td><?= $row['email']?></td>
                 <td><?= $row['phone']?></td>
+                <td><?= $row['name']?></td>
                 <td>
-                    <?php $name = $this->db->get_where('department' , array('department_id' => $row['department_id'] ))->row()->name;
-                        echo $name;?>
-                </td>
-                <td>
-                    <a  onclick="showAjaxModal('<?= site_url('modal/popup/edit_hr/'.$row['hr_id']);?>');" 
-                        class="btn btn-info btn-sm">
+                    <a href="<?= site_url('Admin/edit_hr/'.$row['hr_id']);?>" class="btn btn-info btn-sm">
                         <i class="fas fa-pencil-alt"></i>&nbsp;<?= get_phrase('edit');?>
                     </a>
                     <a onclick="confirm_modal('<?= site_url('Admin/hr/delete/'.$row['hr_id']); ?>')"

@@ -30,22 +30,13 @@ class Crud_model extends CI_Model
         return $this->db->get('balance')->result();
     }
     function deposit($amount = ""){
-        $query = $this->db->get('balance')->first_row();
-        echo $query;
-        if($query){
-            $this->db->insert('balance', array(
-                "owner" => "1",
-                "amount" => "0",
-                "timestamp" => now("Asia/Kabul"),
-            ));
-        } else {
-            $this->db->where('balance_id', $query->balance_id);
-            $this->db->update('balance', array(
-                "owner" => "1",
-                "amount" => (int)$query->amount + (int)$amount,
-                "timestamp" => now('Asia/Kabul') 
-            ));
-        }
+        $query = $this->db->get_where('balance', array('balance_id' => "1"))->row();
+        $this->db->where('balance_id', $query->balance_id);
+        $this->db->update('balance', array(
+            "owner" => "1",
+            "amount" => (int)$query->amount + (int)$amount,
+            "timestamp" => now('Asia/Kabul') 
+        ));
     }
     function withdraw($amount = 0){
         $query = $this->db->get('balance')->first_row();
@@ -70,14 +61,13 @@ class Crud_model extends CI_Model
         return $this->db->get('transaction')->result();
     }
     function create_transaction($data = array()){
-
         $this->db->insert('transaction', array(
             'title' => $data['title'],
             'type' => $data['type'],
             'amount' => $data['amount'],
             'sender' => $data['sender'],
             'receiver' => $data['receiver'],
-            "timestamp" => now('Asia/Kabul')
+            'timestamp' => now('Asia/Kabul')
         ));
     }
     // report => title type amount description
@@ -204,22 +194,23 @@ class Crud_model extends CI_Model
     function update_invoice($invoice_id)
     {
         $invoice = $this->db->get_where('invoice', array('invoice_id'=>$invoice_id))->row();
-        $data['title']              = $this->input->post('title');
-        $data['patient_id']         = $this->input->post('patient_id');
-        $data['hr_id']              = $this->input->post('hr_id');
+        $patient_id                 = $this->input->post('patient_id');
+        $hr_id                      = $this->input->post('hr_id');
         $data['paid']               = $this->input->post('paid');
         $data['creation_timestamp'] = now('Asia/Kabul');
         $data['status']             = $invoice->total == $data['paid'] ? 'paid' : 'unpaid';
-        $patient = $this->db->get_where('patient', array('patient_id'=>$data['patient_id']))->row();
-        $hr = $this->db->get_where('hr', array('hr_id'=>$data['hr_id']))->row();
-        $this->deposit($data['paid']);
-        $this->create_transaction(array(
-            'title' => 'deposit',
-            'type' => 'deposit',
-            'amount' => $data['paid'],
-            'sender' => $patient->name." ".$patient->father_name,
-            'receiver' => $hr->first_name. " " . $hr->last_name,
-        ));
+        $patient = $this->db->get_where('patient', array('patient_id'=>$patient_id))->row();
+        $hr = $this->db->get_where('hr', array('hr_id'=>$hr_id))->row();
+        if($data['paid']){
+            $this->deposit($data['paid']);
+            $this->create_transaction(array(
+                'title' => 'deposit from invoice',
+                'type' => 'deposit',
+                'amount' => $data['paid'],
+                'sender' => $patient->name." ".$patient->father_name,
+                'receiver' => $hr->first_name. " " . $hr->last_name,
+            ));
+        }
         $this->db->where('invoice_id', $invoice_id);
         $this->db->update('invoice', $data);
     }
@@ -361,7 +352,6 @@ class Crud_model extends CI_Model
 
         move_uploaded_file($_FILES['logo']['tmp_name'], 'uploads/logo.png');
     }
-
 
     ////////BACKUP RESTORE/////////
     function create_backup($type)
@@ -642,16 +632,11 @@ class Crud_model extends CI_Model
 
     function get_hr()
     {
-        $this->db->select('h.hr_id as hr_id, h.first_name as first_name, h.last_name as last_name, d.name as name,')
+        $this->db->select('h.hr_id, h.first_name, h.last_name, d.name as name, h.phone, h.tazkira_id, h.email')
             ->from('hr h')
             ->join('department d', 'h.department_id=d.department_id')
             ->order_by('h.hr_id', 'desc');
-        return $this->db->get()->result();
-    }
-    function select_hr_info()
-    {
-        $this->db->order_by('hr_id', 'desc');
-        return $this->db->get('hr')->result_array();
+        return $this->db->get()->result_array();
     }
     function select_hr_info_by_id($hr_id)
     {

@@ -213,7 +213,7 @@
                 var formData = app.formData(app.choosePatient);
                 axios
                     .post(this.api + "edit/" + id, formData)
-                    .then(function(response) {
+                    .then((response) => {
                         if (response.data.error) {
                             app.formValidate = response.data.msg;
                         } else {
@@ -225,7 +225,7 @@
                             app.clearAll();
                         }
                     })
-                    .catch(function(error) {
+                    .catch((error) => {
                         alert(error);
                         iziToast.error({
                             title: 'Error',

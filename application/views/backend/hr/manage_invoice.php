@@ -85,7 +85,7 @@ $hrs = $this->db->get('hr')->result_array();
             <!-- submit -->
             <div class="modal-footer">
                 <div class="col-sm-offset-3 col-sm-8">
-                    <button class="btn btn-primary" @click="updateInvoice">
+                    <button class="btn btn-primary" @click="updateInvoice(chooseInvoice)">
                         <?= get_phrase('update_invoice'); ?></button>
                 </div>
             </div>
@@ -175,8 +175,8 @@ $hrs = $this->db->get('hr')->result_array();
         methods: {
             showAll() {
                 axios.get(`${this.api}/list`)
-                    .then((response)=>{ app.setData(response.data); })
-                    .catch((error)=>console.log('error', error));
+                    .then((response)=> app.setData(response.data))
+                    .catch((error)=> console.log('error', error));
             },
             setSelected(option) {
                 console.log('option', option);
@@ -196,12 +196,12 @@ $hrs = $this->db->get('hr')->result_array();
                         })
                     });
             },
-            updateInvoice() {
-                var i = app.chooseInvoice; 
-                var formData = app.formData(i);
+            updateInvoice(invoice) {
+                var formData = app.formData(invoice);
+                console.log('i', formData);
                 axios
-                    .post(this.api + "edit/" + Number(i.invoice_id), formData)
-                    .then(function (response) {
+                    .post(this.api + "edit/" + invoice.invoice_id, formData)
+                    .then((response) => {
                         if (response.data.error) {
                             app.formValidate = response.data.msg;
                         } else {
@@ -217,7 +217,7 @@ $hrs = $this->db->get('hr')->result_array();
             deleteInvoice(){
                 axios
                     .delete(this.api + "delete/" + app.chooseInvoice.invoice_id)
-                    .then(function(response) {
+                    .then((response) => {
                         iziToast.success({
                                title: 'Delete', 
                                message: ': ' + response.data.msg, 
@@ -225,13 +225,12 @@ $hrs = $this->db->get('hr')->result_array();
                            });
                            app.clearAll();
                      })
-                    .catch(function(){ 
+                    .catch((error) => { 
                         iziToast.error({
                                title: 'Not Deleted', 
-                               message: ': ' + response.data.msg, 
+                               message: ': ' + error, 
                                position: 'topRight'
                            });
-                           app.clearAll();
                     });
             }, 
             AddInvoice(){
@@ -240,18 +239,15 @@ $hrs = $this->db->get('hr')->result_array();
             selectInvoice(invoice){
                 axios
                     .get(this.api+"get/"+invoice.invoice_id)
-                    .then(function(response) { 
-                        var i = response.data.invoice;
-                        app.chooseInvoice = i;
-                        console.log('i', i);
-                    })
-                    .catch(function(error) { console.error(error)});
+                    .then((response) => app.chooseInvoice = response.data.invoice)
+                    .catch((error) => console.log('error', error));
             },
             formData(obj){
                 var formData = new FormData();
                 for (var key in obj) {
                     formData.append(key, obj[key]);
                 }
+                console.log('formData', formData);
                 return formData;
             },
             setData(data) {

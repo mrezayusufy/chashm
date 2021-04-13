@@ -35,22 +35,13 @@ $hrs = $this->crud_model->select_hr_by_tazkira_id();
                     </div>
 
                     <div class="form-group">
-                        <label for="date" class="col-sm-3 control-label"><?= get_phrase('date'); ?></label>
-
-                        <div class="col-sm-7">
-                            <input type="text" name="date" class="form-control datepicker"
-                                   data-format="D, dd MM yyyy" placeholder="<?= get_phrase('date');?>" required>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="status" class="col-sm-3 control-label"><?php echo get_phrase('status'); ?></label>
+                        <label for="status" class="col-sm-3 control-label"><?= get_phrase('status'); ?></label>
 
                         <div class="col-sm-7">
                             <select name="status" class="select2" id = "status" required>
-                                <option value= ""><?php echo get_phrase('select_a_status'); ?></option>
-                                <option value="paid"><?php echo get_phrase('paid'); ?></option>
-                                <option value="unpaid"><?php echo get_phrase('unpaid'); ?></option>
+                                <option value= ""><?= get_phrase('select_a_status'); ?></option>
+                                <option value="paid"><?= get_phrase('paid'); ?></option>
+                                <option value="unpaid"><?= get_phrase('unpaid'); ?></option>
                             </select>
                         </div>
                     </div>

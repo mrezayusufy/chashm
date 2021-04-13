@@ -1,7 +1,4 @@
-<!-- TODO: 4 rename to edit_hr and change everything to hr-->
 <?php
-$department_info = $this->db->get('department')->result_array();
-$single_hr_info = $this->db->get_where('hr', array('hr_id' => $param2))->result_array();
 foreach ($single_hr_info as $row) {
 ?>
     <div class="row">

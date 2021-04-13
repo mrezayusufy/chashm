@@ -1,8 +1,4 @@
 
-<?php
-$hrs = $this->crud_model->select_hr_by_tazkira_id();
-$hr_list = json_encode($hrs);
-?>
 <div id="app">
   <button @click="addSalary=true;" class="btn btn-primary pull-right">
     <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_salary'); ?>

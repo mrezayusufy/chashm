@@ -1,39 +1,40 @@
  
-<button onclick="showAjaxModal('<?php echo site_url('modal/popup/add_staff');?>');" 
-    class="btn btn-primary pull-right">
-        <i class="fas fa-plus"></i>&nbsp;<?php echo get_phrase('add_staff'); ?>
-</button>
+<a href="<?= site_url('Admin/add_staff');?>">
+    <button class="btn btn-primary pull-right">
+            <i class="fas fa-plus"></i>&nbsp;<?= get_phrase('add_staff'); ?>
+    </button>
+</a>
 <div style="clear:both;"></div>
 <br>
 
 <table class="table table-bordered table-striped datatable" id="table-2">
     <thead>
         <tr>
-            <th><?php echo get_phrase('ID');?></th>
-            <th><?php echo get_phrase('name');?></th>
-            <th><?php echo get_phrase('tazkira_id');?></th>
-            <th><?php echo get_phrase('phone');?></th>
-            <th><?php echo get_phrase('options');?></th>
+            <th><?= get_phrase('ID');?></th>
+            <th><?= get_phrase('name');?></th>
+            <th><?= get_phrase('tazkira_id');?></th>
+            <th><?= get_phrase('phone');?></th>
+            <th><?= get_phrase('options');?></th>
         </tr>
     </thead>
 
     <tbody>
     <?php foreach ($staff_info as $row) { ?>   
             <tr>
-                <td><?php echo $row['staff_id']?></td>
-                <td><?php echo $row['name']?></td>
-                <td><?php echo $row['tazkira_id']?></td>
-                <td><?php echo $row['phone']?></td>
+                <td><?= $row['staff_id']?></td>
+                <td><?= $row['name']?></td>
+                <td><?= $row['tazkira_id']?></td>
+                <td><?= $row['phone']?></td>
                 <td>
-                    <a  onclick="showAjaxModal('<?php echo site_url('modal/popup/edit_staff/'.$row['staff_id']);?>');" 
+                    <a href="<?= site_url('Admin/edit_staff/'.$row['staff_id']);?>" 
                         class="btn btn-info btn-sm">
                             <i class="fas fa-pencil-alt"></i>&nbsp;
-                            <?php echo get_phrase('edit');?>
+                            <?= get_phrase('edit');?>
                     </a>
-                    <a onclick="confirm_modal('<?php echo site_url('Admin/staff/delete/'.$row['staff_id']); ?>')"
+                    <a onclick="confirm_modal('<?= site_url('Admin/staff/delete/'.$row['staff_id']); ?>')"
                         class="btn btn-danger btn-sm">
                             <i class="fas fa-trash"></i>&nbsp;
-                            <?php echo get_phrase('delete');?>
+                            <?= get_phrase('delete');?>
                     </a>
                 </td>
             </tr>

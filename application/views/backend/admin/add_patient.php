@@ -3,12 +3,6 @@
 
         <div class="panel panel-primary" data-collapsed="0">
 
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h3><?php echo get_phrase('add_patient'); ?></h3>
-                </div>
-            </div>
-
             <div class="panel-body">
 
                 <form role="form" class="form-horizontal form-groups" action="<?php echo site_url('Admin/patient/create'); ?>" 
@@ -67,24 +61,6 @@
                         </div>
                     </div>
 
-                    <div class="form-group">
-                        <label for="field-ta" class="col-sm-3 control-label"><?php echo get_phrase('blood_group'); ?></label>
-
-                        <div class="col-sm-7">
-                            <select name="blood_group" class="form-control">
-                                <option value=""><?php echo get_phrase('select_blood_group'); ?></option>
-                                <option value="A+">A+</option>
-                                <option value="A-">A-</option>
-                                <option value="B+">B+</option>
-                                <option value="B-">B-</option>
-                                <option value="AB+">AB+</option>
-                                <option value="AB-">AB-</option>
-                                <option value="O+">O+</option>
-                                <option value="O-">O-</option>
-                            </select>
-                        </div>
-                    </div>
-                    
                     <div class="col-sm-3 control-label col-sm-offset-2">
                         <button type="submit" class="btn btn-success">
                             <i class="fas fa-check"></i> <?php echo get_phrase('save');?>

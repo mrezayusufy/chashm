@@ -1,18 +1,12 @@
 <?php
 $department_info = $this->db->get('department')->result_array();
-$staff = $this->db->get_where('staff', array('staff_id' => $param2))->result_array();
+$staff = $this->db->get_where('staff', array('staff_id' => $staff_id))->result_array();
 foreach ($staff as $row) {
 ?>
 <div class="row">
     <div class="col-md-12">
 
         <div class="panel panel-primary" data-collapsed="0">
-
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h3><?php echo get_phrase('add_staff'); ?></h3>
-                </div>
-            </div>
 
             <div class="panel-body">
 

@@ -20,21 +20,12 @@ $phone = $this->db->get_where('settings', array('type' => 'phone'))->row()->desc
                 </table>
                 <table  border="0">
                     <tr>
-                        <td align="left">
-                            <h4><?= get_phrase('payment_to'); ?> </h4>
-                        </td>
                         <td align="right">
                             <h4><?= get_phrase('bill_to'); ?> </h4>
                         </td>
                     </tr>
 
                     <tr>
-                        <td align="left" valign="top">
-                            <?= $system_name; ?><br>
-                            <?= $address; ?><br>
-                            <?= $phone; ?><br>
-                            <h4><?= get_phrase('Doctor'); ?>:</h4> <span>{{ chooseInvoice.hr.first_name }} {{ chooseInvoice.hr.last_name }}</span>
-                        </td>
                         <td align="right" valign="top">
                             ID: {{ chooseInvoice.patient.patient_id }} _ {{ chooseInvoice.patient.name }} _ {{ chooseInvoice.patient.father_name }}<br />
                             {{ chooseInvoice.patient.address }}<br />

@@ -118,8 +118,12 @@ class HR extends CI_Controller
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
         }
+
         $department = $this->session->userdata('department');
         if($department == "Accountant") {
+            $hrs = $this->crud_model->select_hr_by_tazkira_id();
+            $hr_list = json_encode($hrs);
+            $data['hr_list']   = $hr_list;
             $data['page_name']    = 'manage_salary';
             $data['page_title']   = get_phrase('salary');
             $this->load->view('backend/index', $data);
@@ -217,93 +221,7 @@ class HR extends CI_Controller
         $data['page_title']     = get_phrase('patient');
         $this->load->view('backend/index', $data);
     }
-    function pos($invoice_id = ""){
-        header("Access-Control-Allow-Origin: *");
-        header("Content-Type: application/json; charset=UTF-8");
-        header("Access-Control-Allow-Methods:POST,GET");
-        header("Access-Control-Max-Age: 3600");
-        header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-        $data = new class{};
-        $system_name = $this->db->get_where('settings', array('type' => 'system_name'))->row()->description;
-        $address = $this->db->get_where('settings', array('type' => 'address'))->row()->description;
-        $phone = $this->db->get_where('settings', array('type' => 'phone'))->row()->description;
-        $invoice = $this->crud_model->select_invoice_by_id($invoice_id);
-        $status = '';
-        $data->contents = (object)[
-            'invoice' => $invoice,
-            'system_name' => $system_name,
-            'address' => $address,
-            'phone' => $phone,
-        ];
-        
-        $connector = new WindowsPrintConnector("A8Printer");
-        $p = new Printer($connector);
-        $p->initialize();
-        $contents = $data->contents;
-        // // // Title of 
-        $logo = EscposImage::load("uploads/logo.png", false);
-        $p->feed();
-        $p->setJustification(Printer::JUSTIFY_CENTER);
-        $p->graphics($logo);
-        $p->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
-        $p->text($contents->system_name);
-        $p->selectPrintMode();
-        $p->feed();
-        $p->feed();
-        $invoice = $contents->invoice;
-        $status = $invoice->status;
-        $invoice_no = $invoice->invoice_id;
-        $p->setEmphasis(true);
-        $p->setJustification(Printer::JUSTIFY_LEFT);
-        $p->text("Invoice NO: ".$invoice_no);
-        $p->setEmphasis(false);
-        $p->feed();
-        $p->setJustification(Printer::JUSTIFY_RIGHT);
-        $now_time = date('F j, Y, g:i a', now('Asia/Kabul'));
-        $p->text("issue date: ".$now_time);
-        $p->feed();
-        $p->text("status: ".$status);
-        $p->feed();
-        $p->setJustification(Printer::JUSTIFY_LEFT);
-        $p->text("──────────────────────────────────────────");
-        $p->feed();
-        $patient = $this->db->get_where('patient', array('patient_id' => $invoice->patient_id))->row();
-        $p->text("Bill to: #".$patient->patient_id." _ ".$patient->name." _ ".$patient->father_name);
-        $p->feed();
-        $p->text("──────────────────────────────────────────\n");
-
-        $t1 = str_pad("Item", 26);
-        $t2 = str_pad("Qty ", 5, " ", STR_PAD_LEFT);
-        $t3 = str_pad("Price ", 5, " ", STR_PAD_LEFT);
-        $t4 = str_pad("Total", 5, " ", STR_PAD_LEFT);
-        $p->setUnderLine(true);
-        $p->text("$t1$t2$t3$t4\n");
-        $p->setUnderLine(false);
-        $invoice_entries = $invoice->invoice_entries; 
-        foreach($invoice_entries as $i){
-            $res = preg_split("/\:/",$i->item);
-            $left = str_pad($res['0'], 26);
-            $m1 = str_pad($i->quantity, 4, " ", STR_PAD_LEFT);
-            $m2 = str_pad($i->amount, 6, " ", STR_PAD_LEFT);
-            $right = str_pad(($i->amount * $i->quantity), 6, " ", STR_PAD_LEFT);
-            $item = "$left$m1$m2$right\n";
-            $p->text($item);
-        }
-        $subtotal = new item('Subtotal', $invoice->total);
-        $paid = new item('Paid', $invoice->paid);
-        $remain = new item('Remain', ($invoice->total - $invoice->paid));
-        $p->text("──────────────────────────────────────────");
-        $p->feed();
-        $p->setJustification(Printer::JUSTIFY_RIGHT);
-        $p -> setEmphasis(true);
-        $p->text($subtotal->getAsString(12));
-        $p->text($paid->getAsString(12));
-        $p->text($remain->getAsString(12));
-        $p -> setEmphasis(false);
-        $p->cut();
-        $p->close();
-        echo json_encode($data, true);
-    }
+    
     // TODO: invoice crud
     function invoice_add($task = "")
     {
@@ -323,11 +241,11 @@ class HR extends CI_Controller
         $this->load->view('backend/index', $data);
     }
     function invoice($task = "", $invoice_id = "", $limit = "", $offset = "", $hrId = ""){
+        header('Content-Type: application/json');
         if ($this->session->userdata('hr_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
         }
-        header('Content-Type: application/json');
         $department = $this->session->userdata('department');
         $hr_id = $this->session->userdata('login_user_id');
 
@@ -540,5 +458,91 @@ class HR extends CI_Controller
         $this->load->view('backend/index', $data);
     }
      
-    
+    function pos($invoice_id = ""){
+        header("Access-Control-Allow-Origin: *");
+        header("Content-Type: application/json; charset=UTF-8");
+        header("Access-Control-Allow-Methods:POST,GET");
+        header("Access-Control-Max-Age: 3600");
+        header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+        $data = new class{};
+        $system_name = $this->db->get_where('settings', array('type' => 'system_name'))->row()->description;
+        $address = $this->db->get_where('settings', array('type' => 'address'))->row()->description;
+        $phone = $this->db->get_where('settings', array('type' => 'phone'))->row()->description;
+        $invoice = $this->crud_model->select_invoice_by_id($invoice_id);
+        $status = '';
+        $data->contents = (object)[
+            'invoice' => $invoice,
+            'system_name' => $system_name,
+            'address' => $address,
+            'phone' => $phone,
+        ];
+        
+        $connector = new WindowsPrintConnector("A8Printer");
+        $p = new Printer($connector);
+        $p->initialize();
+        $contents = $data->contents;
+        // // // Title of 
+        $logo = EscposImage::load("uploads/logo.png", false);
+        $p->feed();
+        $p->setJustification(Printer::JUSTIFY_CENTER);
+        $p->graphics($logo);
+        $p->selectPrintMode(Printer::MODE_DOUBLE_WIDTH);
+        $p->text($contents->system_name);
+        $p->selectPrintMode();
+        $p->feed();
+        $p->feed();
+        $invoice = $contents->invoice;
+        $status = $invoice->status;
+        $invoice_no = $invoice->invoice_id;
+        $p->setEmphasis(true);
+        $p->setJustification(Printer::JUSTIFY_LEFT);
+        $p->text("Invoice NO: ".$invoice_no);
+        $p->setEmphasis(false);
+        $p->feed();
+        $p->setJustification(Printer::JUSTIFY_RIGHT);
+        $now_time = date('F j, Y, g:i a', now('Asia/Kabul'));
+        $p->text("issue date: ".$now_time);
+        $p->feed();
+        $p->text("status: ".$status);
+        $p->feed();
+        $p->setJustification(Printer::JUSTIFY_LEFT);
+        $p->text("──────────────────────────────────────────");
+        $p->feed();
+        $patient = $this->db->get_where('patient', array('patient_id' => $invoice->patient_id))->row();
+        $p->text("Bill to: #".$patient->patient_id." _ ".$patient->name." _ ".$patient->father_name);
+        $p->feed();
+        $p->text("──────────────────────────────────────────\n");
+
+        $t1 = str_pad("Item", 26);
+        $t2 = str_pad("Qty ", 5, " ", STR_PAD_LEFT);
+        $t3 = str_pad("Price ", 5, " ", STR_PAD_LEFT);
+        $t4 = str_pad("Total", 5, " ", STR_PAD_LEFT);
+        $p->setUnderLine(true);
+        $p->text("$t1$t2$t3$t4\n");
+        $p->setUnderLine(false);
+        $invoice_entries = $invoice->invoice_entries; 
+        foreach($invoice_entries as $i){
+            $res = preg_split("/\:/",$i->item);
+            $left = str_pad($res['0'], 26);
+            $m1 = str_pad($i->quantity, 4, " ", STR_PAD_LEFT);
+            $m2 = str_pad($i->amount, 6, " ", STR_PAD_LEFT);
+            $right = str_pad(($i->amount * $i->quantity), 6, " ", STR_PAD_LEFT);
+            $item = "$left$m1$m2$right\n";
+            $p->text($item);
+        }
+        $subtotal = new item('Subtotal', $invoice->total);
+        $paid = new item('Paid', $invoice->paid);
+        $remain = new item('Remain', ($invoice->total - $invoice->paid));
+        $p->text("──────────────────────────────────────────");
+        $p->feed();
+        $p->setJustification(Printer::JUSTIFY_RIGHT);
+        $p -> setEmphasis(true);
+        $p->text($subtotal->getAsString(12));
+        $p->text($paid->getAsString(12));
+        $p->text($remain->getAsString(12));
+        $p -> setEmphasis(false);
+        $p->cut();
+        $p->close();
+        echo json_encode($data, true);
+    }
 }

@@ -1,15 +1,7 @@
-<?php $department_info = $this->db->get('department')->result_array(); ?>
-<!-- TODO: rename add_hr to add_hr and change everything to hr-->
 <div class="row">
     <div class="col-md-12">
 
         <div class="panel panel-primary" data-collapsed="0">
-
-            <div class="panel-heading">
-                <div class="panel-title">
-                    <h3><?php echo get_phrase('add_hr'); ?></h3>
-                </div>
-            </div>
 
             <div class="panel-body">
 

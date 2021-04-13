@@ -142,6 +142,7 @@ class Admin extends CI_Controller
         ))->result_array();
         $this->load->view('backend/index', $page_data);
     }
+    // department
     function add_department($task = "")
     {
         if ($this->session->userdata('admin_login') != 1) {
@@ -224,26 +225,38 @@ class Admin extends CI_Controller
         $data['page_title']      = get_phrase('department_facilities') . ' | ' . $data['department_info']->name . ' ' . get_phrase('department');
         $this->load->view('backend/index', $data);
     }
-
-    function invoice($task = "", $invoice_id = ""){
+    // invoice
+    function show_invoice($invoice_id = "")
+    {
         if ($this->session->userdata('admin_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
         }
+        $data['invoice_id']   = $invoice_id;
+        $data['page_name']   = 'show_invoice';
+        $data['page_title']  = get_phrase('show_invoice');
+        $this->load->view('backend/index', $data);
+    }
+    function invoice(){
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+
         $data['invoice_info'] = $this->crud_model->select_invoice();
         $data['page_name']   = 'manage_invoice';
         $data['page_title']  = get_phrase('invoice');
         $this->load->view('backend/index', $data);
     }
-
+    // salary
     function salary($task = "", $salary_id = ""){
         if ($this->session->userdata('admin_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
             redirect(site_url(), 'refresh');
         }
         if ($task == "create") {
-                $this->crud_model->save_salary_info();
-                $this->session->set_flashdata('message', get_phrase('salary_info_saved_successfuly'));
+            $this->crud_model->save_salary_info();
+            $this->session->set_flashdata('message', get_phrase('salary_info_saved_successfuly'));
             redirect(site_url('Admin/salary'), 'refresh');
         }
         if ($task == "update") {
@@ -259,6 +272,28 @@ class Admin extends CI_Controller
         $data['page_title']  = get_phrase('salary');
         $this->load->view('backend/index', $data);
 
+    }
+    // staff 
+    function add_staff()
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $data['page_name']   = 'add_staff';
+        $data['page_title']  = get_phrase('add_staff');
+        $this->load->view('backend/index', $data);
+    }
+    function edit_staff($staff_id = "")
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $data['staff_id']   = $staff_id;
+        $data['page_name']   = 'edit_staff';
+        $data['page_title']  = get_phrase('edit_staff');
+        $this->load->view('backend/index', $data);
     }
     function staff($task = "", $staff_id = "")
     {
@@ -285,7 +320,33 @@ class Admin extends CI_Controller
         $data['page_title']  = get_phrase('staff');
         $this->load->view('backend/index', $data);
     }
-    // TODO: 1 => create hr 
+    // hr
+    function add_hr()
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $department_info = $this->crud_model->select_department_info();
+        $data['department_info'] = $department_info;
+        $data['page_name']   = 'add_hr';
+        $data['page_title']  = get_phrase('add_hr');
+        $this->load->view('backend/index', $data);
+    }
+    function edit_hr($hr_id = "")
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $department_info = $this->db->get('department')->result_array();
+        $single_hr_info = $this->db->get_where('hr', array('hr_id' => $hr_id))->result_array();
+        $data['department_info'] = $department_info;
+        $data['single_hr_info'] = $single_hr_info;
+        $data['page_name']   = 'edit_hr';
+        $data['page_title']  = get_phrase('edit_hr');
+        $this->load->view('backend/index', $data);
+    }
     function hr($task = "", $hr_id = "")
     {
         if ($this->session->userdata('admin_login') != 1) {
@@ -309,7 +370,7 @@ class Admin extends CI_Controller
             $this->crud_model->delete_hr_info($hr_id);
             redirect(site_url('Admin/hr'), 'refresh');
         }
-        $data['hr_info'] = $this->crud_model->select_hr_info();
+        $data['hr_info'] = $this->crud_model->get_hr();
         $data['page_name']   = 'manage_hr';
         $data['page_title']  = get_phrase('hr');
         $this->load->view('backend/index', $data);
@@ -326,6 +387,16 @@ class Admin extends CI_Controller
         
         header('Content-Type: application/json');
         echo json_encode($data);
+    }
+    function add_patient()
+    {
+        if ($this->session->userdata('admin_login') != 1) {
+            $this->session->set_userdata('last_page', current_url());
+            redirect(site_url(), 'refresh');
+        }
+        $data['page_name']   = 'add_patient';
+        $data['page_title']  = get_phrase('add_patient');
+        $this->load->view('backend/index', $data);
     }
     function patient($task = "", $patient_id = "")
     {
@@ -356,7 +427,7 @@ class Admin extends CI_Controller
         $this->load->view('backend/index', $data);
     }
     
-    function medicine($task = "")
+    function medicine()
     {
         if ($this->session->userdata('admin_login') != 1) {
             $this->session->set_userdata('last_page', current_url());
