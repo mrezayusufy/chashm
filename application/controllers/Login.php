@@ -50,6 +50,8 @@ class Login extends CI_Controller
                 $this->session->set_flashdata('error_message', get_phrase('login_failed'));
                 redirect(site_url('login'), 'refresh');
             }
+        } else {
+            $this->load->view('backend/login');
         }
     }
     
