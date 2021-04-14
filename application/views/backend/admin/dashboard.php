@@ -291,7 +291,6 @@
             getInvoiceList() {
                 var limit = this.$store.state.limit;
                 var hr = this.$store.state.hr;
-                console.log('hr', hr);
                 axios.get(`${this.api}/api/invoice/list/${hr}/${limit}/0`)
                     .then(r => app.setInvoice(r.data))
                     .catch(e => console.log('error', e));
