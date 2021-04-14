@@ -103,7 +103,7 @@
             <div v-if="$store.state.loading==='idle' || $store.state.invoiceData.length === 0" class="col-md-12">
                 <div>No data</div>
             </div>
-            <table v-if="$store.state.loading==='finished' && $store.state.invoiceData.length > 0" class="table table-bordered table-striped datatable display" id="invoice-table">
+            <table v-if="$store.state.loading==='finished'" class="table table-bordered table-striped datatable display" id="invoice-table">
                 <thead>
                     <tr>
                         <th><?= get_phrase('index'); ?></th>
@@ -150,7 +150,7 @@
             loading: 'idle',
             hrs: <?= json_encode($hrs) ?>,
             invoiceData: [],
-            hr: '10',
+            hr: "10",
             limit: "30",
             totalInvoice: 0,
             message: ""
@@ -284,11 +284,15 @@
             this.getInvoiceList();
             this.getSalaryList();
         },
+        updated() {
+            this.getInvoiceList();
+        },
         methods: {
             getInvoiceList() {
                 var limit = this.$store.state.limit;
                 var hr = this.$store.state.hr;
-                axios.get(`${this.api}/api/invoice/list/${limit}/0/${hr}`)
+                console.log('hr', hr);
+                axios.get(`${this.api}/api/invoice/list/${hr}/${limit}/0`)
                     .then(r => app.setInvoice(r.data))
                     .catch(e => console.log('error', e));
             },

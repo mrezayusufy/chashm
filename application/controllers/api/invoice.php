@@ -68,7 +68,7 @@ class Invoice extends CI_Controller{
     }
   }
   
-  function list($limit = "", $offset = "", $hrId = "") {
+  function list($hrId = "", $limit = "", $offset = "") {
     if ($this->session->userdata('admin_login') != 1 ) {
       echo json_encode(array("message" => "You are not allowed."));
     } else {
@@ -78,7 +78,7 @@ class Invoice extends CI_Controller{
           $data['offset'] = $offset;
           $data['total'] = $this->db->count_all_results('invoice');
           $data['msg'] = "invoice list";
-          $data['invoices'] = $this->crud_model->get_invoice($limit, $offset, $hrId);
+          $data['invoices'] = $this->crud_model->select_invoice_by_hr($hrId, $limit, $offset);
           echo json_encode($data);
       } else {
         $data = array();

@@ -79,7 +79,7 @@
             <div>No data</div>
         </div>
         <table 
-            v-if="$store.state.loading==='finished' && $store.state.invoiceData.length > 0"
+            v-if="$store.state.loading==='finished'"
             class="table table-bordered table-striped datatable display" id="invoice-table">
             <thead>
                 <tr>

@@ -275,7 +275,7 @@ class Crud_model extends CI_Model
         return $query;
     }
     
-    function select_invoice_by_hr($hr_id, $limit = "", $offset = "")
+    function select_invoice_by_hr($hr_id = "", $limit = "", $offset = "")
     {
         $query = 'i.invoice_id as invoice_id, i.total as total, i.invoice_entry_id as invoice_entry_id,  i.title as title, concat_ws(" ", h.hr_id, h.first_name, h.last_name) as hr_name, concat_ws(" ", p.patient_id, p.name, p.father_name) as patient_name, i.creation_timestamp as creation_timestamp, i.status as status, i.paid as paid';
         $this->db->select($query)
